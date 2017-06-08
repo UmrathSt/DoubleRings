@@ -178,4 +178,13 @@ where the arguments $\unitv{r}$, $\unitv{k}$ of the spherical harmonics are a sh
 P_{\ell m}(0).
 \label{eqn:xperiodicity}
 \end{align}
-This sum contains only terms of pairs $(\ell,m)$ with even $\ell+m$ (see \cref{eqn:Plm0}). Since \cref{eqn:xperiodicity} depends upon the polar and azimutal angles the 
+This sum contains only terms of pairs $(\ell,m)$ with even $\ell+m$ (see \cref{eqn:Plm0}). If we collect both, the exponential depending on $x$ and $y$ we can combine them to:
+\begin{equation}
+\exp\left(\imag \frac{2\pi}{L} (x+y)\right) = 4\pi \sum_{\ell=0}^\infty \sum_{m=-\ell}^\ell
+\imag^\ell j_\ell\left(\frac{2\pi r}{L}\right) Y_{\ell m}(\theta, \phi) Y_{\ell m}^*\left(\frac{\pi}{2}, \pi/4\right).
+\end{equation}
+
+In total we end up with the boundary condition:
+\begin{equation}
+\left[\mathbf{E}^\text{inc}+\exp\left(\imag \frac{2\pi}{L}(x+y)\right)\mathbf{E}^\text{scat}\right] \cdot \unitv{\phi}\big|_{r=R} = 0
+\end{equation}
