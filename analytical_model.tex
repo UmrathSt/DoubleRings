@@ -187,4 +187,17 @@ This sum contains only terms of pairs $(\ell,m)$ with even $\ell+m$ (see \cref{e
 In total we end up with the boundary condition:
 \begin{equation}
 \left[\mathbf{E}^\text{inc}+\exp\left(\imag \frac{2\pi}{L}(x+y)\right)\mathbf{E}^\text{scat}\right] \cdot \unitv{\phi}\big|_{r=R} = 0
+\label{eqn:xyperiodicBC}
+\end{equation}
+
+\subsubsection{Dipole limit}
+If the radius of the ring is small compared to the wavelength of the incident radiation, the $\ell=1$-contribution to the scattered field is dominant.
+In this case \cref{eqn:xyperiodicBC} becomes:
+\begin{equation}
+m_{1,m} \mathbf{M}_{1 m} + n_{1 m} \mathbf{N}_{1 m} = \sum_{\ell'=0}^\infty\sum_{m'=-\ell}^{\ell'}
+C_{\ell' m'} Y_{\ell' m'} 
+\left(
+m^\text{scat}_{1 m''} \mathbf{M}_{\ell'' m''} +
+n^\text{scat}_{1 m''} \mathbf{N}_{\ell'' m''}
+\right)
 \end{equation}
