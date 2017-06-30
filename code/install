@@ -1,0 +1,5 @@
+#!/bin/bash
+
+wget https://raw.githubusercontent.com/UmrathSt/CasSphSph/master/CasimirRio/cython_gaunt_setup.py 
+wget https://raw.githubusercontent.com/UmrathSt/CasSphSph/master/CasimirRio/cython_gaunt.pyx
+python3 cython_gaunt_setup.py build_ext --inplace
