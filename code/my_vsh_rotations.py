@@ -3,10 +3,10 @@
 
 import numpy as np
 from math import sqrt
-import quaternion
-import spherical_functions as sf
 from scipy.special import jv, hankel1
 from cython_gaunt import gaunt
+from wignerD_matrix import WignerD_matrices as WignerDs
+
 
 jn = lambda l, x: jv(l + 0.5, x)*np.sqrt(np.pi/(2*x))
 h1 = lambda l, x: hankel1(l + 0.5, x)*np.sqrt(np.pi/(2*x))
@@ -24,7 +24,7 @@ class HarmonicField:
         assert np.shape(mcoeffs) == np.shape(ncoeffs)
         self.no_coeffs = (lmax + 2) * lmax
         self.lmax = lmax
-        assert len(mcoeffs) == self.no_coeffs
+        assert mcoeffs.shape == (self.no_coeffs, 1)
         self.mcoeffs = mcoeffs
         self.ncoeffs = ncoeffs
 
@@ -33,26 +33,19 @@ class HarmonicField:
             theta around the y-axis followed by a rotation of 
             phi around the z-axis
         """
-        rotor = quaternion.from_spherical_coords(theta, phi)
-        D = sf.WignerD.Wigner_D_matrices(rotor, 1, self.lmax)
+        Ds = WignerDs(self.lmax, theta, phi)
         mcoeffs = np.zeros(self.mcoeffs.shape, dtype=np.complex128)
         ncoeffs = np.zeros(self.ncoeffs.shape, dtype=np.complex128)
         start_idx = lambda L, M: (M)*(2*L + 1) + L**2 -1 
         for l in range(1, self.lmax + 1):
-            for j in range(0, 2*l + 1):
-                m = j - l 
-                m0 = l**2 - 1 
-                m1 = m0 + 2*l + 1
-                D0 = (2*l + 1)*(m + l) + l**2 - 1
-                D1 = D0 + 2*l +1
-                Dlm = D[D0:D1]
-                mcoeffs[l**2  - 1 + j] = (
-                        self.mcoeffs[m0:m1] * Dlm).sum()
-                ncoeffs[l**2  - 1 + j] = (
-                        self.ncoeffs[m0:m1] * Dlm).sum()
+            i0 = int(4*l**3 - l - 3)
+            i1 = i0 + (2*l + 1)**2
+            mcoeffs[i0:i1] = np.dot(Ds[l-1], self.mcoeffs[i0:i1])
+            ncoeffs[i0:i1] = np.dot(Ds[l-1], self.ncoeffs[i0:i1])
         self.mcoeffs = mcoeffs
         self.ncoeffs = ncoeffs
-    def Vl1l2_m(self, l1, l2, m, kd, sign_z):
+
+def Vl1l2_m(self, l1, l2, m, kd, sign_z):
         """return the (l1, m) contribution of a vector spherical 
            harmonic M_l1,m (N_l1,m) when it is translated along (sign_z = +1)
            or against (sign_z = -1) the z-direction an adimensional distance
@@ -107,8 +100,8 @@ class HarmonicField:
         
 
 if __name__ == "__main__":
-    m = np.array([1j, 0, 1j])
-    n = np.array([1, 0, -1])
+    m = np.array([1j, 0, 1j])[:, np.newaxis]
+    n = np.array([1, 0, -1])[:, np.newaxis]
     field = HarmonicField(m, n, 1)
     field.rotate(np.pi/2, 0)
     print("applying rotation to mcoeffs = ", m, "ncoeffs = ", n)
