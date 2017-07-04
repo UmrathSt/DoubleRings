@@ -9,7 +9,7 @@ from scipy.special import jv, hankel1
 from cython_gaunt import gaunt
 
 jn = lambda l, x: jv(l + 0.5, x)*np.sqrt(np.pi/(2*x))
-h1 = lambda l, x. hankel1(l + 0.5, x)*np.sqrt(np.pi/(2*x))
+h1 = lambda l, x: hankel1(l + 0.5, x)*np.sqrt(np.pi/(2*x))
 
 
 class HarmonicField:
@@ -63,7 +63,7 @@ class HarmonicField:
                    sqrt(l2*(l2+1) * l1*(l1+1)))
         alpha = np.arange(abs(l1-l2), l1+l2+1, 2)
         gaunts = gaunt(l1, l2, m)
-        h1_sph= hankel1(alpha+0.5, kd)*math.sqrt(np.pi/(2*kd))
+        h1_sph= h1(alpha+0.5, kd)
         fak_PP = ((l1*(l1+1) + l2*(l2+1) - alpha*(alpha+1))*0.5 * h1_sph *
                     (sign_z*1j)**alpha*gaunts*np.sqrt((2*alpha+1)/(4*np.pi))).sum()
         fak_PQ = (-m*kd*(1j)**(alpha+1) * gaunts * np.sqrt((2*alpha+1)/(4*np.pi))
@@ -80,7 +80,7 @@ class HarmonicField:
             R. C. Wittmann, IEEE Trans. Antennas Propag. 34 (1988)
         """
         l1 = np.arange(1, self.lmax+1).reshape(self.lmax, 1)
-        l2 = l1.transpose(1, self.lmax)
+        l2 = l1.transpose()
         mcoeffs = self.mcoeffs.copy()
         ncoeffs = self.ncoeffs.copy()
         for l in range(1, self.lmax+1):
@@ -104,7 +104,17 @@ class HarmonicField:
         
 
 if __name__ == "__main__":
-    field = HarmonicField(np.array([1,1,1], dtype = np.complex128), 
-            np.array([0,0,0], dtype = np.complex128), 1)
-    field.rotate(np.pi, 0)
+    field = HarmonicField(np.array([1j, 0, 1j], dtype = np.complex128), 
+            np.array([1, 0, -1], dtype = np.complex128), 1)
+    field.rotate(np.pi/2, 0)
+    print("applying rotation to mcoefs = [1,1,1], ncoeffs = [0,0,0]")
+    print("M-Coeffs")
     print(field.mcoeffs)
+    print("N-Coeffs")
+    print(field.ncoeffs)
+    print("translating in z-direction")
+    field.z_translate(1, 1)
+    print("M-Coeffs")
+    print(field.mcoeffs)
+    print("N-Coeffs")
+    print(field.ncoeffs)
