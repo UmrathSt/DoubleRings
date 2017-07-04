@@ -72,17 +72,35 @@ class HarmonicField:
         PQ = fak_PQ * common
         return PP, PQ
 
-    def z_translate(self, kd):
+    def z_translate(self, kd, sign_z):
         """ calculate the VSH-coefficients in a frame of 
             reference which is translated kd/k along the 
             z-axis, k beeing the wavevector
             Translation coefficients according to:
             R. C. Wittmann, IEEE Trans. Antennas Propag. 34 (1988)
         """
-        l = np.arange(1, self.lmax).reshape(self.lmax, 1)
-        
+        l1 = np.arange(1, self.lmax+1).reshape(self.lmax, 1)
+        l2 = l1.transpose(1, self.lmax)
+        mcoeffs = self.mcoeffs.copy()
+        ncoeffs = self.ncoeffs.copy()
         for l in range(1, self.lmax+1):
-            for 
+            for m in range(-self.lmax, 1):
+                for l2 in range(1, self.lmax+1):
+                    PP, PQ = self.Vl1l2_m(l, l2, m, kd, sign_z)
+                    idx = l2*(l2+1) - 1 + m
+                    mcoeffs[l*(l+1)-1+m] += (self.mcoeffs[idx] * PP +
+                                             self.ncoeffs[idx] * PQ)
+                    ncoeffs[l*(l+1)-1+m] += (self.ncoeffs[idx] * PP +
+                                             self.mcoeffs[idx] * PQ)
+                    mcoeffs[l*(l+1)-1-m] += (self.mcoeffs[idx-2*m] * PP +
+                                             self.ncoeffs[idx-2*m] * PQ)
+                    ncoeffs[l*(l+1)-1-m] += (self.ncoeffs[idx-2*m] * PP +
+                                             self.mcoeffs[idx-2*m] * PQ)
+        self.mcoeffs = mcoeffs
+        self.ncoeffs = ncoeffs
+
+                                        
+
         
 
 if __name__ == "__main__":
