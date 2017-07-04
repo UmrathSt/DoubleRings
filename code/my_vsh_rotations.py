@@ -35,20 +35,23 @@ class HarmonicField:
         """
         rotor = quaternion.from_spherical_coords(theta, phi)
         D = sf.WignerD.Wigner_D_matrices(rotor, 1, self.lmax)
-        mcoeffs = np.zeros(self.mcoeffs.shape)
-        ncoeffs = np.zeros(self.ncoeffs.shape)
-        start_idx = lambda L, M: (L + M)*(2*L + 1) 
-        for l in range(self.lmax):
-            for m in range(2*l + 1):
-                istart = start_idx(l, m)
-                istop = istart + 2*l+1
-                self.mcoeffs[l**2 + l - 1 + m] = (
-                        self.mcoeffs[istart:istop] 
-                         * D[istart:istop]).sum()
-                self.ncoeffs[l**2 + l - 1 + m] = (
-                        self.ncoeffs[istart:istop] 
-                         * D[istart:istop]).sum()
-
+        mcoeffs = np.zeros(self.mcoeffs.shape, dtype=np.complex128)
+        ncoeffs = np.zeros(self.ncoeffs.shape, dtype=np.complex128)
+        start_idx = lambda L, M: (M)*(2*L + 1) + L**2 -1 
+        for l in range(1, self.lmax + 1):
+            for j in range(0, 2*l + 1):
+                m = j - l 
+                m0 = l**2 - 1 
+                m1 = m0 + 2*l + 1
+                D0 = (2*l + 1)*(m + l) + l**2 - 1
+                D1 = D0 + 2*l +1
+                Dlm = D[D0:D1]
+                mcoeffs[l**2  - 1 + j] = (
+                        self.mcoeffs[m0:m1] * Dlm).sum()
+                ncoeffs[l**2  - 1 + j] = (
+                        self.ncoeffs[m0:m1] * Dlm).sum()
+        self.mcoeffs = mcoeffs
+        self.ncoeffs = ncoeffs
     def Vl1l2_m(self, l1, l2, m, kd, sign_z):
         """return the (l1, m) contribution of a vector spherical 
            harmonic M_l1,m (N_l1,m) when it is translated along (sign_z = +1)
@@ -104,16 +107,17 @@ class HarmonicField:
         
 
 if __name__ == "__main__":
-    field = HarmonicField(np.array([1j, 0, 1j], dtype = np.complex128), 
-            np.array([1, 0, -1], dtype = np.complex128), 1)
+    m = np.array([1j, 0, 1j])
+    n = np.array([1, 0, -1])
+    field = HarmonicField(m, n, 1)
     field.rotate(np.pi/2, 0)
-    print("applying rotation to mcoefs = [1,1,1], ncoeffs = [0,0,0]")
+    print("applying rotation to mcoeffs = ", m, "ncoeffs = ", n)
     print("M-Coeffs")
     print(field.mcoeffs)
     print("N-Coeffs")
     print(field.ncoeffs)
-    print("translating in z-direction")
-    field.z_translate(1, 1)
+    print("rotating back")
+    field.rotate(-np.pi/2,0)
     print("M-Coeffs")
     print(field.mcoeffs)
     print("N-Coeffs")
