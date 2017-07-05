@@ -37,10 +37,11 @@ def translate_l1l2(l1, l2, m, kd, sign_z, regreg):
                np.sqrt(l2*(l2+1) * l1*(l1+1)/(np.pi*4)))
     alpha = np.arange(abs(l1-l2), l1+l2+1, 2)
     gaunts = gaunt(l1, l2, m)
+    spherical_factor = np.sqrt(np.pi/(2*kd))
     if regreg:
-        sphB = jv(alpha+0.5, kd)*np.sqrt(np.pi/(2*kd))
+        sphB = jv(alpha+0.5, kd)*spherical_factor
     else: 
-        sphB = hankel1(alpha+0.5, kd)*np.sqrt(np.pi/(2*kd))
+        sphB = hankel1(alpha+0.5, kd)*spherical_factor
     fak_PP = ((l1*(l1+1) + l2*(l2+1) - alpha*(alpha+1))*0.5 * sphB *
                  (sign_z*1j)**alpha*gaunts*np.sqrt(2*alpha+1)).sum()
     fak_PQ = (-m*kd*(1j)**(alpha+1) * gaunts * np.sqrt(2*alpha+1)
@@ -72,7 +73,7 @@ def translation_matrix(l1_max, l2_max, kd, sign_z, regreg):
                                         sign_z, regreg)
                 PPm[l1-lmin, l2-lmin] = PP
                 PQm[l1-lmin, l2-lmin] = PQ * (-1j) 
-                if [l2-lmin+1, l1-lmin+1] <= list(PPm.shape):
+                if [l2-lmin+1, l1-lmin+1] <= list(PPm.shape) and not l1 == l2:
                     PPm[l2-lmin, l1-lmin] = -1j*PP
                     PQm[l2-lmin, l1-lmin] = -1j*PQ * (-1j)
         PP_result.append(PPm)
