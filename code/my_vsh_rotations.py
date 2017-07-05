@@ -41,7 +41,7 @@ class HarmonicField:
         self.ncoeffs = ncoeffs
 
 
-    def z_translate(self, kd, sign_z):
+    def z_translate(self, kd, sign_z, regreg):
         """ calculate the VSH-coefficients in a frame of 
             reference which is translated kd/k along the 
             z-axis, k beeing the wavevector
@@ -52,39 +52,51 @@ class HarmonicField:
         l2 = l1.transpose()
         mcoeffs = self.mcoeffs.copy()
         ncoeffs = self.ncoeffs.copy()
-        for l in range(1, self.lmax+1):
-            for m in range(-self.lmax, 1):
-                for l2 in range(1, self.lmax+1):
-                    PP, PQ = self.Vl1l2_m(l, l2, m, kd, sign_z)
-                    idx = l2*(l2+1) - 1 + m
-                    mcoeffs[l*(l+1)-1+m] += (self.mcoeffs[idx] * PP +
-                                             self.ncoeffs[idx] * PQ)
-                    ncoeffs[l*(l+1)-1+m] += (self.ncoeffs[idx] * PP +
-                                             self.mcoeffs[idx] * PQ)
-                    mcoeffs[l*(l+1)-1-m] += (self.mcoeffs[idx-2*m] * PP +
-                                             self.ncoeffs[idx-2*m] * PQ)
-                    ncoeffs[l*(l+1)-1-m] += (self.ncoeffs[idx-2*m] * PP +
-                                             self.mcoeffs[idx-2*m] * PQ)
+        [PPm, PQm] = translations(self.lmax, kd, sign_z, regreg)
+        for m in range(-self.lmax, 1):
+            PP, PQ = PPm[self.lmax+m], PQm[self.lmax+m] # square matrices for 
+            mc_neg = np.array([[self.mcoeffs[l2*(l2+1)-1+m,0]] 
+                      for l2 in range(max(abs(m),1), self.lmax+1)])
+            nc_neg = np.array([[self.ncoeffs[l2*(l2+1)-1+m,0]] 
+                      for l2 in range(max(abs(m),1), self.lmax+1)])
+            mc_pos = np.array([[self.mcoeffs[l2*(l2+1)-1-m,0]] 
+                      for l2 in range(max(abs(m),1), self.lmax+1)])
+            nc_pos = np.array([[self.ncoeffs[l2*(l2+1)-1-m,0]] 
+                      for l2 in range(max(abs(m),1), self.lmax+1)])
+            l_min = max(abs(m), 1)
+            for l in range(l_min, self.lmax+1):  
+                i = l - l_min
+                mcoeffs[l*(l+1)+m-1,0] = (PP[i,:] * mc_neg + PQ[i,:] * nc_neg).sum()
+                ncoeffs[l*(l+1)+m-1,0] = (PP[i,:] * nc_neg + PQ[i,:] * mc_neg).sum()
+                mcoeffs[l*(l+1)-m-1,0] = (PP[i,:] * mc_pos + PQ[i,:] * nc_pos).sum()
+                ncoeffs[l*(l+1)-m-1,0] = (PP[i,:] * nc_pos + PQ[i,:] * mc_pos).sum()
         self.mcoeffs = mcoeffs
         self.ncoeffs = ncoeffs
-
-                                        
-
+    
+    def get_mordered_coeffs(self):
+        """set up m-ordered coefficient vectors mcoeffs_morderd
+           and ncoeffs_mordered in which translations are easier to handle
+        """
+        idx = lambda m: [l*(l+1) + m - 1 for l in range(max(abs(m),1), self.lmax+1)]
+        mcoeffs_mord = np.array([elem for m in range(-self.lmax, self.lmax+1) 
+                                      for elem in self.mcoeffs[idx(m)]])
+        ncoeffs_mord = np.array([elem for m in range(-self.lmax, self.lmax+1)
+                                      for elem in self.ncoeffs[idx(m)]])
+        return mcoeffs_mord, ncoeffs_mord
+    
         
 
 if __name__ == "__main__":
-    m = np.array([1j, 0, 1j])[:, np.newaxis]
-    n = np.array([1, 0, -1])[:, np.newaxis]
-    field = HarmonicField(m, n, 1)
-    field.rotate(np.pi/2, 0)
-    print("applying rotation to mcoeffs = ", m, "ncoeffs = ", n)
+    m = np.array([0, 1, 0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0], dtype = np.complex128)[:, np.newaxis]
+    n = np.array([0, 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0], dtype = np.complex128)[:, np.newaxis]
+    field = HarmonicField(m, n, 4)
+    field.z_translate(.01, 1, 1)
+    print("applying translation to mcoeffs = \n", m)
     print("M-Coeffs")
     print(field.mcoeffs)
-    print("N-Coeffs")
-    print(field.ncoeffs)
-    print("rotating back")
-    field.rotate(-np.pi/2,0)
+    field.z_translate(0.01, -1, 1)
+    print("applying reverse translation \n")
     print("M-Coeffs")
     print(field.mcoeffs)
-    print("N-Coeffs")
-    print(field.ncoeffs)
