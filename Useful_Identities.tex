@@ -1,0 +1,21 @@
+\section{Useful identities}
+
+Consider the following integral occurring in xy-periodic structures:
+
+\begin{equation}
+I^{\mathrm{Y\mathbf{X}\mathbf{X}}}_{123} \equiv \int \rd \Omega \, Y_{\ell_1, m_1} \mathbf{X}_{\ell_2, m_2}\cdot \mathbf{X}^*_{\ell_3,m_3}.
+\label{eqn:YXX_integral}
+\end{equation}
+
+Without the spherical harmonic $Y_{\ell_1,m_1}$ the obove integral would have yielded
+1, since the VSH $\mathbf{X}_{\ell, m}$ is normalized with respect to integration over the surface of the unit-sphere and $\mathbf{X}_{\ell,m},\mathbf{W}_{\ell,m}$ form an orthogonal set of zero-divergence vectorfields. 
+
+Lets carry out the dot product of the two vector spherical harmonics:
+\begin{equation}
+I^{\mathrm{Y\mathbf{X}\mathbf{X}}}_{123} =\frac{1}{\sqrt{\ell_2(\ell_2+1)\ell_3(\ell_3+1)}}\int \rd \Omega\, 
+Y_{\ell_1,m_1}\left[
+\frac{m_2 m_3}{\sin^2\theta} Y_{\ell_2,m_2} Y^*_{\ell_3, m_3}
++\partial_\theta Y_{\ell_2,m_2}\partial_\theta Y^*_{\ell_3,m_3}
+\right]
+\label{eqn:YXX_integral_split}
+\end{equation}
