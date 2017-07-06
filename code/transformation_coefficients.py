@@ -33,6 +33,9 @@ def translate_l1l2(l1, l2, m, kd, sign_z, regreg):
     """
     # common has extra "i" since M/N are defined 
     # differently compared to Wittann
+    if abs(m) > max(l1, l2):
+        raise ValueError("translate_l1l2 should not be called \
+        with |m| > max(l1, l2), but got l1=%i, l2=%i, m=%i" %(l1,l2,m))
     common =  ((-1)**m*1j**(l1-l2)/   
                np.sqrt(l2*(l2+1) * l1*(l1+1)/(np.pi*4)))
     alpha = np.arange(abs(l1-l2), l1+l2+1, 2)
@@ -45,40 +48,48 @@ def translate_l1l2(l1, l2, m, kd, sign_z, regreg):
     fak_PP = ((l1*(l1+1) + l2*(l2+1) - alpha*(alpha+1))*0.5 * sphB *
                  (sign_z*1j)**alpha*gaunts*np.sqrt(2*alpha+1)).sum()
     fak_PQ = (-m*kd*(1j)**(alpha+1) * gaunts * np.sqrt(2*alpha+1)
-              *sphB * sign_z**(alpha+1)).sum()
+              *sphB * sign_z**(alpha)).sum()
     PP = fak_PP * common
     PQ = fak_PQ * common
     return [PP, PQ]
 
-def translation_matrix(l1_max, l2_max, kd, sign_z, regreg): 
-    """calculate the full translation matrix assuming that lmax is sufficient
-       in both coordinate systems and return a list:
-       [[PP(m=-lmax), PP(m=-lmax+1..., PP(m=0)], [PQ(m=-lmax),...,PQ(m=0)]] 
-       square matrices PP and PQ
-       for m = -l, -l+1, ..., 0 which is sufficient since translations in z-direction
-       do not depend upon the sign of m and don't mix in m
+def translation_matrix(l1_max, l2_max, m, kd, sign_z, regreg): 
+    """calculate the full translation matrix with dimensions:
+       [2 * (l1_max - max(|m|, 1)) x 2 * (l2_max - max(|m|, 1))]
+       wavenumber*distance = kd and translation in positive
+       (sign_z = +1) or negative (sign_z = -1) z-direction
+       regreg should be either +1 for regular-wave to regular-wave
+       or -1 for regular -> outgoing waves
+       Returns a rectangular Matrix of block-structure:
+       result = [[TETE, TETM],
+                 [TMTE, TMTM]]
+       since the result does not depend upon the sign of m 
+       it should be not recalculated if needed for m = -lmax..+lmax
     """
-    PP_result = []
-    PQ_result = []
     smaller_l = min(l1_max, l2_max)
-    for m in range(-smaller_l, 1):
-        lmin = max(abs(m), 1)
-        dim1 = l1_max - lmin + 1
-        dim2 = l2_max - lmin + 1
-        PPm = np.zeros((dim1, dim2), dtype = np.complex128)
-        PQm = np.zeros(PPm.shape, dtype = np.complex128)
-        for l1 in range(lmin, l1_max+1):
-            for l2 in range(l1, l2_max+1):
-                PP, PQ = translate_l1l2(l1, l2, m, kd, 
-                                        sign_z, regreg)
-                PPm[l1-lmin, l2-lmin] = PP
-                PQm[l1-lmin, l2-lmin] = PQ * (-1j) 
-                if [l2-lmin+1, l1-lmin+1] <= list(PPm.shape) and not l1 == l2:
-                    PPm[l2-lmin, l1-lmin] = -1j*PP
-                    PQm[l2-lmin, l1-lmin] = -1j*PQ * (-1j)
-        PP_result.append(PPm)
-        PQ_result.append(PQm)
-    return [PP_result, PQ_result]
+    lmin = max(abs(m), 1)
+    dim1 = l1_max - lmin + 1
+    dim2 = l2_max - lmin + 1
+    # polarization conserving block
+    result = np.zeros((2*dim1, 2*dim2), dtype = np.complex128)
+    # polarization mixing block
+    for l1 in range(lmin, l1_max+1):
+        for l2 in range(l1, l2_max+1):
+            PP, PQ = translate_l1l2(l1, l2, m, kd, sign_z, regreg)
+            # polarization offset in lines (columns) i (j)
+            Di = l1_max - lmin + 1
+            Dj = l2_max - lmin + 1
+            result[l1-lmin, l2-lmin] = PP
+            result[l1-lmin+Di, l2-lmin+Dj] = PP
+            result[l1-lmin, l2-lmin+Dj] = PQ
+            result[l1-lmin+Di, l2-lmin] = PQ
+            if ([l2-lmin+1, l1-lmin+1] <= [result.shape[0]/2,
+                        result.shape[1]/2] and not l1 == l2):
+                result[l2-lmin, l1-lmin] = -1j*PP
+                result[l2-lmin+Dj, l1-lmin+Di] = -1j*PP
+                result[l2-lmin+Dj, l1-lmin] = -1j*PQ 
+                result[l2-lmin, l1-lmin+Di] = -1j*PQ
+    return result
             
 
 
