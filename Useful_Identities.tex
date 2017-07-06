@@ -1,5 +1,5 @@
 \section{Useful identities}
-
+\subsection{Symmetry}
 Consider the following integral occurring in xy-periodic structures:
 
 \begin{equation}
@@ -19,3 +19,54 @@ Y_{\ell_1,m_1}\left[
 \right]
 \label{eqn:YXX_integral_split}
 \end{equation}
+
+\subsection{Vector Multipole-Translations}
+Suppose given is a multipole field vector:
+\begin{equation}
+\ket{\mathbf{E}_m^A} = \left[
+Q^\text{M}_{\ell_\text{min},m}, Q^\text{M}_{\ell_\text{min}+1,m},...,
+Q^\text{M}_{\ell_\text{max},m};
+Q^\text{E}_{\ell_\text{min},m}, Q^\text{E}_{\ell_\text{min}+1,m},...,
+Q^\text{E}_{\ell_\text{max},m}
+\right]^T
+\end{equation}
+given in a frame of reference $A$ with magnetic and electric multipole coefficients $Q^\text{M}_{\ell,m}, Q^\text{E}_{\ell,m}$ indexed by the angular momentum number $\ell$ and its z-projection $m$. $\ell_\text{min}$ and $\ell_\text{max}$ shall denote the minimum angular momentum involved in the $m$-block, $\ell_\text{min}=\max(|m|,1)$ and $\ell_\text{max}$ is the maximum angular momentum we are interested in.
+
+If we want to know the respective coefficients in a second frame of refernence, $B$ which is shifted by the vector $\mathbf{d}=\pm d \mathbf{z}$\footnote{Note that translations in the z-direction are especially simple since $m$ is conserved and that every frame of reference can always be rotated such that the vector $\mathbf{d}$ points along the $z$-axis.} relative to $A$ we apply the following translation relation:
+\begin{equation}
+\ket{\mathbf{E}_m^B} = \mathbb{V}^\text{m} \ket{\mathbf{E}_m^A},
+\end{equation}
+where $\mathbb{V}^\text{m}$ is a $2\times 2$ block-matrix
+\begin{equation}
+\mathbb{V}^m = \left[
+\begin{matrix}
+\mathbb{V}^{\mathrm{PP},m} & \mathbb{V}^{\mathrm{PQ},m} \\
+\mathbb{V}^{\mathrm{PQ},m} & \mathbb{V}^{\mathrm{PP},m}
+\end{matrix}
+\right]
+\end{equation}
+with polarization conserving (mixing) entries PP (PQ) \Cite{Wittmann1988}:
+\begin{align}
+&&\left(\mathbb{V}^{\mathrm{PP},m}\right)_{\ell_1,\ell_2} &= 
+C^{m,\pm}_{\ell_1,\ell_2} \sum_{\alpha=|\ell_1-\ell_2|}^{\ell_1+\ell_2}
+D^m_{\ell_1,\ell_2,\alpha}(kd) 
+\big[\ell_1(\ell_1+1) + \ell_2(\ell_2+1)-\alpha(\alpha+1)\big]\frac{1}{2},\\
+&&\left(\mathbb{V}^{\mathrm{PQ},m}\right)_{\ell_1,\ell_2} &= -\imag m kd\,
+C^{m,\pm}_{\ell_1,\ell_2} \,  \sum_{\alpha=|\ell_1-\ell_2|}^{\ell_1+\ell_2}
+D^m_{\ell_1,\ell_2,\alpha}(kd).
+\end{align}
+We introduced the abbreviations:
+\begin{align}
+&&C^{m,\pm}_{\ell_1,\ell_2} &= \frac{(-1)^m (\pm \imag)^{\ell_1-\ell_2}2\sqrt{\pi}}
+{\sqrt{\ell_1(\ell_1+1)\ell_2(\ell_2+1)}},\label{eqn:Ccoeff}
+\\
+&&D^m_{\ell_1,\ell_2,\alpha}(kd) &= \imag^\alpha \sqrt{2\alpha+1} z_\alpha(kd)
+\mathrm{Y}^{\ell_1 \ell_2 \alpha}_{m,-m,0}\label{eqn:Dcoeff}
+\end{align}
+with the Gaunt-coefficients $\mathrm{Y}^{\ell_1 \ell_2 \alpha}_{m,-m,0}$, an integral of three spherical harmonics over the surface of the unit-sphere:
+\begin{equation}
+\mathrm{Y}^{\ell_1 \ell_2 \alpha}_{m,-m,0} = \int_{\partial B_1(0)} \rd \Omega \,
+Y_{\ell_1,m}(\theta,\phi) Y_{\ell_2,-m}(\theta,\phi) Y_{\alpha,0} (\theta,\phi)
+\label{eqn:Gaunt}
+\end{equation}
+and spherical bessel functions $z_\alpha(kd)$ which are to be understood to be either regular ($z_\alpha = j_\alpha$) or outgoing ($z_\alpha = h^{(1)}_\alpha$) depending on whether the orgin is inclosed in the region where the field is to be evaluated or not.  \capEref{eqn:Ccoeff}  depends upon the the sign of the translation, with $+$ for translations in positive $z$-direction and $-$ for translations in the opposite direction.

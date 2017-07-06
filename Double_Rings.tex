@@ -17,6 +17,7 @@ style=numeric, sorting=none]{biblatex}
 \usepackage{amssymb}
 \usepackage{psfrag}
 \usepackage{authblk}
+\usepackage{physics}
 \usepackage{bm}
 
 \renewcommand*\sectfont{\normalcolor\rmfamily\bfseries}
@@ -63,12 +64,13 @@ style=numeric, sorting=none]{biblatex}
   \end{center}
 }
 \renewcommand{\Cref}[1]{\cref{#1}\textcolor{RoyalBlue}{)}}
-\newcommand{\capCref}[1]{Fig. \ref{#1}\textcolor{RoyalBlue}{)}}
+\newcommand{\capFref}[1]{Fig. \ref{#1}\textcolor{RoyalBlue}{)}}
+\newcommand{\capEref}[1]{Eq. \textcolor{RoyalBlue}{(}\ref{#1}\textcolor{RoyalBlue}{)}}
 \newcommand{\Ref}[1]{\ref{#1}\textcolor{RoyalBlue}{)}}
 \newcommand{\unitv}[1]{\hat{\bm{#1}}}
 \newcommand{\imag}{\mathrm{i}}
 \newcommand{\euler}{\mathrm{e}}
-\newcommand{\dyad}[1]{\overset{\bm\leftrightarrow}{#1}}
+\renewcommand{\dyad}[1]{\overset{\bm\leftrightarrow}{#1}}
 \newcommand{\rd}{\mathrm{d}}
 %\newcommand{\ontop}{\genfrac{\{}{\}}{0pt}{}}
 \newcommand\ontop[4]{\genfrac{#1}{#2}{0pt}{}{#3}{#4}}
@@ -80,6 +82,8 @@ style=numeric, sorting=none]{biblatex}
 \author[1]{Dr. Stefan Umrath, \href{mailto:Stefan.Umrath@dlr.de}{Stefan.Umrath@dlr.de}}
 \affil[1]{German Aerospace Center (DLR)}
 \date{Oberpfaffenhofen \today{} \vspace{3cm}}
+\bibliography{bibliography}
+
 \begin{document}
 \maketitle
 \begin{center}
@@ -109,7 +113,7 @@ style=numeric, sorting=none]{biblatex}
 
 
 %%% name of the bibliography file without .bib
-%%% e.g.: literatur.bib -> \bibliography{literatur}
+%%% e.g.: literatur.bib -> 
 \printbibliography
 
 
