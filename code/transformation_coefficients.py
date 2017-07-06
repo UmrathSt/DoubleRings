@@ -39,7 +39,6 @@ def translate_l1l2(l1, l2, m, kd, sign_z, regreg):
                sqrt(pi/(l1*(l1+1)*l2*(l2+1))))
     alpha = np.arange(abs(l1-l2), l1+l2+1, 2)
     gaunts = gaunt(l1, l2, m)
-    spherical_factor = sqrt(pi/(2*kd))
     if regreg:
         bessel = jv(alpha+0.5, kd)
     else: 
@@ -77,6 +76,7 @@ def translation_matrix(l1_max, l2_max, m, kd, sign_z, regreg):
     # polarization conserving block
     result = np.zeros((2*dim1, 2*dim2), dtype = np.complex128)
     # polarization mixing block
+    l1l2_switch = -1j*sign_z
     for l1 in range(lmin, l1_max+1):
         for l2 in range(l1, l2_max+1):
             PP, PQ = translate_l1l2(l1, l2, m, kd, sign_z, regreg)
@@ -87,7 +87,6 @@ def translation_matrix(l1_max, l2_max, m, kd, sign_z, regreg):
             result[l1-lmin+Di, l2-lmin+Dj] = PP
             result[l1-lmin, l2-lmin+Dj] = PQ
             result[l1-lmin+Di, l2-lmin] = PQ
-            l1l2_switch = -1j*sign_z
             if ([l2-lmin+1+Dj, l1-lmin+1+Di] <= [result.shape[0]/2,
                         result.shape[1]/2] and not l1 == l2):
                 result[l2-lmin, l1-lmin] = l1l2_switch*PP
@@ -102,10 +101,9 @@ def translation_matrix(l1_max, l2_max, m, kd, sign_z, regreg):
 
 if __name__ == "__main__":
     #print(WignerD_matrices(2, 0, 1.5))
-    
-    T = translation_matrix(5, 3, 0.1, 1, 1)
-    print(T[0][0])
-    print(T[1][0])
-    print(T[0][-2])
-    print(T[1][-2])
-
+    l1_max, l2_max = 4, 4
+    m, kd = 1, 0.5
+    sign_z, regreg = 1, 1
+    T1 = translation_matrix(l1_max, l2_max, m,kd, sign_z, regreg)
+    T2 = translation_matrix(l1_max, l2_max, m, kd, -sign_z, regreg)
+    print(np.dot(T1, np.conjugate(T2.transpose())))
