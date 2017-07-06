@@ -3,42 +3,45 @@
 
 import numpy as np
 from math import sqrt
-from transformation_coefficients import WignerD_matrices as WignerDs, translation_matrix as translations
+from transformation_coefficients import WignerD_matrices as WignerDs
+from transformation_coefficients import translation_matrix as translations
 
 
 
 class HarmonicField:
-    def __init__(self, mcoeffs, ncoeffs, lmax):
+    def __init__(self, coeffs, lmax):
         """ declare a harmonic field as linear combination of 
             Hansens Mlm and Nlm vector fields represented as a 
             vector with index ordering according to:
-            mcoeffs = [M(l=1, m=-1), M(l=1, m=0), ...
-                     , M(l=lmax, m=-lmax),..., M(l=lmax, m=lmax)]
+            coeffs = [M(l=1, m=-1), M(l=1, m=0), ...
+                     , M(l=lmax, m=-lmax),..., M(l=lmax, m=lmax),
+                     N(l=1, m=-1), N(l=1, m=0),...
+                     , N(l=lmax, m=lmax)]
         """
-        assert type(mcoeffs) == np.ndarray
-        assert np.shape(mcoeffs) == np.shape(ncoeffs)
-        self.no_coeffs = (lmax + 2) * lmax
+        self.no_coeffs = (lmax + 2) * lmax * 2
         self.lmax = lmax
-        assert mcoeffs.shape == (self.no_coeffs, 1)
-        self.mcoeffs = mcoeffs
-        self.ncoeffs = ncoeffs
+        assert type(coeffs) == np.ndarray
+        assert np.shape(coeffs) == np.shape(self.no_coeffs, 1)
+        self.coeffs = coeffs
 
     def rotate(self, theta, phi):
-        """ calculate the m- and ncoeffs after a rotation of
+        """ calculate the multipole coefficients after a rotation of
             theta around the y-axis followed by a rotation of 
             phi around the z-axis
         """
         Ds = WignerDs(self.lmax, theta, phi)
-        mcoeffs = np.zeros(self.mcoeffs.shape, dtype=np.complex128)
-        ncoeffs = np.zeros(self.ncoeffs.shape, dtype=np.complex128)
-        start_idx = lambda L, M: (M)*(2*L + 1) + L**2 -1 
+        # get the index, where a block of fixed l starts for
+        # magnetic coefficients
+        start_idx = lambda L: L**2 - 1
+        lwidth = lambda L: 2*L + 1
+        # determine the offset to jump from magnetic to electric
+        jump = lmax*(lmax + 2)
         for l in range(1, self.lmax + 1):
-            i0 = int(4*l**3 - l - 3)
-            i1 = i0 + (2*l + 1)**2
-            mcoeffs[i0:i1] = np.dot(Ds[l-1], self.mcoeffs[i0:i1])
-            ncoeffs[i0:i1] = np.dot(Ds[l-1], self.ncoeffs[i0:i1])
-        self.mcoeffs = mcoeffs
-        self.ncoeffs = ncoeffs
+            i0 = l**2 - 1
+            i1 = i0 + 2*l + 1
+            self.coeffs[i0:i1] = np.dot(Ds[l-1], self.coeffs[i0:i1])
+            self.coeffs[i0+jump:i1+jump] = np.dot(Ds[l-1], 
+                                self.coeffs[i0+jump:i1+jump])
 
 
     def z_translate(self, kd, sign_z, regreg):
