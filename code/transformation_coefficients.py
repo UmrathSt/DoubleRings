@@ -30,8 +30,6 @@ def translate_l1l2(l1, l2, m, kd, sign_z, regreg):
        as the first and the polarization mixing contribution N_l1,m (M_l1,m)
        as the second value
     """
-    # common has extra "i" since M/N are defined 
-    # differently compared to Wittann
     if abs(m) > max(l1, l2):
         raise ValueError("translate_l1l2 should not be called \
         with |m| > max(l1, l2), but got l1=%i, l2=%i, m=%i" %(l1,l2,m))
@@ -76,34 +74,72 @@ def translation_matrix(l1_max, l2_max, m, kd, sign_z, regreg):
     # polarization conserving block
     result = np.zeros((2*dim1, 2*dim2), dtype = np.complex128)
     # polarization mixing block
-    l1l2_switch = -1j*sign_z
+    # polarization offset in lines (columns) i (j)
+    Di = l1_max - lmin + 1
+    Dj = l2_max - lmin + 1
     for l1 in range(lmin, l1_max+1):
         for l2 in range(l1, l2_max+1):
-            PP, PQ = translate_l1l2(l1, l2, m, kd, sign_z, regreg)
-            # polarization offset in lines (columns) i (j)
-            Di = l1_max - lmin + 1
-            Dj = l2_max - lmin + 1
-            result[l1-lmin, l2-lmin] = PP
-            result[l1-lmin+Di, l2-lmin+Dj] = PP
-            result[l1-lmin, l2-lmin+Dj] = PQ
-            result[l1-lmin+Di, l2-lmin] = PQ
-            if ([l2-lmin+1+Dj, l1-lmin+1+Di] <= [result.shape[0]/2,
-                        result.shape[1]/2] and not l1 == l2):
-                result[l2-lmin, l1-lmin] = l1l2_switch*PP
-                result[l2-lmin+Dj, l1-lmin+Di] = l1l2_switch*PP
-                result[l2-lmin+Dj, l1-lmin] = l1l2_switch*PQ 
-                result[l2-lmin, l1-lmin+Di] = l1l2_switch*PQ
+            # fill elements in the "upper" triangle
+            i, j = l1-lmin, l2-lmin
+            PPij, PQij = translate_l1l2(l1, l2, m, kd, sign_z, regreg)
+            result[i, j] = PPij
+            result[i, j+Dj] = PQij
+        for l2 in range(lmin+1, l1_max+1):
+            transpose_factor = (-1)**(l1-l2)
+            j = l2-lmin
+            # use V(l1,l2) = (-1)^(l1-l2)* V(l2,l1)
+            result[j, i] = result[i, j] * transpose_factor
+            result[j, Dj+i] = result[i, j+Dj] * transpose_factor
+            # now the first line in the matrix [[PP, PQ],
+            # is filled and ready to copy       [PQ, PP]]
+    # copy the PP and PQ of the first line to the second
+    # line in the correct order
+    result[Di:, Dj:] = result[0:Di, 0:Dj] # PP to lower right corner
+    result[Di:, 0:Dj] = result[0:Di, Dj:] # PQ to lower left corner
     if transpose:
-        result.transpose()
+        result = result.transpose()
     return result
             
-
+def translation_matrix_debug(l1_max, l2_max, m, kd, sign_z, regreg): 
+    """Calculate the matrix without using symmetries
+       calculate the full translation matrix with dimensions:
+       [2 * (l1_max - max(|m|, 1)) x 2 * (l2_max - max(|m|, 1))]
+       wavenumber*distance = kd and translation in positive
+       (sign_z = +1) or negative (sign_z = -1) z-direction
+       regreg should be either +1 for regular-wave to regular-wave
+       or -1 for regular -> outgoing waves
+       Returns a rectangular Matrix of block-structure:
+       result = [[TETE, TETM],
+                 [TMTE, TMTM]]
+       since the result does not depend upon the sign of m 
+       it should be not recalculated if needed for m = -lmax..+lmax
+    """
+    lmin = max(abs(m), 1)
+    dim1 = l1_max - lmin + 1
+    dim2 = l2_max - lmin + 1
+    # polarization conserving block
+    result = np.zeros((2*dim1, 2*dim2), dtype = np.complex128)
+    # polarization mixing block
+    # polarization offset in lines (columns) i (j)
+    Di = l1_max - lmin + 1
+    Dj = l2_max - lmin + 1
+    for l1 in range(lmin, l1_max+1):
+        for l2 in range(lmin, l2_max+1):
+            # fill elements in the "upper" triangle
+            i, j = l1-lmin, l2-lmin
+            PPij, PQij = translate_l1l2(l1, l2, m, kd, sign_z, regreg)
+            result[i, j] = PPij
+            result[i, j+Dj] = PQij
+    result[Di:, Dj:] = result[0:Di, 0:Dj] # PP to lower right corner
+    result[Di:, 0:Dj] = result[0:Di, Dj:] # PQ to lower left corner
+    return result
+ 
 
 if __name__ == "__main__":
     #print(WignerD_matrices(2, 0, 1.5))
-    l1_max, l2_max = 4, 4
+    l1_max, l2_max = 4, 10 
     m, kd = 1, 0.5
     sign_z, regreg = 1, 1
-    T1 = translation_matrix(l1_max, l2_max, m,kd, sign_z, regreg)
-    T2 = translation_matrix(l1_max, l2_max, m, kd, -sign_z, regreg)
-    print(np.dot(T1, np.conjugate(T2.transpose())))
+    T1 = translation_matrix_debug(l1_max, l2_max, m, kd, +sign_z, regreg)
+    T2 = translation_matrix_debug(l2_max, l1_max, m, kd, -sign_z, regreg)
+    print(np.dot(T1, T2))
