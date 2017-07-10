@@ -1,6 +1,6 @@
 import numpy as np
-from transformation_coefficients import translate_l1l2 as trans
-from transformation_coefficients import translation_matrix
+from MultipoleTransformations import translate_l1l2 as trans
+from MultipoleTransformations import translation_matrix
 from math import isclose
 
 def test_symmetry(lmax, kd):
@@ -39,28 +39,36 @@ def test_inverse(A, B):
     """
     passed = True
     i, j = A.shape
+    dim = i
     if not i == j:
-        Asq = np.eye(max(i, j))
+        dim = max(i, j)
+        Asq = np.eye(dim)
         Asq[0:i, 0:j] = A
         A = Asq
-        Bsq = np.eye(max(i, j))
+        Bsq = np.eye(dim)
         Bsq[0:i, 0:j] = B
         B = Bsq
-    AB = np.dot(A, np.linalg.inv(B))
-    for line in AB:
-        for elem in line:
-            if not (abs(elem.imag) < 1e-5 and 
-                    abs(elem.real-1) < 1e-5):
+    AB = np.dot(A, B)
+    for i in range(dim):
+        for j in range(dim):
+            elem = AB[i,j]
+            if not (abs(elem.imag) < 1e-2):
+                print("nonvanishing imaginary part at (i,j)=(%i,%i), %.2f" %(i,j, elem.imag))
                 passed = False
+                break
+            if i == j and not (abs(elem.real-1) < 1e-2):
+                passed = False
+                print("non-1 real part at (i,j)=(%i,%i), %.2f" %(i, j, elem.real))
+                break
     return passed
 
 
 
 if __name__ == "__main__":
-    A1 = translation_matrix(10, 15, 1, 1, 1, 1)
-    A2 = translation_matrix(15, 10, 1, 1, 1, 1)
+    A1 = translation_matrix(10, 10, 1, 1, 1, 1)
+    A2 = translation_matrix(10, 10, 1, 1, 1, 1)
     A = np.dot(A1, A2)
-    B = translation_matrix(10, 10, 1, 2, 1, 1) 
+    B = translation_matrix(10, 10, 1, 2, -1, 1) 
     tests = [test_symmetry(10, 3), test_inverse(A, B)]
     for i, test in enumerate(tests):
         print("Test %i passed: " %(i+1), test)

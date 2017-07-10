@@ -73,29 +73,25 @@ def translation_matrix(l1_max, l2_max, m, kd, sign_z, regreg):
     dim2 = l2_max - lmin + 1
     # polarization conserving block
     result = np.zeros((2*dim1, 2*dim2), dtype = np.complex128)
-    # polarization mixing block
-    # polarization offset in lines (columns) i (j)
-    Di = l1_max - lmin + 1
-    Dj = l2_max - lmin + 1
     for l1 in range(lmin, l1_max+1):
         for l2 in range(l1, l2_max+1):
             # fill elements in the "upper" triangle
             i, j = l1-lmin, l2-lmin
             PPij, PQij = translate_l1l2(l1, l2, m, kd, sign_z, regreg)
             result[i, j] = PPij
-            result[i, j+Dj] = PQij
+            result[i, j+dim2] = PQij
         for l2 in range(lmin+1, l1_max+1):
             transpose_factor = (-1)**(l1-l2)
             j = l2-lmin
             # use V(l1,l2) = (-1)^(l1-l2)* V(l2,l1)
             result[j, i] = result[i, j] * transpose_factor
-            result[j, Dj+i] = result[i, j+Dj] * transpose_factor
+            result[j, i+dim2] = result[i, j+dim2] * transpose_factor
             # now the first line in the matrix [[PP, PQ],
             # is filled and ready to copy       [PQ, PP]]
     # copy the PP and PQ of the first line to the second
     # line in the correct order
-    result[Di:, Dj:] = result[0:Di, 0:Dj] # PP to lower right corner
-    result[Di:, 0:Dj] = result[0:Di, Dj:] # PQ to lower left corner
+    result[dim1:, dim2:] = result[0:dim1, 0:dim2] # PP to lower right corner
+    result[dim1:, 0:dim2] = result[0:dim1, dim2:] # PQ to lower left corner
     if transpose:
         result = result.transpose()
     return result
