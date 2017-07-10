@@ -3,9 +3,9 @@
 
 import numpy as np
 from math import sqrt
-from transformation_coefficients import WignerD_matrices as WignerDs
-from transformation_coefficients import translation_matrix as translations
-from transformation_coefficients import translation_matrix_debug as translationsD
+from MultipoleTransformations import WignerD_matrices as WignerDs
+from MultipoleTransformations import translation_matrix as translations
+from MultipoleTransformations  import translation_matrix_debug as translationsD
 
 
 class HarmonicField:
@@ -23,9 +23,24 @@ class HarmonicField:
         assert type(coeffs) == np.ndarray
         assert np.shape(coeffs) == (self.no_coeffs, 1)
         self.coeffs = coeffs
-        self.coeffs.dtype = np.complex128
+        if not self.coeffs.dtype == np.complex128:
+            self.coeffs = self.coeffs + 0j 
         # determine the offset to jump from magnetic to electric
+        # self.jump will be the line-index of first electric 
+        # coefficient QE(l=1, m=-1)
         self.jump = lmax*(lmax + 2)
+    
+    def reduce_lmax(self, new_lmax):
+        assert self.lmax >= new_lmax
+        if self.lmax == new_lmax:
+            pass
+        else:
+            new_max_idx = new_lmax*(new_lmax + 2)
+            E0_idx = self.lmax*(self.lmax + 2)
+            Qmagnetic = self.coeffs[0:new_max_idx, :]
+            new_max_idx += E0_idx
+            Qelectric = self.coeffs[E0_idx:new_max_idx,:]
+            self.coeffs = np.append(Qmagnetic, Qelectric, axis=0)
     
     def get_coef_at(self, m):
         """ get a mask of magnetic and electric coefficients at 
@@ -33,10 +48,8 @@ class HarmonicField:
         """
         valid_l = np.arange(max(abs(m), 1), self.lmax + 1)
         pos_M = np.array([l*(l+1) + m -1 for l in valid_l])
-        pos_M = np.append(pos_M, pos_M+self.jump, axis=0)
-        if m >=0:
-            return pos_M
-        return pos_M - 2*m
+        pos_M = np.append(pos_M, pos_M + self.jump, axis=0)
+        return pos_M
 
     def rotate(self, theta, phi):
         """ calculate the multipole coefficients after a rotation of
@@ -74,31 +87,29 @@ class HarmonicField:
                     m, kd, sign_z, regreg)
             # update the coefficients belonging to a fixed value of m
             # and use the fact that translations are sign(m) invariant
-            pos_M = self.get_coef_at(m) 
-            neg_M = self.get_coef_at(-m)
-            self.coeffs[pos_M] = np.dot(Tmatrix, self.coeffs[pos_M])
-            self.coeffs[neg_M] = np.dot(Tmatrix, self.coeffs[neg_M])
+            pos_m_idx = self.get_coef_at(m) 
+            neg_m_idx = self.get_coef_at(-m)
+            self.coeffs[pos_m_idx, 0] = np.dot(Tmatrix, self.coeffs[pos_m_idx])[0,0]
+            self.coeffs[neg_m_idx, 0] = np.dot(Tmatrix, self.coeffs[neg_m_idx])[0,0]
         # now also translate m = 0
-        zero_M = self.get_coef_at(0)
+        m0_idx = self.get_coef_at(0)
         Tmatrix = translations(self.lmax, self.lmax, 0, kd, sign_z, regreg)
-        self.coeffs[zero_M] = np.dot(Tmatrix, self.coeffs[zero_M])
+        self.coeffs[m0_idx, 0] = np.dot(Tmatrix, self.coeffs[m0_idx])[0,0]
 
 if __name__ == "__main__":
-    np.set_printoptions(precision=2)
-    lmax = 5 
+    np.set_printoptions(precision=3)
+    lmax = 2 
     ncoeffs = 2*lmax*(lmax+2)
     m = np.zeros(ncoeffs, dtype = np.complex128).reshape(ncoeffs, 1)
-    l1_coeffs =  np.array([-1, 0.01, 1], dtype = np.complex128)[:, np.newaxis]
-    m[:l1_coeffs.size,:] = l1_coeffs
-    coeffs = m
-    coeffs2= m.copy()
+    l1_coeffs =  np.array([-1, 0.01, 1, -20, -10, 0.1, 10, 20], dtype = np.complex128)
+    m[:l1_coeffs.size,0] = l1_coeffs
+    coeffs = m.copy()
     field = HarmonicField(coeffs, lmax)
-    field2= HarmonicField(coeffs.copy(), lmax)
-    kd = 0.15
-    field.z_translate(kd, sign_z = 1, regreg = 1, debug = False)
-
-    print("applying inverse translation \n")
-    field.z_translate(kd, sign_z = 1, regreg = 1, debug = False)
-    field2.z_translate(2*kd, sign_z = 1, regreg = 1, debug = False)
-    print("Coeffs almost equal", np.allclose(field.coeffs, field2.coeffs, atol=1e-4))
-    print("difference \n", field.coeffs- field2.coeffs)
+    print("Koeffizienten")
+    print(field.coeffs)
+    kd = 5
+    field.z_translate(kd, sign_z = 1, regreg = 1)
+    field.z_translate(kd, sign_z =-1, regreg = 1)
+    field.reduce_lmax(1)
+    #print("Coeffs almost equal", np.allclose(field.coeffs, m, atol=1e-4))
+    print("Dipole-coeffs \n", field.coeffs)

@@ -14,8 +14,8 @@ class Translation_functionality(unittest.TestCase):
     """
     
     def setUp(self):
-        self.l1max = 20
-        self.l2max = 20
+        self.l1max = 30 
+        self.l2max = self.l1max 
         self.regreg = 1
     
     def test_identity(self):
@@ -28,12 +28,12 @@ class Translation_functionality(unittest.TestCase):
         sign_z = 1 # translation in pos. z-direction
         regreg = 1 # regular -> regular translations
         l1max = self.l1max
-        l2max = self.l2max
+        l2max = self.l2max + 5
         m = 1 
         dim = 2*(l1max - max(abs(m), 1) + 1)
         T = translation_matrix(l1max, l2max, m, d, sign_z, regreg)
         Ti= translation_matrix(l2max, l1max, m, d, -sign_z, regreg)
-        assert_array_almost_equal(np.dot(T, Ti), np.eye(dim))
+        assert_array_almost_equal(np.dot(T, Ti), np.eye(dim), decimal=3)
 
     def test_double_translation(self):
         """ Test if a translation of distance d, twice, is the same
@@ -48,7 +48,7 @@ class Translation_functionality(unittest.TestCase):
         T1d = translation_matrix(l1max, l2max, m, d, sign_z, regreg)
         T2d = translation_matrix(l2max, l1max, m, d, sign_z, regreg)
         Tdd = translation_matrix(l1max, l1max, m, 2*d, sign_z, regreg)
-        assert_array_almost_equal(np.dot(T1d, T2d), Tdd)
+        assert_array_almost_equal(np.dot(T1d, T2d), Tdd, decimal = 2)
         
 
 if __name__ == "__main__":
