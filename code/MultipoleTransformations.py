@@ -107,7 +107,13 @@ def translation_matrix(l1_max, l2_max, m, kd, sign_z, regreg):
 def full_translation_matrix(l1max, l2max, kd, sign_z, regreg):
     """ get the full translation matrix
     """
-    pass
+    valid_ms = np.arange(0, min(l1max, l2max) + 1)
+    Tmatrices = [translation_matrix(l1max, l2max, m, kd, sign_z, regreg) for
+                 m in valid_ms]
+    Tneg = Tmatrices[1:].copy()
+    Tneg.reverse()
+    Tneg.extend(Tmatrices)
+    return block_diag(*Tneg)
 
 def basisChange_l_to_m(lmax):
     """ return the basis-change matrix from l-ordered
@@ -117,14 +123,15 @@ def basisChange_l_to_m(lmax):
     dim = 2*lmax*(lmax+2)
     dh = lmax*(lmax+2)
     Bml = np.zeros((dim, dim))
+    i = 0
     for m in valid_ms:
         lmin = max(abs(m), 1)
         for l in range(lmin, lmax+1):
-            i = m-valid_ms[0]+l-lmin
             zero = np.zeros(dh)
             zero[l*(l+1) + m -1] =1
             Bml[i, 0:dh] = zero
             Bml[i+dh, dh:] = zero
+            i += 1
     return Bml
 
 
