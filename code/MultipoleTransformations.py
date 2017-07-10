@@ -4,6 +4,7 @@ import quaternion
 from cython_gaunt import gaunt
 from scipy.special import hankel1, jv
 from math import sqrt, pi
+from scipy.linalg import block_diag
 
 
 def WignerD_matrices(l, theta_y, phi_z):
@@ -20,6 +21,13 @@ def WignerD_matrices(l, theta_y, phi_z):
                                 dtype = np.complex128)
         result.append(Matrix)
     return result
+
+def full_rotation_matrix(lmax, theta_y, phi_z):
+    """ Get the full Rotation Matrix
+    """
+    rotor = quaternion.from_spherical_coords(theta_y, phi_z)
+    blocklist = WignerD_matrices(lmax, theta_y, phi_z)
+    return block_diag(*blocklist)
 
 def translate_l1l2(l1, l2, m, kd, sign_z, regreg):
     """return the (l1, m) contribution of a vector spherical 
@@ -95,7 +103,32 @@ def translation_matrix(l1_max, l2_max, m, kd, sign_z, regreg):
     if transpose:
         result = result.transpose()
     return result
-            
+ 
+def full_translation_matrix(l1max, l2max, kd, sign_z, regreg):
+    """ get the full translation matrix
+    """
+    pass
+
+def basisChange_l_to_m(lmax):
+    """ return the basis-change matrix from l-ordered
+        to m-ordered
+    """
+    valid_ms = np.arange(-lmax, lmax+1)
+    dim = 2*lmax*(lmax+2)
+    dh = lmax*(lmax+2)
+    Bml = np.zeros((dim, dim))
+    for m in valid_ms:
+        lmin = max(abs(m), 1)
+        for l in range(lmin, lmax+1):
+            i = m-valid_ms[0]+l-lmin
+            zero = np.zeros(dh)
+            zero[l*(l+1) + m -1] =1
+            Bml[i, 0:dh] = zero
+            Bml[i+dh, dh:] = zero
+    return Bml
+
+
+
 def translation_matrix_debug(l1_max, l2_max, m, kd, sign_z, regreg): 
     """Calculate the matrix without using symmetries
        calculate the full translation matrix with dimensions:

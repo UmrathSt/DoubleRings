@@ -29,13 +29,30 @@ class MultipoleFields_coefficients(unittest.TestCase):
 
         lmax = 5
         n0 = lmax*(lmax + 2)
-        coeffs = np.array([[i] for i in range(2*lmax*(lmax+2))])
+        coeffs = np.arange(2*n0)[:, np.newaxis]
         hf = HarmonicField(coeffs, lmax)
         
         l1_coeffs = np.append(coeffs[0:3,:], coeffs[n0:n0+3,:], axis=0)
         hf.reduce_lmax(1)
         assert_array_almost_equal(l1_coeffs, hf.coeffs)
 
+    def test_rotation_translation(self):
+        """ test if a multipole field translated by d in positive
+            z-direction is the same as a field rotated by pi around the
+            y-axis and then translated a distance -d in the z-direction
+        """
+        lmax = 5
+        kd = 2
+        sign_z = 1
+        regreg = 1
+        coeffs = np.arange(lmax*(lmax + 2)*2)[:,np.newaxis]
+        hf1 = HarmonicField(coeffs.copy(), lmax)
+        hf1.z_translate(kd, sign_z, regreg)
+        hf2 = HarmonicField(coeffs.copy(), lmax)
+        hf2.rotate(np.pi, 0)
+        hf2.z_translate(kd, -sign_z, regreg)
+        hf2.rotate(-np.pi, 0)
+        assert_array_almost_equal(hf1.coeffs, hf2.coeffs, decimal=4)
 if __name__ == "__main__":
     unittest.main()
 
