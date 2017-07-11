@@ -183,12 +183,12 @@ def translation_matrix_debug(l1_max, l2_max, m, kd, sign_z, regreg):
 
 if __name__ == "__main__":
     #print(WignerD_matrices(2, 0, 1.5))
-    l1_max, l2_max = 7, 10 
-    m, kd = 5, 0.5
+    l1_max, l2_max = 20, 10 
+    m, kd = 5, 5
     debug = True
     sign_z, regreg = 1, 1
-    T1 = translation_matrix_debug(l1_max, l2_max, m, kd, +sign_z, 
+    T1 = full_translation_matrix(l1_max, l1_max, kd, +sign_z, 
             regreg)
-    T2 = translation_matrix_debug(l2_max, l1_max, m, kd, -sign_z, 
+    T2 = full_translation_matrix(l1_max, l1_max, kd, -sign_z, 
             regreg )
     print(np.dot(T1, T2))

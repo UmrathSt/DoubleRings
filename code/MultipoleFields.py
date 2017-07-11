@@ -7,7 +7,7 @@ from MultipoleTransformations import WignerD_matrices as WignerDs
 from MultipoleTransformations import translation_matrix as translations
 from MultipoleTransformations  import translation_matrix_debug as translationsD
 from MultipoleTransformations import full_translation_matrix as Tfull
-
+from MultipoleTransformations import full_rotation_matrix as Rfull
 
 class HarmonicField:
     def __init__(self, coeffs, lmax):
@@ -69,6 +69,14 @@ class HarmonicField:
             self.coeffs[i0:i1] = np.dot(Ds[l-1], self.coeffs[i0:i1])
             self.coeffs[i0+jump:i1+jump] = np.dot(Ds[l-1], 
                                 self.coeffs[i0+jump:i1+jump])
+    def rotate_matrix(self, theta, phi):
+        """ applies a rotation by multiplication of the 
+            multipole-coefficients with the full rotation 
+            matrix
+        """
+        R = Rfull(self.lmax, theta, phi)
+        self.coeffs = np.dot(R, self.coeffs)
+            
     def z_translate_matrix(self, kd, sign_z, regreg, debug = False):
         """ do a translation and use matrixmultiplication by 
             the full translation matrix
@@ -105,17 +113,19 @@ class HarmonicField:
         self.coeffs[m0_idx, 0] = np.dot(Tmatrix, self.coeffs[m0_idx])[0,0]
 
 if __name__ == "__main__":
-    np.set_printoptions(precision=3)
-    lmax = 5 
+    np.set_printoptions(precision=3, suppress=True)
+    lmax = 50 
     ncoeffs = 2*lmax*(lmax+2)
     m = np.zeros(ncoeffs, dtype = np.complex128).reshape(ncoeffs, 1)
     l1_coeffs =  np.array([-1, 0.01, 1, -20, -10, 0.1, 10, 20], dtype = np.complex128)
     m[:l1_coeffs.size,0] = l1_coeffs
+    offset = lmax*(lmax+2)
+    m[offset:offset+l1_coeffs.size,0] = 1j*l1_coeffs
     coeffs = m.copy()
     field = HarmonicField(coeffs, lmax)
     print("Koeffizienten")
     print(field.coeffs)
-    kd = 0.5
+    kd = 5
     field.z_translate_matrix(kd, sign_z = 1, regreg = 1)
     field.z_translate_matrix(kd, sign_z =-1, regreg = 1)
     field.reduce_lmax(2)

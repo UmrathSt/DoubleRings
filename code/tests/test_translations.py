@@ -7,7 +7,7 @@ from numpy.testing import assert_array_almost_equal
 import unittest
 from MultipoleTransformations import translation_matrix, translate_l1l2
 from MultipoleTransformations import translation_matrix_debug
-
+from MultipoleTransformations import full_translation_matrix
 
 class Translation_functionality(unittest.TestCase):
     """ Run functionality tests
@@ -57,23 +57,23 @@ class Translation_functionality(unittest.TestCase):
         l2max = self.l2max + 5
         m = 1 
         dim = 2*(l1max - max(abs(m), 1) + 1)
-        T = translation_matrix(l1max, l2max, m, d, sign_z, regreg)
-        Ti= translation_matrix(l2max, l1max, m, d, -sign_z, regreg)
-        assert_array_almost_equal(np.dot(T, Ti), np.eye(dim), decimal=3)
+        T = full_translation_matrix(l2max, l2max, d, sign_z, regreg)
+        Ti= full_translation_matrix(l2max, l2max, d, -sign_z, regreg)
+        dot = np.dot(T, Ti)
+        assert_array_almost_equal(dot, np.eye(dot.shape[0]), decimal=3)
 
     def test_double_pos_translation(self):
         """ Test if a translation of distance d, twice, is the same
             as a single translation of a distance 2*d
         """
         l1max = self.l1max
-        l2max = self.l2max
-        m = 2
+        l2max = self.l1max
         d = 0.51
         regreg = self.regreg
         sign_z = 1
-        T1d = translation_matrix(l1max, l2max, m, d, sign_z, regreg)
-        T2d = translation_matrix(l2max, l1max, m, d, sign_z, regreg)
-        Tdd = translation_matrix(l1max, l1max, m, 2*d, sign_z, regreg)
+        T1d = full_translation_matrix(l1max, l2max, d, sign_z, regreg)
+        T2d = full_translation_matrix(l2max, l1max, d, sign_z, regreg)
+        Tdd = full_translation_matrix(l1max, l1max, 2*d, sign_z, regreg)
         Tdot = np.dot(T1d, T2d)
         Di = l1max 
         Dj = l2max

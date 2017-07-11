@@ -51,7 +51,7 @@ with polarization conserving (mixing) entries PP (PQ) \Cite{Wittmann1988}:
 C^{m,\pm}_{\ell_1,\ell_2} \sum_{\alpha=|\ell_1-\ell_2|}^{\ell_1+\ell_2}
 D^m_{\ell_1,\ell_2,\alpha}(kd) 
 \big[\ell_1(\ell_1+1) + \ell_2(\ell_2+1)-\alpha(\alpha+1)\big]\frac{1}{2},\\
-&&\left(\mathbb{V}^{\mathrm{PQ},m}\right)_{\ell_1,\ell_2} &= -\imag m kd\,
+&&\left(\mathbb{V}^{\mathrm{PQ},m}\right)_{\ell_1,\ell_2} &= \mp \imag m kd\,
 C^{m,\pm}_{\ell_1,\ell_2} \,  \sum_{\alpha=|\ell_1-\ell_2|}^{\ell_1+\ell_2}
 D^m_{\ell_1,\ell_2,\alpha}(kd).
 \end{align}
@@ -61,12 +61,13 @@ We introduced the abbreviations:
 {\sqrt{\ell_1(\ell_1+1)\ell_2(\ell_2+1)}},\label{eqn:Ccoeff}
 \\
 &&D^m_{\ell_1,\ell_2,\alpha}(kd) &= \imag^\alpha \sqrt{2\alpha+1} z_\alpha(kd)
-\mathrm{Y}^{\ell_1 \ell_2 \alpha}_{m,-m,0}\label{eqn:Dcoeff}
+\mathrm{Y}^{\ell_1, \ell_2, \alpha}_{m,-m,0}\label{eqn:Dcoeff}
 \end{align}
 with the Gaunt-coefficients $\mathrm{Y}^{\ell_1 \ell_2 \alpha}_{m,-m,0}$, an integral of three spherical harmonics over the surface of the unit-sphere:
 \begin{equation}
-\mathrm{Y}^{\ell_1 \ell_2 \alpha}_{m,-m,0} = \int_{\partial B_1(0)} \rd \Omega \,
+\mathrm{Y}^{\ell_1, \ell_2, \alpha}_{m,-m,0} = \int_{\partial B_1(0)} \rd \Omega \,
 Y_{\ell_1,m}(\theta,\phi) Y_{\ell_2,-m}(\theta,\phi) Y_{\alpha,0} (\theta,\phi)
 \label{eqn:Gaunt}
 \end{equation}
 and spherical bessel functions $z_\alpha(kd)$ which are to be understood to be either regular ($z_\alpha = j_\alpha$) or outgoing ($z_\alpha = h^{(1)}_\alpha$) depending on whether the orgin is inclosed in the region where the field is to be evaluated or not.  \capEref{eqn:Ccoeff}  depends upon the the sign of the translation, with $+$ for translations in positive $z$-direction and $-$ for translations in the opposite direction.
+

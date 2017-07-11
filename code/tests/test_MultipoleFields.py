@@ -41,17 +41,22 @@ class MultipoleFields_coefficients(unittest.TestCase):
             z-direction is the same as a field rotated by pi around the
             y-axis and then translated a distance -d in the z-direction
         """
-        lmax = 5
-        kd = 2
+        lmax = 15
+        lmax_red = 5
+        kd = 1 
         sign_z = 1
         regreg = 1
         coeffs = np.arange(lmax*(lmax + 2)*2)[:,np.newaxis]
-        hf1 = HarmonicField(coeffs.copy(), lmax)
-        hf1.z_translate(kd, sign_z, regreg)
-        hf2 = HarmonicField(coeffs.copy(), lmax)
-        hf2.rotate(np.pi, 0)
-        hf2.z_translate(kd, -sign_z, regreg)
-        hf2.rotate(-np.pi, 0)
+        coeffs1 = coeffs.copy()
+        coeffs2 = coeffs.copy()
+        hf1 = HarmonicField(coeffs1, lmax)
+        hf1.z_translate_matrix(kd, sign_z, regreg)
+        hf1.reduce_lmax(lmax_red)
+        hf2 = HarmonicField(coeffs2, lmax)
+        hf2.rotate_matrix(np.pi, 0)
+        hf2.z_translate_matrix(kd, -sign_z, regreg)
+        hf2.rotate_matrix(-np.pi, 0)
+        hf2.reduce_lmax(lmax_red)
         assert_array_almost_equal(hf1.coeffs, hf2.coeffs, decimal=4)
 if __name__ == "__main__":
     unittest.main()
