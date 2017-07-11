@@ -6,6 +6,7 @@ from math import sqrt
 from MultipoleTransformations import WignerD_matrices as WignerDs
 from MultipoleTransformations import translation_matrix as translations
 from MultipoleTransformations  import translation_matrix_debug as translationsD
+from MultipoleTransformations import full_translation_matrix as Tfull
 
 
 class HarmonicField:
@@ -68,6 +69,13 @@ class HarmonicField:
             self.coeffs[i0:i1] = np.dot(Ds[l-1], self.coeffs[i0:i1])
             self.coeffs[i0+jump:i1+jump] = np.dot(Ds[l-1], 
                                 self.coeffs[i0+jump:i1+jump])
+    def z_translate_matrix(self, kd, sign_z, regreg, debug = False):
+        """ do a translation and use matrixmultiplication by 
+            the full translation matrix
+        """
+        T = Tfull(self.lmax, self.lmax, kd, sign_z, regreg)
+        self.coeffs = np.dot(T, self.coeffs)
+
 
     def z_translate(self, kd, sign_z, regreg, debug = False):
         """ calculate the VSH-coefficients in a frame of 
@@ -98,7 +106,7 @@ class HarmonicField:
 
 if __name__ == "__main__":
     np.set_printoptions(precision=3)
-    lmax = 2 
+    lmax = 5 
     ncoeffs = 2*lmax*(lmax+2)
     m = np.zeros(ncoeffs, dtype = np.complex128).reshape(ncoeffs, 1)
     l1_coeffs =  np.array([-1, 0.01, 1, -20, -10, 0.1, 10, 20], dtype = np.complex128)
@@ -107,9 +115,9 @@ if __name__ == "__main__":
     field = HarmonicField(coeffs, lmax)
     print("Koeffizienten")
     print(field.coeffs)
-    kd = 5
-    field.z_translate(kd, sign_z = 1, regreg = 1)
-    field.z_translate(kd, sign_z =-1, regreg = 1)
-    field.reduce_lmax(1)
+    kd = 0.5
+    field.z_translate_matrix(kd, sign_z = 1, regreg = 1)
+    field.z_translate_matrix(kd, sign_z =-1, regreg = 1)
+    field.reduce_lmax(2)
     #print("Coeffs almost equal", np.allclose(field.coeffs, m, atol=1e-4))
     print("Dipole-coeffs \n", field.coeffs)

@@ -27,7 +27,9 @@ def full_rotation_matrix(lmax, theta_y, phi_z):
     """
     rotor = quaternion.from_spherical_coords(theta_y, phi_z)
     blocklist = WignerD_matrices(lmax, theta_y, phi_z)
-    return block_diag(*blocklist)
+    bm = block_diag(*blocklist)
+    bm = block_diag(bm, bm)
+    return bm
 
 def translate_l1l2(l1, l2, m, kd, sign_z, regreg):
     """return the (l1, m) contribution of a vector spherical 
@@ -53,7 +55,7 @@ def translate_l1l2(l1, l2, m, kd, sign_z, regreg):
                     1j**alpha * bessel * gaunts)
     fak_PP = ((l1*(l1+1) + l2*(l2+1) - alpha*(alpha+1)) * 0.5 
                * common_alpha_factor).sum()
-    fak_PQ = (-m*1j*kd * common_alpha_factor).sum()
+    fak_PQ = sign_z*(-m*1j*kd * common_alpha_factor).sum()
     PP = fak_PP * common
     PQ = fak_PQ * common
     return [PP, PQ]
@@ -107,13 +109,21 @@ def translation_matrix(l1_max, l2_max, m, kd, sign_z, regreg):
 def full_translation_matrix(l1max, l2max, kd, sign_z, regreg):
     """ get the full translation matrix
     """
+    try:
+        assert l1max == l2max
+    except:
+        raise ValueError("l1max != l2max")
+
     valid_ms = np.arange(0, min(l1max, l2max) + 1)
-    Tmatrices = [translation_matrix(l1max, l2max, m, kd, sign_z, regreg) for
+    Tmatrices = [translation_matrix_debug(l1max, l2max, m, kd, sign_z, regreg) for
                  m in valid_ms]
     Tneg = Tmatrices[1:].copy()
     Tneg.reverse()
     Tneg.extend(Tmatrices)
-    return block_diag(*Tneg)
+    T = block_diag(*Tneg)
+    Bml = basisChange_l_to_m(l1max)
+    result = np.dot(np.dot(np.linalg.inv(Bml), T), Bml) 
+    return result
 
 def basisChange_l_to_m(lmax):
     """ return the basis-change matrix from l-ordered
@@ -173,9 +183,12 @@ def translation_matrix_debug(l1_max, l2_max, m, kd, sign_z, regreg):
 
 if __name__ == "__main__":
     #print(WignerD_matrices(2, 0, 1.5))
-    l1_max, l2_max = 4, 10 
-    m, kd = 1, 0.5
+    l1_max, l2_max = 7, 10 
+    m, kd = 5, 0.5
+    debug = True
     sign_z, regreg = 1, 1
-    T1 = translation_matrix_debug(l1_max, l2_max, m, kd, +sign_z, regreg)
-    T2 = translation_matrix_debug(l2_max, l1_max, m, kd, -sign_z, regreg)
+    T1 = translation_matrix_debug(l1_max, l2_max, m, kd, +sign_z, 
+            regreg)
+    T2 = translation_matrix_debug(l2_max, l1_max, m, kd, -sign_z, 
+            regreg )
     print(np.dot(T1, T2))
