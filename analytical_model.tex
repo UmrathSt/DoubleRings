@@ -5,8 +5,7 @@ A plane wave of frequency $\omega$ with the elctric field vector pointing along 
 \mathbf{E}^\text{inc.} (\unitv{r}, t)= E_0 \unitv{\xi} \exp\left[\imag (-\omega t- \mathbf{k}\cdot \mathbf{r})\right].
 \label{eqn:Einc_cart}
 \end{equation}
-In order to describe how a 2d ring scatters waves described by \cref{eqn:Einc_cart} an appropriate coordinate system should be chosen. This could be both, cylindrical ($\rho$, $\phi$, $z$) or spherical coordinates ($r$, $\theta$, $\phi$). From now on we will drop the harmonic time dependence.
-In the case of spherical coordinates a complete set of zero-divergence (i. e. sourceless) vector fields are the Hansen multipoles \Cite{Hansen1935}:
+In order to describe how a 2d ring scatters waves described by \cref{eqn:Einc_cart} an appropriate coordinate system should be chosen. This could be both, cylindrical ($\rho$, $\phi$, $z$) or spherical coordinates ($r$, $\theta$, $\phi$). From now on we will choose spherical coordinates and drop the harmonic time dependence. A complete set of zero-divergence (i. e. sourceless) vector fields is given by the Hansen multipoles \Cite{Hansen1935} 
 \begin{equation}
 \mathbf{M}_{\ell m} = \nabla \times \unitv{r} z_\ell(kr) Y_{\ell m}(\theta, \phi),
 \label{eqn:HansenM}
@@ -15,7 +14,6 @@ In the case of spherical coordinates a complete set of zero-divergence (i. e. so
 \mathbf{N}_{\ell m} = \frac{1}{k}\nabla \times \mathbf{M}_{\ell m}.
 \label{eqn:HansenN}
 \end{equation}
-
 In \cref{eqn:HansenM} $z_\ell$ is any linear combination of spherical bessel functions $j_\ell(kr)$ and $y_\ell(kr)$ \Cite{DLMF_Bessel} of degree $\ell$. $r$ is the distance from the origin and $k$ the wave number. $Y_{\ell m}$ denote spherical harmonics of degree $\ell$ and order $m$ \Cite{DLMF_SphericalHarmonics}. Their dependence upon the azimut angle $\theta$ and polar angle $\phi$ is understood although not written out explicitly from now on.
 
 Written in terms of $\mathbf{M}_{\ell m}$ and $\mathbf{N}_{\ell m}$ \cref{eqn:Einc_cart} becomes:
@@ -149,7 +147,7 @@ I_{1,-1}^\text{(N)}
 \end{align}
 
 We observe, that in order to match the boundary conditions the coefficients $I_{\ell m}^\text{(M)}$ and $I_{\ell m}^\text{(N)}$ resemble Mie's coefficients for a perfectly conducting sphere of radius $R$, $b_\ell$ and $a_\ell$. 
-The fact that on the thin ring no currents in the $\unitv{\theta}$-direction leads to the vanishing magnetic dipole polarizability in the $xy$-plane i. e. zero terms $I_{\ell, \pm 1}^\text{(M)}$ and a vanishing electric dipole polarizability in the $\unitv{z}$-direction $I_{\ell, 0}^\text{(N)}$.
+The fact that on the thin ring no currents in the $\unitv{\theta}$-direction can be induced leads to the vanishing magnetic dipole polarizability in the $xy$-plane i. e. zero terms $I_{\ell, \pm 1}^\text{(M)}$ and a vanishing electric dipole polarizability in the $\unitv{z}$-direction $I_{\ell, 0}^\text{(N)}$.
 
 \subsection{xy-periodic array of thin rings}
 Building upon the results of the last section we can discuss the scattering of a periodic arrangement of rings in the $xy$-plane by forcing the expansion coefficients $Q^\text{TM}$ and $Q^\text{TE}$ of the total electric field to be eigenfunctions of the translationoperators $\mathcal{P}_x$ and $\mathcal{P}_y$. This is necessary because the fields in the periodic structure must satisfy:
