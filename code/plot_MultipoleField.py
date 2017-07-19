@@ -5,73 +5,98 @@ from scipy.special import hankel1, jv
 from math import sqrt
 
 def Ylm(l, m, theta, phi):
+    if abs(m) > l:
+        return 0
     return sph_harm(m, l, theta, phi)
 
-def get_Mlm(l, m, kr, x, y, z, reg):
-    """ Get the values of the first-order vector
-        spherical harmonic of angular momentum l
-        and order m at the values given by the 
-        numpy arrays x, y, z
+def zl(l, kr, reg):
+    """ return regular (reg=1) or outgoing
+        spherical bessel function (reg=0)
+        of integer order l with argument kr
     """
-    r = np.sqrt(x**2+y**2+z**2)
-    theta = np.arccos(z/r)
-    phi = np.arctan2(y, x)
-    size = x.size
-    assert size == y.size and size == z.size
-    r = r.reshape(size, 1, 1)
-    theta = theta.reshape(1, size, 1)
-    phi = phi.reshape(1, 1, size)
-    sph_factor = np.sqrt(np.pi/(2*kr))
-    if reg == 1:
-        zl = jv(l+0.5, kr) * sph_factor
+    factor = np.sqrt(np.pi/(2*kr))
+    if reg:
+        return jv(l+0.5,kr)*factor
     if reg == 0:
-        zl = hankel1(l+0.5, kr) * sph_factor 
+        return hankel1(l+0.5, kr)*factor
+    else:
+        raise ValueError("Must be called with 0 or 1, but got", reg)
 
-    Etheta = 1j*m*Ylm(l,m, theta, phi)/np.sin(theta) * zl
-    Ephi = -(m / np.tan(theta) * Ylm(l, m, theta, phi) + 
-            sqrt((l - m)*(l + m + 1)) * np.exp(-1j*phi)*Ylm(l, m+1, theta, phi)) * zl
-    Ex = Etheta * np.cos(theta) * np.cos(phi) - Ephi * np.sin(phi)
-    Ey = Etheta * np.cos(theta) * np.sin(phi) + Ephi * np.cos(phi)
-    Ez = -Etheta * np.sin(theta)
-    return [Ex, Ey, Ez]
+def zlD(l, kr, reg):
+    return -l*zl(l, kr, reg) + kr * zl(l-1, kr, reg)
 
-def get_Nlm(l, m, kr, x, y, z, reg):
-    """ Get the values of the second-order vector
-        spherical harmonic of angular momentum l
-        and order m at the values given by the 
-        numpy arrays x, y, z
-    """
-    r = np.sqrt(x**2+y**2+z**2)
-    theta = np.arccos(z/r)
-    phi = np.arctan2(y, x)
-    size = x.size
-    assert size == y.size and size == z.size
-    r = r.reshape(size, 1, 1)
-    theta = theta.reshape(1, size, 1)
-    phi = phi.reshape(1, 1, size)
-    sph_factor = np.sqrt(np.pi/(2*kr))
-    if reg == 1:
-        zl = jv(l+0.5, kr) * sph_factor
-        zlD= -l * zl + kr*jv(l-0.5, kr)*sph_factor
-    if reg == 0:
-        zl = hankel1(l+0.5, kr) * sph_factor
-        zlD= -l * zl + kr*hankel1(l-0.5, kr)*sph_factor
 
-    Ephi = 1j*m*Ylm(l,m, theta, phi)/np.sin(theta) * zlD
-    Etheta = (m / np.tan(theta) * Ylm(l, m, theta, phi) + 
-            sqrt((l - m)*(l + m + 1)) * np.exp(-1j*phi)*Ylm(l, m+1, theta, phi)) * zlD
-    Er = Ylm(l, m, theta, phi)
-    Ex = (Er * np.sin(theta) * np.cos(phi) +
-            Etheta * np.cos(theta) * np.cos(phi) - Ephi * np.sin(phi)
-            )
-    Ey = (Er * np.sin(theta) * np.sin(phi) + 
-            Etheta * np.cos(theta) * np.sin(phi) + Ephi * np.cos(phi)
-            )
-    Ez = Er * np.cos(theta) - Etheta * np.sin(theta)
-    return [Ex, Ey, Ez]
+class plot_multipole_field:
+    def __init__(self, l, m, k, x, y, z, reg):
+            assert type(l) == type(m) and type(l) == int
+            assert type(x) == type(y) and type(x) == np.ndarray
+            assert type(z) == float
+            self.l = l
+            self.m = m
+            self.k = k
+            XX, YY = np.meshgrid(x, y)
+            self.r = np.sqrt(XX**2 + YY**2 + z**2)
+            self.theta = np.arccos(z/self.r)
+            self.phi = np.arctan2(YY, XX)
+            self.zl = zl(self.l, self.k*self.r, reg)
+            self.zlD = zlD(self.l, self.k*self.r, reg)
+
+    def get_Mlm(self):
+        """ Get the values of the first-order vector
+            spherical harmonic of angular momentum l
+            and order m at the values given by the 
+            two numpy arrays x and y at a fixed value
+            of z.
+        """
+        theta = self.theta
+        phi = self.phi
+        r = self.r
+        l = self.l
+        m = self.m
+        kr = self.k*self.r
+        zl = self.zl    
+        Etheta = 1j*m*Ylm(l,m, theta, phi)/np.sin(theta) * zl
+        Ephi = -(m / np.tan(theta) * Ylm(l, m, theta, phi) + 
+                sqrt((l - m)*(l + m + 1)) * np.exp(-1j*phi) * 
+                Ylm(l, m+1, theta, phi)) * zl
+        Ex = Etheta * np.cos(theta) * np.cos(phi) - Ephi * np.sin(phi)
+        Ey = Etheta * np.cos(theta) * np.sin(phi) + Ephi * np.cos(phi)
+        Ez = -Etheta * np.sin(theta)
+        return [Ex, Ey, Ez]
+    
+    def get_Nlm(self):
+        """ Get the values of the second-order vector
+            spherical harmonic of angular momentum l
+            and order m at the values given by the 
+            numpy arrays x, y, z
+        """
+        theta = self.theta
+        phi = self.phi
+        r = self.r
+        l = self.l
+        m = self.m
+        kr = self.k * self.r
+        zl = self.zl
+        zlD = self.zlD
+        Ephi = 1j*m*Ylm(l,m, theta, phi)/np.sin(theta) * zlD
+        Etheta = (m / np.tan(theta) * Ylm(l, m, theta, phi) + 
+                sqrt((l - m)*(l + m + 1)) * np.exp(-1j*phi) * 
+                Ylm(l, m+1, theta, phi)) * zlD
+        Er = Ylm(l, m, theta, phi)
+        Ex = (Er * np.sin(theta) * np.cos(phi) +
+                Etheta * np.cos(theta) * np.cos(phi) - Ephi * np.sin(phi)
+                )
+        Ey = (Er * np.sin(theta) * np.sin(phi) + 
+                Etheta * np.cos(theta) * np.sin(phi) + Ephi * np.cos(phi)
+                )
+        Ez = Er * np.cos(theta) - Etheta * np.sin(theta)
+        return [Ex, Ey, Ez]
 
 
 
 if __name__ == "__main__":
-    print(get_Nlm(10, 3, 2, np.array([0.1, 0.2, 0.3]), np.array([0.1, 0.2, 0.3]), np.array([0.001, 0.001, 0.001]), reg = 1))
-
+    x, y = np.array([-1, 0.01, 1]), np.array([-1, 0.01, 1])
+    z = 0.001
+    
+    f = plot_multipole_field(l=1, m=1, k=0.2, x=x, y=y, z=z, reg=1)
+    print(f.get_Mlm())
