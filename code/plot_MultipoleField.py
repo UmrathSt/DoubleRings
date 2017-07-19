@@ -61,7 +61,7 @@ class plot_multipole_field:
                 Ylm(l, m+1, theta, phi)) * zl
         Ex = Etheta * np.cos(theta) * np.cos(phi) - Ephi * np.sin(phi)
         Ey = Etheta * np.cos(theta) * np.sin(phi) + Ephi * np.cos(phi)
-        Ez = -Etheta * np.sin(theta)
+        Ez = -Etheta * np.sin(theta) 
         return [Ex, Ey, Ez]
     
     def get_Nlm(self):
@@ -78,11 +78,11 @@ class plot_multipole_field:
         kr = self.k * self.r
         zl = self.zl
         zlD = self.zlD
-        Ephi = 1j*m*Ylm(l,m, theta, phi)/np.sin(theta) * zlD
+        Ephi = 1j*m*Ylm(l,m, theta, phi)/np.sin(theta) * zlD/kr
         Etheta = (m / np.tan(theta) * Ylm(l, m, theta, phi) + 
                 sqrt((l - m)*(l + m + 1)) * np.exp(-1j*phi) * 
-                Ylm(l, m+1, theta, phi)) * zlD
-        Er = Ylm(l, m, theta, phi)
+                Ylm(l, m+1, theta, phi)) * zlD/kr
+        Er = Ylm(l, m, theta, phi)*sqrt(l*(l+1))*zl/kr
         Ex = (Er * np.sin(theta) * np.cos(phi) +
                 Etheta * np.cos(theta) * np.cos(phi) - Ephi * np.sin(phi)
                 )
@@ -95,8 +95,24 @@ class plot_multipole_field:
 
 
 if __name__ == "__main__":
-    x, y = np.array([-1, 0.01, 1]), np.array([-1, 0.01, 1])
+    N = 100 
+    val = 10 
+    x, y = np.linspace(-val, val, N), np.linspace(-val, val, N)
     z = 0.001
-    
-    f = plot_multipole_field(l=1, m=1, k=0.2, x=x, y=y, z=z, reg=1)
-    print(f.get_Mlm())
+   
+    from matplotlib import pyplot as plt
+
+    f = plot_multipole_field(l=1, m=1, k=2, x=x, y=y, z=z, reg=1)
+    XX, YY = np.meshgrid(x, y)
+    for l in range(1, 15):
+        for m in [-1, 1]:
+            flm = plot_multipole_field(l=l, m=m, k=2, x=x, y=y, z=z, reg=1)
+            M, N = flm.get_Mlm(), flm.get_Nlm()
+            field = []
+            for i in range(3):
+                field.append(1j**(l+1)*np.sqrt((2*l+1)*np.pi)* (
+                    M[i] +m * N[i]))
+
+    plt.pcolor(XX, YY, np.real(field[0]))
+    plt.colorbar()
+    plt.show()
