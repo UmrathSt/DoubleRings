@@ -99,20 +99,20 @@ if __name__ == "__main__":
     val = 10 
     x, y = np.linspace(-val, val, N), np.linspace(-val, val, N)
     z = 0.001
-   
+    lmax = 25 
     from matplotlib import pyplot as plt
 
     f = plot_multipole_field(l=1, m=1, k=2, x=x, y=y, z=z, reg=1)
     XX, YY = np.meshgrid(x, y)
-    for l in range(1, 15):
+    for l in range(1, lmax+1):
         for m in [-1, 1]:
-            flm = plot_multipole_field(l=l, m=m, k=2, x=x, y=y, z=z, reg=1)
+            flm = plot_multipole_field(l=l, m=m, k=1, x=x, y=y, z=z, reg=1)
             M, N = flm.get_Mlm(), flm.get_Nlm()
             field = []
             for i in range(3):
                 field.append(1j**(l+1)*np.sqrt((2*l+1)*np.pi)* (
                     M[i] +m * N[i]))
 
-    plt.pcolor(XX, YY, np.real(field[0]))
+    plt.pcolor(XX, YY, np.real(field[1]))
     plt.colorbar()
     plt.show()

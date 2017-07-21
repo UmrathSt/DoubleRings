@@ -7,6 +7,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 from filewalk import fileList
 from scipy.signal import argrelmin, general_gaussian, fftconvolve
+from matplotlib import rc
+#rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+
+
+
 
 def get_minima_positions(dataset, above, N=21, P=0.5, Sig=25):
     """ get the position of the local minima
@@ -21,7 +29,7 @@ def get_minima_positions(dataset, above, N=21, P=0.5, Sig=25):
     filtered = (np.average(dataset) / np.average(filtered)) * filtered
     filtered = np.roll(filtered, int((N-1)/2))
     min_pos = argrelmin(filtered)[0][1:-1]
-    mask = min_pos[filtered[min_pos] < 0.9]
+    mask = min_pos[filtered[min_pos] < 0.8]
     return mask
 
 def get_plot_data(file_list, val):
@@ -35,6 +43,9 @@ def get_plot_data(file_list, val):
     if val == "tand_":
         string = r"$\tan \delta = %.4f$"
         endmark = ".txt"
+    if val == "UCDim_":
+        string = r"$L^\mathrm{UC} = %.2f$"
+        endmark = "_lz" 
     result = []
     for filE in file_list:
         daten = np.loadtxt(filE, delimiter=",")
@@ -46,15 +57,16 @@ def get_plot_data(file_list, val):
         print("working on file: ", s)
         idx1 = s.find(endmark)
         s = float(s[:idx1])
+        print("%s=" %val, s)
         result.append((s, dataset))
     result.sort(key = lambda x: x[0])
     return result
 
 
-files = fileList("/home/stefan/Arbeit/latex/DoubleRings/code/double_ring_eps_sweep/tand_sweep/", "S11_f_UCDim", ".txt")
-plot_data = get_plot_data(files, "tand_")
+files = fileList("/home/stefan/Arbeit/latex/DoubleRings/code/double_ring_eps_sweep/UCDim_sweep/", "S11_f_UCDim", ".txt")
+plot_data = get_plot_data(files, "UCDim_")
 col = ["r", "b", "g", "m", "c"]
-for index in range(3):
+for index in range(2):
     counter = 0
     for data in plot_data:
         dset = data[1]
@@ -67,6 +79,13 @@ for index in range(3):
         else:
             plt.plot(eps, f/normalization, marker="o", color=col[index])
         counter += 1
+
+#plt.xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=14)
+plt.xlabel(r"$L^\mathrm{UC}$", fontsize=14)
+#plt.ylabel(r"$f(\epsilon_\mathrm{r}^\mathrm{FR4})/f(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=14)
+#plt.xlim([3.99, 4.651])
+plt.ylabel(r"$f(L^\mathrm{UC})/f(L^\mathrm{UC}=20)$", fontsize=14)
+#plt.ylim([0.935, 1.001])
 plt.legend(loc="best").draw_frame(False)
 plt.show()
 
