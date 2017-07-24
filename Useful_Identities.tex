@@ -67,7 +67,7 @@ where $\mathbb{V}^\text{m}$ is a $2\times 2$ block-matrix
 \end{matrix}
 \right]
 \end{equation}
-with polarization conserving (mixing) entries PP (PQ) \Cite{Wittmann1988}:
+with polarization conserving (mixing) entries denoted by the superscript PP (PQ) \Cite{Wittmann1988}:
 \begin{align}
 &&\left(\mathbb{V}^{\mathrm{PP},m}\right)_{\ell_1,\ell_2} &= 
 C^{m,\pm}_{\ell_1,\ell_2} \sum_{\alpha=|\ell_1-\ell_2|}^{\ell_1+\ell_2}
@@ -93,3 +93,28 @@ Y_{\ell_1,m}(\theta,\phi) Y_{\ell_2,-m}(\theta,\phi) Y_{\alpha,0} (\theta,\phi)
 \end{equation}
 and spherical bessel functions $z_\alpha(kd)$ which are to be understood to be either regular ($z_\alpha = j_\alpha$) or outgoing ($z_\alpha = h^{(1)}_\alpha$) depending on whether the orgin is inclosed in the region where the field is to be evaluated or not.  \capEref{eqn:Ccoeff}  depends upon the the sign of the translation, with $+$ for translations in positive $z$-direction and $-$ for translations in the opposite direction.
 
+\subsection{Scattering by multiple scatterers}
+If there is more than one scatterer, an appropriate formalism is needed to account for the joint scattering of all involved scatterers. 
+For $N$ scatterers the operator 
+\begin{equation}
+\mathcal{R} = 
+\left(
+\begin{matrix}
+\mathbb{T}_1 & 0 & ... & 0 \\
+0 & \mathbb{T}_2 & ... & 0 \\
+\vdotswithin{\ldots} & \ldots &  \ldots & \vdotswithin{\ldots} \\
+0 & ... & 0 & \mathbb{T}_N\\
+\end{matrix}
+\right)
+\left(\begin{matrix}
+\mathbb{I} & \mathbb{U}_{21} & ... & \mathbb{U}_{N 1} \\
+\mathbb{U}_{12} & \mathbb{I} & ... & \mathbb{U}_{N 2} \\
+\vdotswithin{\mathbb{U}_{13}} & \vdotswithin{\ldots} & \ldots & \vdotswithin{\ldots} \\
+\mathbb{U}_{1 N} & \mathbb{U}_{2 N} & \ldots & \mathbb{U}_{N N} 
+\end{matrix}\right)
+\end{equation}
+defines fields $\ket{\mathbf{E}}$ satisfying the equation
+\begin{equation}
+\left(\mathcal{R}-\mathbb{I}\right)\ket{\mathbf{E}} = 0,
+\end{equation}
+which makes those $\ket{\mathbf{E}}$ eigensolutions of the $N$-body multiple-scattering problem.
