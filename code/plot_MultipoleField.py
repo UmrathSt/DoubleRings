@@ -7,7 +7,7 @@ from math import sqrt
 def Ylm(l, m, theta, phi):
     if abs(m) > l:
         return 0
-    return sph_harm(m, l, theta, phi)
+    return sph_harm(m, l, phi, theta)
 
 def zl(l, kr, reg):
     """ return regular (reg=1) or outgoing
@@ -56,7 +56,7 @@ class plot_multipole_field:
         m = self.m
         kr = self.k*self.r
         zl = self.zl    
-        Etheta = 1j*m*Ylm(l,m, theta, phi)/np.sin(theta) * zl
+        Etheta = 1j*m*Ylm(l,m, theta, phi)/np.sin(theta) * zl 
         Ephi = -(m / np.tan(theta) * Ylm(l, m, theta, phi) + 
                 sqrt((l - m)*(l + m + 1)) * np.exp(-1j*phi) * 
                 Ylm(l, m+1, theta, phi)) * zl
@@ -85,7 +85,8 @@ class plot_multipole_field:
                 Ylm(l, m+1, theta, phi)) * zlD/kr
         Er = Ylm(l, m, theta, phi)*sqrt(l*(l+1))*zl/kr
         Ex = (Er * np.sin(theta) * np.cos(phi) +
-                Etheta * np.cos(theta) * np.cos(phi) - Ephi * np.sin(phi)
+              Etheta * np.cos(theta) * np.cos(phi) +
+              Ephi * (-1) * np.sin(phi)
                 )
         Ey = (Er * np.sin(theta) * np.sin(phi) + 
                 Etheta * np.cos(theta) * np.sin(phi) + Ephi * np.cos(phi)
@@ -96,35 +97,28 @@ class plot_multipole_field:
 
 
 if __name__ == "__main__":
-    N = 101 
-    val1 = 2 
-    minval = 0.01 
-    val2 = 4
-    wavevector = 2 
-    x, z = np.linspace(-val1, -minval, N), np.linspace(-val2, -minval, N)
-    x = np.append(x, -x[::-1])
-    z = np.append(z, -z[::-1])
+    N = 100
+    val1 = 10 
+    minval = 0 
+    val2 =20 
+    wavevector = 2
+    x, z = np.linspace(-val1, val1, N), np.linspace(0, val2, N)
     y = np.array([0])
-    lmax = 25
+    lmax = 150 
     from matplotlib import pyplot as plt
-
-    f = plot_multipole_field(l=1, m=1, k=wavevector, x=x, y=y, z=z, reg=1)
-    XX, ZZ = np.meshgrid(x, z, indexing = "ij")
+    
     field = [0]*3
     for l in range(1, lmax+1):
-        for m in [-1, 1]:
-            flm = plot_multipole_field(l=l, m=m, k=wavevector, x=x, y=y, z=z, reg=1)
-            M, N = flm.get_Mlm(), flm.get_Nlm()
-            for i in range(3):
-                field[i] += (1j**(l+1)*np.sqrt((2*l+1)*np.pi)* (
-                    M[i] + m * N[i]))
-
+        flm = plot_multipole_field(l=l, m=1, k=wavevector, x=x, y=y, z=z, reg=1)
+        M, N = flm.get_Mlm(), flm.get_Nlm()
+        for i in range(3):
+            field[i] += (1j**(l+1)*np.sqrt((2*l+1)*np.pi)* (
+                    2j*np.imag(M[i]) +  2*np.real(N[i])))
     plt.pcolor(flm.XX[:,0,:], flm.ZZ[:,0,:], np.sqrt(np.real(field[0][:,0,:])**2+
-                               np.real(field[1][:,0,:])**2+
-                               np.real(field[2][:,0,:])**2))
+        np.real(field[1][:,0,:])**2+np.real(field[2][:,0,:])**2))
     plt.colorbar()
-    skip_x, skip_z = 10,10
-    plt.quiver(flm.XX[::skip_x,::skip_z], flm.ZZ[::skip_x, ::skip_z], 
-            np.real(field[0][::skip_x,0,::skip_z]), np.real(field[2][::skip_x,0,::skip_z].shape), color="Teal", headlength=10)
+    skip_x, skip_z = 5,2
+    plt.quiver(flm.XX[::skip_x,0,::skip_z], flm.ZZ[::skip_x,0,::skip_z], 
+            np.real(field[0][::skip_x,0,::skip_z]), np.real(field[2][::skip_x,0,::skip_z]), color="Teal", headlength=6)
     plt.gca().set_aspect('equal', adjustable='box')
     plt.show()
