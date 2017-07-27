@@ -23,7 +23,9 @@ def WignerD_matrices(l, theta_y, phi_z):
     return result
 
 def full_rotation_matrix(lmax, theta_y, phi_z):
-    """ Get the full Rotation Matrix
+    """ Get the full Rotation Matrix for a rotation of
+        theta_y around the y-axis followed by the rotation
+        of phi_z around the z-axis
     """
     rotor = quaternion.from_spherical_coords(theta_y, phi_z)
     blocklist = WignerD_matrices(lmax, theta_y, phi_z)
