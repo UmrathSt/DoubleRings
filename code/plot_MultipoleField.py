@@ -30,14 +30,15 @@ class plot_multipole_field:
     def __init__(self, l, m, k, x, y, z, reg):
             assert type(l) == type(m) and type(l) == int
             assert type(x) == type(y) and type(x) == np.ndarray
-            assert type(z) == float
+            assert type(z) == type(x) 
             self.l = l
             self.m = m
             self.k = k
-            XX, YY = np.meshgrid(x, y)
-            self.r = np.sqrt(XX**2 + YY**2 + z**2)
-            self.theta = np.arccos(z/self.r)
-            self.phi = np.arctan2(YY, XX)
+            self.norm = np.sqrt(l*(l+1))
+            self.XX, self.YY, self.ZZ = np.meshgrid(x, y, z, indexing = "ij")
+            self.r = np.sqrt(self.XX**2 + self.YY**2 + self.ZZ**2)
+            self.theta = np.arccos(self.ZZ/self.r)
+            self.phi = np.arctan2(self.YY, self.XX)
             self.zl = zl(self.l, self.k*self.r, reg)
             self.zlD = zlD(self.l, self.k*self.r, reg)
 
@@ -62,7 +63,7 @@ class plot_multipole_field:
         Ex = Etheta * np.cos(theta) * np.cos(phi) - Ephi * np.sin(phi)
         Ey = Etheta * np.cos(theta) * np.sin(phi) + Ephi * np.cos(phi)
         Ez = -Etheta * np.sin(theta) 
-        return [Ex, Ey, Ez]
+        return [Ex/self.norm, Ey/self.norm, Ez/self.norm]
     
     def get_Nlm(self):
         """ Get the values of the second-order vector
@@ -90,29 +91,40 @@ class plot_multipole_field:
                 Etheta * np.cos(theta) * np.sin(phi) + Ephi * np.cos(phi)
                 )
         Ez = Er * np.cos(theta) - Etheta * np.sin(theta)
-        return [Ex, Ey, Ez]
+        return [Ex/self.norm, Ey/self.norm, Ez/self.norm]
 
 
 
 if __name__ == "__main__":
-    N = 100 
-    val = 10 
-    x, y = np.linspace(-val, val, N), np.linspace(-val, val, N)
-    z = 0.001
-    lmax = 25 
+    N = 101 
+    val1 = 2 
+    minval = 0.01 
+    val2 = 4
+    wavevector = 2 
+    x, z = np.linspace(-val1, -minval, N), np.linspace(-val2, -minval, N)
+    x = np.append(x, -x[::-1])
+    z = np.append(z, -z[::-1])
+    y = np.array([0])
+    lmax = 25
     from matplotlib import pyplot as plt
 
-    f = plot_multipole_field(l=1, m=1, k=2, x=x, y=y, z=z, reg=1)
-    XX, YY = np.meshgrid(x, y)
+    f = plot_multipole_field(l=1, m=1, k=wavevector, x=x, y=y, z=z, reg=1)
+    XX, ZZ = np.meshgrid(x, z, indexing = "ij")
+    field = [0]*3
     for l in range(1, lmax+1):
         for m in [-1, 1]:
-            flm = plot_multipole_field(l=l, m=m, k=1, x=x, y=y, z=z, reg=1)
+            flm = plot_multipole_field(l=l, m=m, k=wavevector, x=x, y=y, z=z, reg=1)
             M, N = flm.get_Mlm(), flm.get_Nlm()
-            field = []
             for i in range(3):
-                field.append(1j**(l+1)*np.sqrt((2*l+1)*np.pi)* (
-                    M[i] +m * N[i]))
+                field[i] += (1j**(l+1)*np.sqrt((2*l+1)*np.pi)* (
+                    M[i] + m * N[i]))
 
-    plt.pcolor(XX, YY, np.real(field[1]))
+    plt.pcolor(flm.XX[:,0,:], flm.ZZ[:,0,:], np.sqrt(np.real(field[0][:,0,:])**2+
+                               np.real(field[1][:,0,:])**2+
+                               np.real(field[2][:,0,:])**2))
     plt.colorbar()
+    skip_x, skip_z = 10,10
+    plt.quiver(flm.XX[::skip_x,::skip_z], flm.ZZ[::skip_x, ::skip_z], 
+            np.real(field[0][::skip_x,0,::skip_z]), np.real(field[2][::skip_x,0,::skip_z].shape), color="Teal", headlength=10)
+    plt.gca().set_aspect('equal', adjustable='box')
     plt.show()
