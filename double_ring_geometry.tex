@@ -68,3 +68,27 @@ To discriminate the influence of both rings \Cref{fig:single_double_rings} shows
 \caption{Comparision of $|S_{11}|$ for an isolated ring 1 with $R_1=9.8$ mm, $w_1=1.5$ mm (red solid), ring 2, $R_2=5.1$ mm, $w_2=0.5$ mm (blue solid) and the concentric configuration (black dashed), where both rings are present.}
 \label{fig:single_double_rings}
 \end{figure}
+
+To study how the size of the unit-cell influences the position of the absorption 
+minima of the double--ring--absorber, \Cref{fig:LUC} shows the position of the two first absorption maxima at about $f_1\approx2.7$ GHz and $f_2\approx 5.5$ GHz as a function of the size of the unit cell, $L^\text{UC}$.
+\begin{figure}
+\centering
+\includegraphics[width=0.75\linewidth]{./media/Einfluss_LUC.pdf}
+\caption{Simulated position of the first two absorption maxima of a double ring absorber with $R_1=9.8$ mm, $w_1=1.5$ mm, $R_2=5.1$ mm, $w_2=0.5$ mm as a function of the size of the a-dimension. Metallic parts are chosen to be copper and FR4 is supposed to possess $\Re\left(\epsilon\right)=4.1$ and a loss tangent $\tan\delta = 0.015$.}
+\label{fig:LUC}
+\end{figure}
+
+What can be observed is that as the size of the unit cell grows, the absorption frequency which can be attributed to the larger ring suffers a shift to higher frequencies. Since this shift tends to saturate as the distance of the outer ring to its neighbours becomes comparable to the ring radius. Therefor we can say that a stronger coupling of neighbouring unit cells leads to an increase of the resonance frequency of the larger ring, whereas the resonance frequency of the smaller ring does not show a significant dependence on the size of the unit cell. This is probably the case since $L^\mathrm{UC}/2 R_2\gtrsim 1.8$ even for the smallest unit cell with $L^\mathrm{UC}=20$ mm, where the beginning of the saturation in \Cref{fig:LUC} is way back.
+
+What is of interest, too is the magnitude of the absorption at the two resonant frequencies as the unit cell grows. \capFref{fig:LUC_absS11} shows this dependence.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\linewidth]{./media/Einfluss_LUC_absS11.pdf}
+\caption{Simulated ratio of $|S_{11}(\eta)|/|S_{11}(\eta=1.02)|$ for the first two absorption maxima of a double ring absorber with $R_1=9.8$ mm, $w_1=1.5$ mm, $R_2=5.1$ mm, $w_2=0.5$ mm as a function of the size of the a-dimensional parameter $\eta = L^\mathrm{UC}/2R_1$. Metallic parts are chosen to be made of copper and FR4 is supposed to possess $\Re\left(\epsilon_\mathrm{r}\right)=4.1$ and a loss tangent $\tan\delta = 0.015$.}
+\label{fig:LUC_absS11}
+\end{figure}
+
+
+\subsection{Comparison to measured data}
+Due to the promising absorption characteristics of the discussed absorber it has been manufactured and measured experimentally. The magnitude of the measured and simulated values of $S_{11}$ are depicted in 
