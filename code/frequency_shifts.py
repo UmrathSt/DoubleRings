@@ -74,7 +74,7 @@ for index in range(2):
     for data in plot_data:
         dset = data[1]
         eps = data[0]
-        ratio = eps/(2*9.8)
+        ratio = eps
         mask = get_minima_positions(dset[:,1], 0.9, N=1)
         f = dset[mask,0][index]
         if counter == 0:
@@ -95,7 +95,7 @@ ax.plot([1, 2], [1, 1], "k--")
 ax.set_xlabel(r"$L^\mathrm{UC}/2R_1$", fontsize=16)
 ax.tick_params(axis="both", labelsize=14)
 ax.set_ylim([0.99, 1.2])
-ax.set_xlim([1, 2.01])
+ax.set_xlim([20, 40])
 ax.legend(loc="best").draw_frame(False)
 fig.savefig("Einfluss_LUC.pdf", format="pdf")
 plt.show()

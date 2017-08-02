@@ -74,15 +74,15 @@ for index in range(2):
     for data in plot_data:
         dset = data[1]
         eps = data[0]
-        ratio = eps/(2*9.8)
+        ratio = eps
         mask = get_minima_positions(dset[:,1], 0.8, N=1)
         S11 = 20*np.log10(dset[mask,1][index])
         print("S11", S11)
         f = dset[mask,0][index]
         if counter == 0:
-            normalization = S11 
+            normalization = 1 
             ax.plot(ratio, S11/normalization, 
-                label="$f=%.2f$ GHz" %(f/1e9), marker=symbol[index], 
+                label="$f_%i= %.2f$ GHz" %(index+1,f/1e9), marker=symbol[index], 
                 color=col[index])
         else:
             ax.plot(ratio, S11/normalization, marker=symbol[index],
@@ -91,14 +91,14 @@ for index in range(2):
 
 ax.set_title(r"Doppelringabsorber, Einfluss von $L^\mathrm{UC}$ auf $|S_{11}|$")
 #plt.xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=14)
-ax.set_ylabel(r"$\log{S_{11}}_i(\eta)/\log{S_{11}}_i(\eta=1.02)$", fontsize=16)
+ax.set_ylabel(r"$20\log{S_{11}}_i(\eta)$", fontsize=16)
 #plt.ylabel(r"$f(\epsilon_\mathrm{r}^\mathrm{FR4})/f(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=14)
 #plt.xlim([3.99, 4.651])
 ax.plot([1, 2], [1, 1], "k--")
 ax.set_xlabel(r"$L^\mathrm{UC}/2R_1$", fontsize=16)
 ax.tick_params(axis="both", labelsize=14)
 #ax.set_ylim([0.99, 1.2])
-ax.set_xlim([1, 2.01])
+ax.set_xlim([20, 40])
 ax.legend(loc="best").draw_frame(False)
 fig.savefig("Einfluss_LUC_absS11.pdf", format="pdf")
 plt.show()
