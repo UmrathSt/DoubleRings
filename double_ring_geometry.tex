@@ -24,7 +24,7 @@ R_i \propto \frac{c}{2 n^\mathrm{S}\pi f_i}.
 
 If we decide to design an absorber operating at the two commonly used wifi frequencies $f_1=2.4$ GHz and $f_2=5.2$ GHz and assume a refractive index of $n^\mathrm{S}$, \cref{eqn:radii_precise} predicts radii of $R_1\approx9.8$ mm and $R_2\approx 4.5$ mm. We could further reduce the parameter space by choosing a square unit cell with $L^\mathrm{UC}_\mathrm{x}=L^\mathrm{UC}_\mathrm{y}=L^\mathrm{UC}\gtrsim 2R_1$. By this choice we maximize the "density" of absorbing rings in the $xy$-plane without shortcutting neighboring rings, what would effectively reduce their length by a factor of $2$.
 
-Since we really do not only conduct a theoretical analysis but rather want to manufacture the absorber by a PCB layout, we are quite limited in the choice of the substrate and the available board thicknesses. Lets choose $l_z^\mathrm{S}=2$ mm and take FR4 with real part of permittivity $\epsilon_\mathrm{r}=4.4$ and a loss tangent of $\tan \delta=0.02$. The metallic character of copper shall be incorported by setting its conductivity $\sigma=55\times 10^6$ S/m. This corresponds to a purely imaginary permittivity $\epsilon/\epsilon_0 = \imag \sigma$ relative to the permittivity of vacuum $\epsilon_0$.
+Since we really do not only conduct a theoretical analysis but rather want to manufacture the absorber by a PCB layout, we are quite limited in the choice of the substrate and the available board thicknesses. Lets choose $l_z^\mathrm{S}=2$ mm and take FR4 with real part of permittivity $\epsilon_\mathrm{r}=4.4$ and a loss tangent of $\tan \delta=0.02$. The metallic character of copper shall be incorporated by setting its conductivity $\sigma=55\times 10^6$ S/m. This corresponds to a purely imaginary permittivity $\epsilon/\epsilon_0 = \imag \sigma$ relative to the permittivity of vacuum $\epsilon_0$.
 
 \begin{figure}
 \centering
@@ -87,6 +87,35 @@ What is of interest, too is the magnitude of the absorption at the two resonant 
 \includegraphics[width=0.75\linewidth]{./media/Einfluss_LUC_absS11.pdf}
 \caption{Simulated ratio of $|S_{11}(\eta)|/|S_{11}(\eta=1.02)|$ for the first two absorption maxima of a double ring absorber with $R_1=9.8$ mm, $w_1=1.5$ mm, $R_2=5.1$ mm, $w_2=0.5$ mm as a function of the size of the a-dimensional parameter $\eta = L^\mathrm{UC}/2R_1$. Metallic parts are chosen to be made of copper and FR4 is supposed to possess $\Re\left(\epsilon_\mathrm{r}\right)=4.1$ and a loss tangent $\tan\delta = 0.015$.}
 \label{fig:LUC_absS11}
+\end{figure}
+
+
+Another important question concerns the impact of the loss taking place in the substrate. \capFref{fig:tand_fi_41} therefore shows the positions of the first two frequencies with minimal $S_{11}$ as a function of $\tan\delta$ of the FR4 substrate at fixed real part $\epsilon_\mathrm{r}^\text{FR4}=4.1$.
+It can be observed, that the loss in the substrate does not at all change the resonance frequencies.
+In \cref{fig:tand_fi_45} the sweep of $\tan\delta$ without changing anything but the real part of the permittivity to $\epsilon_\mathrm{r}^\text{FR4}=4.5$. Again the resonance frequencies don't show any dependence on the loss since the downwards shift of about 3 \% is within the numerical errors.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\linewidth]{./media/Einfluss_tand_eps_41.pdf}
+\caption{Position of the first two absorption frequencies as a function of the loss tangent $\tan\delta$ of FR4 at a fixed value of the real part of the permittivity $\epsilon_\mathrm{r}^\text{FR4}=4.1$.}
+\label{fig:tand_fi_41}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=0.75\linewidth]{./media/Einfluss_tand_eps_45.pdf}
+\caption{Position of the first two absorption frequencies as a function of the loss tangent $\tan\delta$ of FR4 at a fixed value of the real part of the permittivity $\epsilon_\mathrm{r}^\text{FR4}=4.5$.}
+\label{fig:tand_fi_45}
+\end{figure}
+
+What can observed, however is that the values of the resonance frequencies in \cref{fig:tand_fi_41} and \cref{fig:tand_fi_45} deviate. 
+
+This naturally leads us to the study of $f_i$ as a function of $\epsilon_\mathrm{r}^\text{FR4}$ in \cref{fig:fi_epsr}. We observe an almost linear dependence of $f_i$ upon $\epsilon_\mathrm{r}^\text{FR4}$ with the same slope for both frequencies. It's worth noting that the shift is relative to the value of $f_i$ at the smallest value of $\epsilon_\mathrm{r}^\text{FR4}$, meaning higher frequencies get shifted more strongly than smaller frequencies. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\linewidth]{./media/Einfluss_eps.pdf}
+\caption{Position of the first two absorption frequencies as a function of $\epsilon_\mathrm{r}^\text{FR4}$ at a fixed value of the loss tangent $\tan\delta=0.015$.}
+\label{fig:fi_epsr}
 \end{figure}
 
 

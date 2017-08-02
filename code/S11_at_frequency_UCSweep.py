@@ -68,22 +68,25 @@ plot_data = get_plot_data(files, "UCDim_")
 col = ["r", "b", "g", "m", "c"]
 fig = plt.figure()
 ax = fig.add_subplot(111)
-
+symbol = ["o", "x"]
 for index in range(2):
     counter = 0
     for data in plot_data:
         dset = data[1]
         eps = data[0]
         ratio = eps/(2*9.8)
-        mask = get_minima_positions(dset[:,1], 0.9)
+        mask = get_minima_positions(dset[:,1], 0.8, N=1)
         S11 = 20*np.log10(dset[mask,1][index])
         print("S11", S11)
         f = dset[mask,0][index]
         if counter == 0:
             normalization = S11 
-            ax.plot(ratio, S11/normalization, label="$f=%.2f$ GHz" %(f/1e9), marker="o", color=col[index])
+            ax.plot(ratio, S11/normalization, 
+                label="$f=%.2f$ GHz" %(f/1e9), marker=symbol[index], 
+                color=col[index])
         else:
-            ax.plot(ratio, S11/normalization, marker="o", color=col[index])
+            ax.plot(ratio, S11/normalization, marker=symbol[index],
+                    color=col[index])
         counter += 1
 
 ax.set_title(r"Doppelringabsorber, Einfluss von $L^\mathrm{UC}$ auf $|S_{11}|$")
