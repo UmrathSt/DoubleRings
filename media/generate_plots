@@ -1,0 +1,9 @@
+#!/bin/bash
+codedir="../code/"
+python3 ${codedir}S11_at_frequency_tand_sweep.py
+python3 ${codedir}S11_at_frequency_UCSweep.py
+python3 ${codedir}frequency_shifts_epsr.py
+python3 ${codedir}frequency_shifts.py
+for eps in 4.5 4.1; 
+    do python3 ${codedir}frequency_shifts_tand.py --eps $eps;
+done;
