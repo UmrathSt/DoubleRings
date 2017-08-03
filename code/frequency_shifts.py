@@ -98,7 +98,7 @@ ax.set_ylim([0.99, 1.2])
 ax.set_xlim([20, 40])
 ax.legend(loc="best").draw_frame(False)
 fig.savefig("Einfluss_LUC.pdf", format="pdf")
-plt.show()
+#plt.show()
 
 
 if __name__ == "__main__":
