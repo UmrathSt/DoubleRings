@@ -89,9 +89,9 @@ for index in range(2):
                     marker=symbol[index], color=col[index])
         counter += 1
 
-ax.set_title(r"Doppelringabsorber, Einfluss der Substratdicke, $l_z^\mathrm{FR4}$ auf $f_i$")
+#ax.set_title(r"Doppelringabsorber, Einfluss der Substratdicke, $l_z^\mathrm{FR4}$ auf $f_i$")
 #plt.xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=14)
-ax.set_ylabel(r"$f_i(\eta)f_i(\eta=1.02)$", fontsize=16)
+ax.set_ylabel(r"$f_i(l_z^\mathrm{FR4})f_i(l_z^\mathrm{FR4}=1\,\mathrm{mm})$", fontsize=16)
 #plt.ylabel(r"$f(\epsilon_\mathrm{r}^\mathrm{FR4})/f(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=14)
 #plt.xlim([3.99, 4.651])
 ax.plot([1, 3], [1, 1], "k--")

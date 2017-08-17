@@ -90,7 +90,7 @@ for index in range(2):
                     marker=symbol[index], color=col[index])
         counter += 1
 
-ax.set_title(r"Doppelringabsorber, Einfluss der Substratdicke, $l_z^\mathrm{FR4}$, auf $S_{11}$ ")
+#ax.set_title(r"Doppelringabsorber, Einfluss der Substratdicke, $l_z^\mathrm{FR4}$, auf $S_{11}$ ")
 #plt.xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=14)
 ax.set_ylabel(r"$20\log|S_{11}(l_z^\mathrm{FR4})|$", fontsize=16)
 #plt.ylabel(r"$f(\epsilon_\mathrm{r}^\mathrm{FR4})/f(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=14)

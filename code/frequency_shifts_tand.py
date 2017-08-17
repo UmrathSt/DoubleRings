@@ -85,21 +85,21 @@ for index in range(2):
         f = dset[mask,0][index]
         if counter == 0:
             normalization = f
-            ax.plot(eps, f/normalization, label="$f=%.2f$ GHz" %(f/1e9), 
+            ax.plot(eps, f/normalization, label="$f_%i=%.2f$ GHz" %(index+1, f/1e9), 
                     marker = symbol[index], color=col[index])
         else:
             ax.plot(eps, f/normalization, marker=symbol[index], 
                     color=col[index])
         counter += 1
 
-ax.set_title(r"Doppelringabsorber, Einfluss von $\tan\delta$ auf $f_i$ bei $\epsilon_\mathrm{r}=%s$" %args.eps)
+#ax.set_title(r"Doppelringabsorber, Einfluss von $\tan\delta$ auf $f_i$ bei $\epsilon_\mathrm{r}=%s$" %args.eps)
 #plt.xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=14)
 ax.set_ylabel(r"$f_i(\tan\delta)f_i(\tan\delta=0.005)$", fontsize=16)
 #plt.ylabel(r"$f(\epsilon_\mathrm{r}^\mathrm{FR4})/f(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=14)
 #plt.xlim([3.99, 4.651])
 ax.plot([0, 0.04], [1, 1], "k--")
 ax.set_xlabel(r"$\tan\delta$", fontsize=16)
-ax.tick_params(axis="both", labelsize=14)
+ax.tick_params(axis="both", labelsize=16)
 ax.set_ylim([0.98, 1.02])
 ax.set_xlim([0.004, 0.041])
 ax.legend(loc="best").draw_frame(False)

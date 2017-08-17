@@ -89,14 +89,14 @@ for index in range(2):
                     color=col[index])
         counter += 1
 
-ax.set_title(r"Doppelringabsorber, Einfluss von $L^\mathrm{UC}$ auf $|S_{11}|$")
+#ax.set_title(r"Doppelringabsorber, Einfluss von $L^\mathrm{UC}$ auf $|S_{11}|$")
 #plt.xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=14)
-ax.set_ylabel(r"$20\log{S_{11}}_i(\eta)$", fontsize=16)
+ax.set_ylabel(r"$20\log{S_{11}}_i(L^\mathrm{UC})$", fontsize=16)
 #plt.ylabel(r"$f(\epsilon_\mathrm{r}^\mathrm{FR4})/f(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=14)
 #plt.xlim([3.99, 4.651])
 ax.plot([1, 2], [1, 1], "k--")
-ax.set_xlabel(r"$L^\mathrm{UC}/2R_1$", fontsize=16)
-ax.tick_params(axis="both", labelsize=14)
+ax.set_xlabel(r"$L^\mathrm{UC}$ [mm]", fontsize=16)
+ax.tick_params(axis="both", labelsize=16)
 #ax.set_ylim([0.99, 1.2])
 ax.set_xlim([20, 40])
 ax.legend(loc="best").draw_frame(False)
