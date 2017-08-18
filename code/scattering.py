@@ -1,5 +1,7 @@
 from MultipoleFields import HarmonicField
 import numpy as np
+from scipy.special import jv, hankel1
+from scipy.linalg import block_diag
 
 class Scatterer(object):
     def __init__(self, origin):
@@ -23,7 +25,22 @@ class Sphere(Scatterer):
 
     def scatter(self, field, origin = np.array([0,0,0])):
         assert isinstance(field, HarmonicField)
+        field.rotate(-self.theta, -self.phi)
+        #field.z_translate(self.distance...)
         return field
+
+    def scattering_operator(self, lmax):
+        A, B = [], [] 
+        for l in range(1, lmax+1):
+            al = ((-l*hankel1(l+0.5,k*R) + k*R*hankel1(l-0.5, k*R))/
+                  (-l*jv(l+0.5, k*R) + k*R*jv(l-0.5, k*R)))
+            bl = hankel1(l+0.5,k*R)/jv(l+0.5, k*R)
+            ones = np.ones(2*l+1)
+            A.append(al*ones)
+            B.append(bl*ones)
+        matrices = A.extend(B)
+        return block_diag(matrices*)
+
 
 class PECWall(Scatterer):
     def __init__(self, origin):
