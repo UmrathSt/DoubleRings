@@ -2,6 +2,7 @@
 # calculate VSH in rotated and/or translated  frames of reference
 
 import numpy as np
+from math import pi
 from math import sqrt
 from MultipoleTransformations import WignerD_matrices as WignerDs
 from MultipoleTransformations import translation_matrix as translations
@@ -165,28 +166,65 @@ class HarmonicField:
         """
         field = 0
         idx_offset = self.lmax*(self.lmax+2)
-        for l in range(1, lmax+1):
+        for l in range(1, self.lmax+1):
             for m in range(-l, l+1):
-                Midx = l**2-1 + abs(m) + m 
+                Midx = l*(l+1) - 1 + m 
                 Nidx = Midx + idx_offset
                 Mcoeff = self.coeffs[Midx]
                 Ncoeff = self.coeffs[Nidx]
                 F = pmf(l, m, self.k, x, y, z, reg)
                 if abs(Mcoeff) >= 1e-14:
-                    field +=  np.array(F.get_Mlm())
+                    field += Mcoeff * np.array(F.get_Mlm())
                 if abs(Ncoeff) >= 1e-14:
-                    field += np.array(F.get_Nlm())
+                    field += Ncoeff * np.array(F.get_Nlm())
         return field
+
+
+def get_z_multipole_coeffs(polarization, lmax):
+    """ Get the multiple coefficients of a z-propagating
+        plane wave with maximum considered angular momentum 
+        "lmax" and electric field vector in "x" 
+        (polarization=0) or "y"-direction (polarization=1)
+    """
+    if polarization not in [0, 1]:
+        raise ValueError("polarization must bei either 0 or 1, given: ", polarization)
+    if polarization == 0:
+        Mfact = lambda m: 1
+        Nfact = lambda m: m
+    if polarization == 1:
+        Mfact = lambda m: -1j*m
+        Nfact = lambda m: 1j*m
+    coeffs = np.zeros(2*lmax*(lmax+2), dtype=np.complex128)
+    offset = lmax*(lmax + 2)
+    for l in range(1, lmax+1):
+        prefactor = 1j**(l+1) * sqrt((2*l+1)*pi)
+        for m in [-1, 1]:
+            idx = l*(l+1) -1 + m
+            coeffs[idx] = prefactor * Mfact(m)
+            coeffs[idx + offset] = prefactor * Nfact(m)
+    return coeffs
+
+def PlaneMultipoleWave(k_theta, k_phi, polarization, freq, lmax):
+    """ return a HarmonicField object which represents
+        a plane wave propagating in the direction of (k_theta, k_phi)
+        polarized in x/y direction (polarization = 0/1) with frequency
+        freq and maximum considered angular momentum lmax
+    """
+    F = HarmonicField(get_z_multipole_coeffs(polarization, lmax), freq, lmax)
+    F.rotate(-k_theta, -k_phi)
+    return F
 
 if __name__ == "__main__":
     np.set_printoptions(precision=3, suppress=True)
-    lmax = 2
-    ncoeffs = 2*lmax*(lmax+2)
-    coeffs = np.zeros(ncoeffs, dtype = np.complex128)
-    l1_coeffs =  np.array([-1, 0.01, 1, -20, -10, 0.1, 10, 20], 
-                                                dtype = np.complex128)
-    coeffs[:l1_coeffs.size] = l1_coeffs
-    offset = lmax*(lmax+2)
-    coeffs[offset::] = 1j*l1_coeffs
-    F = HarmonicField(coeffs, 1, lmax)
-    print(F.get_field_at(np.array([1]), np.array([2]), np.array([3]), 1))
+    from matplotlib import pyplot as plt
+    PW = PlaneMultipoleWave(np.pi/8, 0, 0, 0.5e9, 10)
+    x = np.linspace(-1, 1, 100)
+    z = np.linspace(0, 2, 100)
+    y = np.array([0])
+    field = PW.get_field_at(x, y, z, 1)
+    X, Z = np.meshgrid(x, z)
+    plt.pcolor(X, Z, np.sqrt(np.real(field[0,:,0,:])**2 +
+                             np.real(field[1,:,0,:])**2 +
+                             np.real(field[2,:,0,:])**2).transpose())
+    plt.colorbar()
+    plt.show()
