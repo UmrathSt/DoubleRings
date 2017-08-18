@@ -217,14 +217,16 @@ def PlaneMultipoleWave(k_theta, k_phi, polarization, freq, lmax):
 if __name__ == "__main__":
     np.set_printoptions(precision=3, suppress=True)
     from matplotlib import pyplot as plt
-    PW = PlaneMultipoleWave(np.pi/8, 0, 0, 0.5e9, 10)
+    PW = PlaneMultipoleWave(np.pi/8, 0, 0, 0.5e9, 30)
     x = np.linspace(-1, 1, 100)
-    z = np.linspace(0, 2, 100)
+    z = np.linspace(-2, 2, 100)
     y = np.array([0])
     field = PW.get_field_at(x, y, z, 1)
     X, Z = np.meshgrid(x, z)
     plt.pcolor(X, Z, np.sqrt(np.real(field[0,:,0,:])**2 +
                              np.real(field[1,:,0,:])**2 +
                              np.real(field[2,:,0,:])**2).transpose())
+    
+    plt.quiver(X[:,0,:], Z[:,0,:], np.real(field[0,:,0,:]), np.real(field[2,:,0,:]))
     plt.colorbar()
     plt.show()
