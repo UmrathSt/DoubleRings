@@ -1,15 +1,14 @@
+from MultipoleFields import HarmonicField
 import numpy as np
-from MultipoleFields import MultipoleField
 
 class Scatterer(object):
     def __init__(self, origin):
         self.origin = origin
         assert type(origin) == np.ndarray
         self.distance = np.sqrt((origin**2).sum())
-        self.phi = np.arctan2(origin[1]/origin[0])
-        self.theta = np.arccos(origin[3]/self.distance)
-
-ssert origin.shape == (3,)
+        self.phi = np.arctan2(origin[1], origin[0])
+        self.theta = np.arccos(origin[2]/self.distance)
+        assert origin.shape == (3,)
 
     def scatter(self, field, origin=np.array([0,0,0])):
         """ scatter a multipole field and return the total field
@@ -23,7 +22,7 @@ class Sphere(Scatterer):
         Scatterer.__init__(self, origin)
 
     def scatter(self, field, origin = np.array([0,0,0])):
-        assert isinstance(field, MultipoleField)
+        assert isinstance(field, HarmonicField)
         return field
 
 class PECWall(Scatterer):
@@ -50,5 +49,6 @@ class PMCWall(Scatterer):
 if __name__ == "__main__":
 
     Y_Wall = PECWall(np.array([0,0,2]))
-    print("Origin of S: ", S.origin)
-    print("field after scattering", S.scatter([1,2,3]))
+    print("Origin of S: ", Y_Wall.origin)
+    field = HarmonicField(np.array([-1,0,1,-2,0,1]), 1, 1)
+    print("field after scattering", Y_Wall.scatter(field))
