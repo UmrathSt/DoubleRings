@@ -104,7 +104,7 @@ if __name__ == "__main__":
     wavevector = 2
     x, z = np.linspace(-val1, val1, N), np.linspace(0, val2, N)
     y = np.array([0])
-    lmax = 250 
+    lmax = 50 
     from matplotlib import pyplot as plt
     
     field = [0]*3

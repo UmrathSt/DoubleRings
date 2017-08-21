@@ -117,7 +117,7 @@ def full_translation_matrix(l1max, l2max, kd, sign_z, regreg):
         raise ValueError("l1max != l2max")
 
     valid_ms = np.arange(0, min(l1max, l2max) + 1)
-    Tmatrices = [translation_matrix_debug(l1max, l2max, m, kd, sign_z, regreg) for
+    Tmatrices = [translation_matrix(l1max, l2max, m, kd, sign_z, regreg) for
                  m in valid_ms]
     Tneg = Tmatrices[1:].copy()
     Tneg.reverse()
@@ -185,12 +185,11 @@ def translation_matrix_debug(l1_max, l2_max, m, kd, sign_z, regreg):
 
 if __name__ == "__main__":
     #print(WignerD_matrices(2, 0, 1.5))
-    l1_max, l2_max = 20, 10 
-    m, kd = 5, 5
+    l1_max, l2_max = 3, 2
+    m, kd = 2, 5
     debug = True
     sign_z, regreg = 1, 1
-    T1 = full_translation_matrix(l1_max, l1_max, kd, +sign_z, 
-            regreg)
-    T2 = full_translation_matrix(l1_max, l1_max, kd, -sign_z, 
-            regreg )
-    print(np.dot(T1, T2))
+    T1 = translation_matrix(l1_max, l1_max, m, kd, sign_z, regreg)
+    T2 = translation_matrix_debug(l1_max, l1_max, m, kd, sign_z, regreg )
+    print(T1)
+    print(T2)

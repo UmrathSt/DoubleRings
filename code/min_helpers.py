@@ -12,11 +12,11 @@ from matplotlib import rc
 ## for Palatino and other serif fonts use:
 rc('font',**{'family':'serif','serif':['Palatino']})
 rc('text', usetex=True)
+from smooth import smooth
 
 
 
-
-def get_minima_positions(dataset, above, N=21, P=0.5, Sig=25):
+def get_min_mask(dataset, below, N=21, P=0.5, Sig=25):
     """ get the position of the local minima
         in the 1d numpy array >dataset< after
         smoothing it with a gaussian
@@ -24,12 +24,9 @@ def get_minima_positions(dataset, above, N=21, P=0.5, Sig=25):
         where the value of dataset[indices] is 
         smaller than >above<
     """
-    window = general_gaussian(N, p=P, sig=Sig)
-    filtered = fftconvolve(window, dataset)
-    filtered = (np.average(dataset) / np.average(filtered)) * filtered
-    filtered = np.roll(filtered, int((N-1)/2))
+    filtered = smooth(dataset,31)[15:-15]
     min_pos = argrelmin(filtered)[0][1:-1]
-    mask = min_pos[filtered[min_pos] < 0.8]
+    mask = min_pos[filtered[min_pos] < below]
     return mask
 
 def get_plot_data(file_list, val):
@@ -61,46 +58,3 @@ def get_plot_data(file_list, val):
         result.append((s, dataset))
     result.sort(key = lambda x: x[0])
     return result
-
-
-files = fileList("/home/stefan/Arbeit/latex/DoubleRings/code/double_ring_eps_sweep/UCDim_sweep/", "S11_f_UCDim", ".txt")
-plot_data = get_plot_data(files, "UCDim_")
-col = ["r", "b", "g", "m", "c"]
-fig = plt.figure()
-ax = fig.add_subplot(111)
-symbol = ["o", "x"]
-for index in range(2):
-    counter = 0
-    for data in plot_data:
-        dset = data[1]
-        eps = data[0]
-        ratio = eps
-        mask = get_minima_positions(dset[:,1], 0.9, N=1)
-        f = dset[mask,0][index]
-        if counter == 0:
-            normalization = f
-            ax.plot(ratio, f/normalization, label="$f_%i=%.2f$ GHz" %(index+1,f/1e9), 
-                    marker=symbol[index], color=col[index])
-        else:
-            ax.plot(ratio, f/normalization, 
-                    marker=symbol[index], color=col[index])
-        counter += 1
-
-#ax.set_title(r"Doppelringabsorber, Einfluss von $L^\mathrm{UC}$ auf $f_i$")
-#plt.xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=14)
-ax.set_ylabel(r"$f_i(L^\mathrm{UC})f_i(L^\mathrm{UC}=20\,\mathrm{mm})$", fontsize=16)
-#plt.ylabel(r"$f(\epsilon_\mathrm{r}^\mathrm{FR4})/f(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=14)
-#plt.xlim([3.99, 4.651])
-ax.plot([1, 2], [1, 1], "k--")
-ax.set_xlabel(r"$L^\mathrm{UC}$ [mm]", fontsize=16)
-ax.tick_params(axis="both", labelsize=14)
-ax.set_ylim([0.99, 1.2])
-ax.set_xlim([20, 40])
-ax.legend(loc="best").draw_frame(False)
-fig.savefig("Einfluss_LUC.pdf", format="pdf")
-#plt.show()
-
-
-if __name__ == "__main__":
-    pass
-  

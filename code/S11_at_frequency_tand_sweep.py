@@ -29,7 +29,7 @@ def get_minima_positions(dataset, above, N=21, P=0.5, Sig=25):
     filtered = (np.average(dataset) / np.average(filtered)) * filtered
     filtered = np.roll(filtered, int((N-1)/2))
     min_pos = argrelmin(filtered)[0][1:-1]
-    mask = min_pos[filtered[min_pos] < 0.8]
+    mask = min_pos[filtered[min_pos] < above]
     return mask
 
 def get_plot_data(file_list, val):
@@ -58,46 +58,49 @@ def get_plot_data(file_list, val):
         idx1 = s.find(endmark)
         s = float(s[:idx1])
         print("%s=" %val, s)
+        # make it a sorted list of tuples
+        # with first entry equal to the float
+        # value of "val" i. e. eps, tand ...
+        # and the second entry a numpy array
+        # containing frequencies vs. |S11|
+        # in the first/second column
         result.append((s, dataset))
-    result.sort(key = lambda x: x[0])
+    result.sort(key = lambda x: x[0]) 
     return result
 
 
-files = fileList("/home/stefan/Arbeit/latex/DoubleRings/code/double_ring_eps_sweep/UCDim_sweep/", "S11_f_UCDim", ".txt")
-plot_data = get_plot_data(files, "UCDim_")
+files = fileList("/home/stefan/Arbeit/latex/DoubleRings/code/double_ring_eps_sweep/tand_sweep_eps_4.5/", "S11_f_UCDim_20_lz_2", ".txt")
+plot_data = get_plot_data(files, "tand_")
 col = ["r", "b", "g", "m", "c"]
 fig = plt.figure()
 ax = fig.add_subplot(111)
-symbol = ["o", "x"]
-for index in range(2):
+
+for index in range(2): # increase index to study more resonances
     counter = 0
     for data in plot_data:
         dset = data[1]
-        eps = data[0]
-        ratio = eps
-        mask = get_minima_positions(dset[:,1], 0.9, N=1)
+        val = data[0] # the parameter which is swept
+        mask = get_minima_positions(dset[:,1]**2, 0.5, N=1)
+        S11 = 20*np.log10(dset[mask,1])[index]
         f = dset[mask,0][index]
         if counter == 0:
-            normalization = f
-            ax.plot(ratio, f/normalization, label="$f_%i=%.2f$ GHz" %(index+1,f/1e9), 
-                    marker=symbol[index], color=col[index])
+            norm = S11 
+            ax.plot(val, S11/norm, label="$f_%i=%.2f$ GHz" %(index+1, f/1e9),
+                    marker="o", color=col[index])
         else:
-            ax.plot(ratio, f/normalization, 
-                    marker=symbol[index], color=col[index])
+            ax.plot(val, S11/norm, marker="o", color=col[index])
         counter += 1
 
-#ax.set_title(r"Doppelringabsorber, Einfluss von $L^\mathrm{UC}$ auf $f_i$")
-#plt.xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=14)
-ax.set_ylabel(r"$f_i(L^\mathrm{UC})f_i(L^\mathrm{UC}=20\,\mathrm{mm})$", fontsize=16)
-#plt.ylabel(r"$f(\epsilon_\mathrm{r}^\mathrm{FR4})/f(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=14)
+#ax.set_title(r"Doppelringabsorber, Einfluss von $\tan\delta^\mathrm{FR4}$ auf $|S_{11}|$")
+ax.set_ylabel(r"$\log S_{11}(\tan\delta)/\log S_{11}(\tan\delta=0.005)$", fontsize=16)
 #plt.xlim([3.99, 4.651])
-ax.plot([1, 2], [1, 1], "k--")
-ax.set_xlabel(r"$L^\mathrm{UC}$ [mm]", fontsize=16)
-ax.tick_params(axis="both", labelsize=14)
-ax.set_ylim([0.99, 1.2])
-ax.set_xlim([20, 40])
+#ax.plot([1, 2], [1, 1], "k--")
+ax.set_xlabel(r"$\tan\delta^\mathrm{FR4}$", fontsize=16)
+ax.tick_params(axis="both", labelsize=16)
+#ax.set_ylim([0.99, 1.2])
+#ax.set_xlim([1, 2.01])
 ax.legend(loc="best").draw_frame(False)
-fig.savefig("Einfluss_LUC.pdf", format="pdf")
+fig.savefig("Einfluss_tand_absS11_45.pdf", format="pdf")
 #plt.show()
 
 

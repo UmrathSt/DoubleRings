@@ -46,6 +46,9 @@ def get_plot_data(file_list, val):
     if val == "UCDim_":
         string = r"$L^\mathrm{UC} = %.2f$"
         endmark = "_lz" 
+    if val == "lz_":
+        string = r"$l_z=%.2f$"
+        endmark = "_R1"
     result = []
     for filE in file_list:
         daten = np.loadtxt(filE, delimiter=",")
@@ -63,8 +66,8 @@ def get_plot_data(file_list, val):
     return result
 
 
-files = fileList("/home/stefan/Arbeit/latex/DoubleRings/code/double_ring_eps_sweep/UCDim_sweep/", "S11_f_UCDim", ".txt")
-plot_data = get_plot_data(files, "UCDim_")
+files = fileList("/home/stefan/Arbeit/latex/DoubleRings/code/double_ring_eps_sweep/lz_sweep/", "S11_f_UCDim_20", "")
+plot_data = get_plot_data(files, "lz_")
 col = ["r", "b", "g", "m", "c"]
 fig = plt.figure()
 ax = fig.add_subplot(111)
@@ -76,28 +79,29 @@ for index in range(2):
         eps = data[0]
         ratio = eps
         mask = get_minima_positions(dset[:,1], 0.9, N=1)
+        s11 = 20*np.log10(dset[mask,1][index])
         f = dset[mask,0][index]
         if counter == 0:
-            normalization = f
-            ax.plot(ratio, f/normalization, label="$f_%i=%.2f$ GHz" %(index+1,f/1e9), 
+            normalization =1 
+            ax.plot(ratio, s11, label="$f_%i=%.2f$ GHz" %(1+index,f/1e9), 
                     marker=symbol[index], color=col[index])
         else:
-            ax.plot(ratio, f/normalization, 
+            ax.plot(ratio, s11, 
                     marker=symbol[index], color=col[index])
         counter += 1
 
-#ax.set_title(r"Doppelringabsorber, Einfluss von $L^\mathrm{UC}$ auf $f_i$")
+#ax.set_title(r"Doppelringabsorber, Einfluss der Substratdicke, $l_z^\mathrm{FR4}$, auf $S_{11}$ ")
 #plt.xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=14)
-ax.set_ylabel(r"$f_i(L^\mathrm{UC})f_i(L^\mathrm{UC}=20\,\mathrm{mm})$", fontsize=16)
+ax.set_ylabel(r"$20\log|S_{11}(l_z^\mathrm{FR4})|$", fontsize=16)
 #plt.ylabel(r"$f(\epsilon_\mathrm{r}^\mathrm{FR4})/f(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=14)
 #plt.xlim([3.99, 4.651])
-ax.plot([1, 2], [1, 1], "k--")
-ax.set_xlabel(r"$L^\mathrm{UC}$ [mm]", fontsize=16)
-ax.tick_params(axis="both", labelsize=14)
-ax.set_ylim([0.99, 1.2])
-ax.set_xlim([20, 40])
+ax.plot([1, 3], [0,0 ], "k--")
+ax.set_xlabel(r"$l_z^\mathrm{FR4}$ [mm]", fontsize=16)
+ax.tick_params(axis="both", labelsize=16)
+#ax.set_ylim([0.99, 1.2])
+#ax.set_xlim([20, 40])
 ax.legend(loc="best").draw_frame(False)
-fig.savefig("Einfluss_LUC.pdf", format="pdf")
+fig.savefig("Einfluss_lz_absS11.pdf", format="pdf")
 #plt.show()
 
 

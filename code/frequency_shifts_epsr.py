@@ -63,41 +63,41 @@ def get_plot_data(file_list, val):
     return result
 
 
-files = fileList("/home/stefan/Arbeit/latex/DoubleRings/code/double_ring_eps_sweep/UCDim_sweep/", "S11_f_UCDim", ".txt")
-plot_data = get_plot_data(files, "UCDim_")
+files = fileList("/home/stefan/Arbeit/latex/DoubleRings/code/double_ring_eps_sweep/eps_sweep/", "S11_f_UCDim_20_lz_2_R1_9.8_w1_1.5_R2_5.1_w2_0.5", ".txt")
+plot_data = get_plot_data(files, "eps_")
 col = ["r", "b", "g", "m", "c"]
 fig = plt.figure()
 ax = fig.add_subplot(111)
 symbol = ["o", "x"]
+
 for index in range(2):
     counter = 0
     for data in plot_data:
         dset = data[1]
         eps = data[0]
-        ratio = eps
         mask = get_minima_positions(dset[:,1], 0.9, N=1)
         f = dset[mask,0][index]
         if counter == 0:
             normalization = f
-            ax.plot(ratio, f/normalization, label="$f_%i=%.2f$ GHz" %(index+1,f/1e9), 
-                    marker=symbol[index], color=col[index])
+            ax.plot(eps, f/normalization, label="$f_%i=%.2f$ GHz" %(index+1, f/1e9), 
+                    marker = symbol[index], color=col[index])
         else:
-            ax.plot(ratio, f/normalization, 
-                    marker=symbol[index], color=col[index])
+            ax.plot(eps, f/normalization, marker=symbol[index], 
+                    color=col[index])
         counter += 1
 
-#ax.set_title(r"Doppelringabsorber, Einfluss von $L^\mathrm{UC}$ auf $f_i$")
+#ax.set_title(r"Doppelringabsorber, Einfluss von $\epsilon_\mathrm{r}^\mathrm{FR4}$ auf $f_i$ bei $\tan\delta=0.015$")
 #plt.xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=14)
-ax.set_ylabel(r"$f_i(L^\mathrm{UC})f_i(L^\mathrm{UC}=20\,\mathrm{mm})$", fontsize=16)
+ax.set_ylabel(r"$f_i(\epsilon_\mathrm{r}^\mathrm{FR4})f_i(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=16)
 #plt.ylabel(r"$f(\epsilon_\mathrm{r}^\mathrm{FR4})/f(\epsilon_\mathrm{r}^\mathrm{FR4}=4.0)$", fontsize=14)
 #plt.xlim([3.99, 4.651])
-ax.plot([1, 2], [1, 1], "k--")
-ax.set_xlabel(r"$L^\mathrm{UC}$ [mm]", fontsize=16)
+ax.plot([0, 0.04], [1, 1], "k--")
+ax.set_xlabel(r"$\epsilon_\mathrm{r}^\mathrm{FR4}$", fontsize=16)
 ax.tick_params(axis="both", labelsize=14)
-ax.set_ylim([0.99, 1.2])
-ax.set_xlim([20, 40])
+ax.set_ylim([0.92, 1.02])
+ax.set_xlim([3.99, 4.7])
 ax.legend(loc="best").draw_frame(False)
-fig.savefig("Einfluss_LUC.pdf", format="pdf")
+fig.savefig("Einfluss_eps.pdf", format="pdf")
 #plt.show()
 
 
