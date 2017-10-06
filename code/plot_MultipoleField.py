@@ -83,7 +83,7 @@ class plot_multipole_field:
         Etheta = (m / np.tan(theta) * Ylm(l, m, theta, phi) + 
                 sqrt((l - m)*(l + m + 1)) * np.exp(-1j*phi) * 
                 Ylm(l, m+1, theta, phi)) * zlD/kr
-        Er = Ylm(l, m, theta, phi)*sqrt(l*(l+1))*zl/kr
+        Er = Ylm(l, m, theta, phi)*self.norm*zl/kr
         Ex = (Er * np.sin(theta) * np.cos(phi) +
               Etheta * np.cos(theta) * np.cos(phi) +
               Ephi * (-1) * np.sin(phi)
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     val2 =20 
     wavevector = 2
     x, z = np.linspace(-val1, val1, N), np.linspace(0, val2, N)
-    y = np.array([0])
+    y = np.array([0.1])
     lmax = 50 
     from matplotlib import pyplot as plt
     
@@ -119,6 +119,6 @@ if __name__ == "__main__":
     plt.colorbar()
     skip_x, skip_z = 5,2
     plt.quiver(flm.XX[::skip_x,0,::skip_z], flm.ZZ[::skip_x,0,::skip_z], 
-            np.real(field[0][::skip_x,0,::skip_z]), np.real(field[2][::skip_x,0,::skip_z]), color="Teal", headlength=6)
+            np.real(field[0][::skip_x,0,::skip_z]).transpose(), np.real(field[2][::skip_x,0,::skip_z]).transpose(), color="Teal", headlength=6)
     plt.gca().set_aspect('equal', adjustable='box')
     plt.show()

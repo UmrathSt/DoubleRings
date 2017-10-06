@@ -211,22 +211,25 @@ def PlaneMultipoleWave(k_theta, k_phi, polarization, freq, lmax):
         freq and maximum considered angular momentum lmax
     """
     F = HarmonicField(get_z_multipole_coeffs(polarization, lmax), freq, lmax)
-    F.rotate(-k_theta, -k_phi)
+    F.rotate(k_theta, k_phi)
     return F
 
 if __name__ == "__main__":
     np.set_printoptions(precision=3, suppress=True)
     from matplotlib import pyplot as plt
-    PW = PlaneMultipoleWave(np.pi/8, 0, 0, 0.5e9, 30)
+    PW = PlaneMultipoleWave(k_theta = np.pi/32, k_phi = 0, 
+                            polarization = 0, freq = 0.5e9, lmax = 15)
     x = np.linspace(-1, 1, 100)
     z = np.linspace(-2, 2, 100)
     y = np.array([0])
     field = PW.get_field_at(x, y, z, 1)
     X, Z = np.meshgrid(x, z)
+    for f in [field, X, Z]:
+        print("shape is ", f.shape)
     plt.pcolor(X, Z, np.sqrt(np.real(field[0,:,0,:])**2 +
                              np.real(field[1,:,0,:])**2 +
                              np.real(field[2,:,0,:])**2).transpose())
     
-    plt.quiver(X[:,0,:], Z[:,0,:], np.real(field[0,:,0,:]), np.real(field[2,:,0,:]))
     plt.colorbar()
+    plt.quiver(X[:,:], Z[:,:], np.real(field[0,:,0,:]).transpose(), np.real(field[2,:,0,:]).transpose())
     plt.show()
