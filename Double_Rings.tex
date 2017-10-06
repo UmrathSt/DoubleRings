@@ -1,11 +1,12 @@
-\documentclass[a4paper,11pt]{scrartcl}  %% article, see KOMA 
+\documentclass[a4paper,12pt]{scrartcl}  %% article, see KOMA 
 \usepackage[english]{babel}
 \usepackage{caption}
 \captionsetup[figure]{labelfont={color=blue}}
 \usepackage{color}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
-\usepackage[backref=true,backend=biber,natbib=true,hyperref=true, 
+\usepackage[backref=true,backend=bibtex,natbib=true,hyperref=true, 
 style=numeric, sorting=none]{biblatex}
+
 \addbibresource{bibliography.bib}
 \renewcommand{\labelnamepunct}{\addcolon\space} % Doppelpunkt anstatt des Punkts nach dem Autor und vor dem Titel der Arbeit
 \usepackage[T1]{fontenc}
@@ -83,9 +84,12 @@ style=numeric, sorting=none]{biblatex}
 \author[1]{Dr. Stefan Umrath, \href{mailto:Stefan.Umrath@dlr.de}{Stefan.Umrath@dlr.de}}
 \affil[1]{German Aerospace Center (DLR)}
 \date{Oberpfaffenhofen \today{} \vspace{3cm}}
-\bibliography{bibliography}
+\bibliography{bibliography.bib}
+
+
 
 \begin{document}
+
 \maketitle
 \begin{center}
 \includegraphics[width= 0.75\linewidth]{./media/DLR_Logo_engl_schwarz.jpg}
@@ -115,6 +119,7 @@ style=numeric, sorting=none]{biblatex}
 
 %%% name of the bibliography file without .bib
 %%% e.g.: literatur.bib -> 
+
 \printbibliography
 
 
