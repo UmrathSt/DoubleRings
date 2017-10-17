@@ -95,7 +95,78 @@ and spherical bessel functions $z_\alpha(kd)$ which are to be understood to be e
 
 \subsection{Scattering by multiple scatterers}
 If there is more than one scatterer, an appropriate formalism is needed to account for the joint scattering of all involved scatterers. 
-For $N$ scatterers the operator 
+For $N$ scatterers the electric field $\mathbf{E}$ can be expanded in a basis associated to the scattering site indexed by $i$:
+
+\begin{equation}
+\mathbf{E}_\mathrm{tot}^{(i)} = \mathbf{E}_\mathrm{inc}^{(i)} + 
+\mathbf{E}_\mathrm{scat}^{(i)}.
+\label{eqn:E_tot_site}
+\end{equation}
+The field incident on site $i$ contains the external field $\mathbf{E}_0$ and all fields which are scattered by the other ($j\neq i$) scatterers $j=1..N$:
+\begin{equation}
+\mathbf{E}_\mathrm{inc}^{(i)} = \mathbf{E}_0^{(i)} + \sum_{j=1,j\neq i}^N\mathbf{E}_\mathrm{scat}^{(j)}.
+\end{equation}
+At each scattering site the respective incident and scattered fields can be connected to each other by the scatterers $\mathbb{T}$-Matrix:
+\begin{equation}
+\mathbf{E}_\mathrm{scat}^{(i)} = \mathbb{T}^{(i)} \mathbf{E}^{(i)}_\mathrm{inc}.
+\end{equation}
+Therefore the expression for the total field, \cref{eqn:E_tot_site}, can be written
+\begin{equation}
+\mathbf{E}_\mathrm{tot}^{(i)} = \left(\mathbb{I}+\mathbb{T}^{(i)}\right)\mathbf{E}^{(i)}_\mathrm{inc},
+\end{equation}
+whereas the scattered field at site $i$, which in most cases is the most important quantity, is
+\begin{equation}
+\mathbf{E}_\mathrm{scat}^{(i)} = \mathbb{T}^{(i)} \left(
+\mathbf{E}_0^{(i)} + \sum_{j\neq i} \mathbf{E}^{(j)}_\mathrm{scat}
+\right)
+\end{equation}
+and can be rearranged to:
+\begin{equation}
+\mathbf{E}_\mathrm{scat}^{(i)}-\mathbb{T}^{(i)}\sum_{j\neq i} \mathbf{E}^{(j)}_\mathrm{scat} = \mathbb{T}^{(i)}
+\mathbf{E}_0^{(i)}.
+\label{eqn:Escat_to_Einc}
+\end{equation}
+If we collect the fields at all sites $i$ into the vector $\mathbf{E}=\left[
+\mathbf{E}^{(1)},...,\mathbf{E}^{(N)}
+\right]^T$, arrange the $\mathbb{T}$-matrices into a diagonal matrix 
+\begin{equation}
+\mathbb{T} = 
+\left(
+\begin{matrix}
+\mathbb{T}_1 & 0 & ... & 0 \\
+0 & \mathbb{T}_2 & ... & 0 \\
+\vdotswithin{\ldots} & \ldots &  \ldots & \vdotswithin{\ldots} \\
+0 & ... & 0 & \mathbb{T}_N\\
+\end{matrix}
+\right)
+\end{equation}
+and introduce the matrix $\mathbf{U}$ containing multipole translations from non-coinciding scattering sites
+\begin{equation}
+\mathbb{U} = 
+\left(
+\begin{matrix}
+0 & \mathbb{U}_{12} & ... & \mathbb{U}_{1 N} \\
+\mathbb{U}_{21} & 0 & ... & \mathbb{U}_{2 N} \\
+\vdotswithin{\ldots} & \ldots &  \ldots & \vdotswithin{\ldots} \\
+\mathbb{U}_{N 1} & ... & \mathbb{U}_{N N-1} & 0\\
+\end{matrix}
+\right),
+\end{equation}
+then \cref{eqn:Escat_to_Einc} can be written in compact matrix form as
+\begin{equation}
+\left(\mathbb{I}-\mathbb{T} \mathbb{U}\right)\mathbf{E}_\mathrm{scat} = 
+\mathbb{T} \mathbf{E}_0.
+\label{eqn:matrix_form}
+\end{equation}
+The scattered fields can therefore be obtained if a matrix inversion is done:
+\begin{equation}
+\mathbf{E}_\mathrm{scat} = \left(\mathbb{I}-\mathbb{T} \mathbb{U}\right)^{-1}
+\mathbb{T} \mathbf{E}_0.
+\label{eqn:matrix_form}
+\end{equation}
+
+
+which contains the external field $\mathbf{E}_0$ and all fields scattered by the other scatterers.
 \begin{equation}
 \mathcal{R} = 
 \left(
