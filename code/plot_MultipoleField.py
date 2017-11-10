@@ -29,8 +29,7 @@ def zlD(l, kr, reg):
 class plot_multipole_field:
     def __init__(self, l, m, k, x, y, z, reg):
             assert type(l) == type(m) and type(l) == int
-            assert type(x) == type(y) and type(x) == np.ndarray
-            assert type(z) == type(x) 
+            assert type(x) == type(y) == type(z) and type(x) == np.ndarray
             self.l = l
             self.m = m
             self.k = k
@@ -83,7 +82,7 @@ class plot_multipole_field:
         Etheta = (m / np.tan(theta) * Ylm(l, m, theta, phi) + 
                 sqrt((l - m)*(l + m + 1)) * np.exp(-1j*phi) * 
                 Ylm(l, m+1, theta, phi)) * zlD/kr
-        Er = Ylm(l, m, theta, phi)*self.norm*zl/kr
+        Er = Ylm(l, m, theta, phi)*self.norm**2*zl/kr
         Ex = (Er * np.sin(theta) * np.cos(phi) +
               Etheta * np.cos(theta) * np.cos(phi) +
               Ephi * (-1) * np.sin(phi)
