@@ -31,7 +31,7 @@ Here $\theta_k$ and $\phi_k$ denote the angular coordinates of $\mathbf{k}$ and 
 
 An electromagnetic wave incident on a conducting ring (radius $R$ and width $w$) situated in the $xy$-plane induces currents in the ring which can only exist on the surface of the rings. If the ring possesses zero thickness in $z$-direction and zero width $w$ only currents flowing in $\unitv{\phi}$-direction can exist. Therefore we may expand the current density responsible for scattered waves in a fourier series in the coordinate $\phi$:
 \begin{equation}
-\mathbf{j}^\text{scat} = \frac{1}{2\pi R}\sum_{p=-\infty}^\infty \mathrm{e}^{\imag p \phi} \delta(r-R) \delta(\theta-\pi/2) \unitv{\phi}K_p.
+\mathbf{j}^\text{scat} = \sum_{p=-\infty}^\infty \mathrm{e}^{\imag p \phi} \unitv{\phi}K_p\; \delta(r-R) \delta(\theta-\pi/2) .
 \label{eqn:ring_currents}
 \end{equation}
 Note that \cref{eqn:ring_currents} needs to be extended to include $\unitv{\theta}$ and $\unitv{r}$ components, if the ring possesses a finite thickness or a finite width, respectively. PEC boundary conditions force the components of $\mathbf{E}$ tangential to the surface of the ring to zero and by that determine the coefficients $K_p$.
@@ -66,14 +66,19 @@ I_{\ell m}^\text{(M)} = \int \rd^3\mathbf{r}' \mathbf{M}^*_{\ell m}(\mathbf{r}')
 I_{\ell m}^\text{(N)} = \int \rd^3\mathbf{r}' \mathbf{N}^*_{\ell m}(\mathbf{r}')\cdot
 \mathbf{j}^\textbf{scat}(\mathbf{r}'),
 \end{align}
-where the Hansen multipoles have to be written with regular spherical bessel function $j_\ell(kr)$. The above integrals can be evaluated in closed form, if \cref{eqn:ring_currents} is inserted for the scattered current density $\mathbf{j}^\text{scat}$ yielding:
+where the Hansen Multipoles have to be written with regular spherical bessel function $j_\ell(kr)$. The above integrals can be evaluated in closed form once \cref{eqn:ring_currents} is inserted as the scattered current density $\mathbf{j}^\text{scat}$ yielding:
 \begin{align}
-\left.I_{\ell m}^\textbf{(M)} = \delta_{p m}\frac{j_\ell(kR)}{\sqrt{\ell(\ell+1)}} \left[-K_p\frac{\displaystyle\rd}{\rd \theta}P_{\ell}^{(m)}(\cos(\theta))
+\left.I_{\ell m}^\textbf{(M)} = K_p\delta_{p m} \mathcal{N}_{\ell m} j_\ell(kR)\left[-\frac{\displaystyle\rd}{\rd \theta}P_{\ell}^{(m)}(\cos(\theta))
 \right]\right \vert_{\theta=\pi/2},\\
-\left.I_{\ell m}^\textbf{(N)} =  \delta_{p m} 
-\frac{\frac{\rd}{\rd (kR)}\left[kR j_\ell(kR)\right]}{kR\sqrt{\ell(\ell+1)}}\left[-\imag m K_p
+\left.I_{\ell m}^\textbf{(N)} =  K_p \delta_{p m} \mathcal{N}_{\ell m}jd_\ell(kR)
+\left[-\imag m 
 P_\ell^{(m)}(\cos(\theta)) \right]\right\vert_{\theta=\pi/2}.
 \end{align}
+Here we introduced the abbreviations:
+\begin{equation}
+\mathcal{N}_{\ell m} = \sqrt{\frac{(2\ell+1)\pi}{\ell(\ell+1)}\frac{(\ell-|m|)!}{(\ell+|m|)!}},\quad
+jd_\ell(kR) = \frac{\partial_{kr}  kR j_\ell(kR)}{kR}.
+\end{equation}
 The associated Legendre polynomials and their derivative can be written \Cite{Leong1997}:
 \begin{align}
 \frac{\rd}{\rd \theta}P_\ell^{(m)}(0) =\left\{\ontop{}{}{
@@ -84,20 +89,15 @@ The associated Legendre polynomials and their derivative can be written \Cite{Le
 P_\ell^{(m)}(0) = \ontop{}{}{\cos\big((l+m)\pi/2\big)\dfrac{2^m \Gamma\big((n+m+1)/2\big)}{\sqrt{\pi}\Gamma\big((n-m)/2+1\big)}\quad:\quad (l+m)\%2=0}{0\quad:\quad \text{otherwise}}\right\}.
 \label{eqn:Plm0}
 \end{align}
-If we are just interested in the scattered field and not the current distribution in the rings, we find the $I$-coefficients by requiring that for each occuring term proportional to $\mathbf{M}_{\ell,m}$ and $\mathbf{N}_{\ell,m}$ in the expansion of the incoming field the respective terms on the right-hand side of \cref{eqn:E_scattered} must ensure that 
+What we can learn from the above reasoning is, that a thin ring situated in the $xy$-plane can only scatter magnetic multipoles if $l+m$ is odd whereas only electric multipoles with even $l+m$ can be scattered.
+We can now write down the equation for the tangential part of the total electric field on the ring if a magnetic multipole is incoming:
 \begin{align}
-\left(
-E_0^\text{inc}\left[
-\begin{matrix}
-\mathbf{M}_{\ell,m}^\text{reg} \\
-\mathbf{N}_{\ell,m}^\text{reg}
-\end{matrix}\right]
-+
-\imag k \left[\begin{matrix}
-I_{\ell m}^\textbf{(M)}\mathbf{M}_{\ell,m}^\text{out} \\
-I_{\ell m}^\textbf{(N)}\mathbf{N}_{\ell,m}^\text{out}
-\end{matrix}\right]\right) \cdot 
-\unitv{\phi}\left.\right\vert_{\theta=\pi/2,r=R} = 0
+0&=\mathbf{E}^\mathrm{tot}\delta(r-R)\delta(\theta-\pi/2)\cdot \unitv{\phi} \\
+\nonumber
+0&=\left(\mathbf{M}^\mathrm{inc}_{\ell m} + \imag k \sum_{\nu=1}^\infty  \sum_{\mu=-\nu}^\nu
+I_{\mu \nu}^\textbf{(M)}\mathbf{M}_{\mu \nu}(\mathbf{r})+
+I_{\mu \nu}^\textbf{(N)}\mathbf{N}_{\mu \nu}(\mathbf{r})\right) \cdot \unitv{\phi}
+\delta(r-R)\delta(\theta-\pi/2)
 \end{align}
 
 \subsection{Perpendicular incidence, perfectly conducting rings}
