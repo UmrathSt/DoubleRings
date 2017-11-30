@@ -4,13 +4,15 @@
 from scipy.special import gamma
 from scipy.misc import factorial
 from numpy import sin, cos, sqrt, pi
+import numpy as np
 from scipy.special import jv, hankel1
+from scipy.special import gammaln as lngamma
 
 jl = lambda l, x: sqrt(pi/(2*x)) * jv(l+0.5,x)
 hl = lambda l, x: sqrt(pi/(2*x)) * hankel1(l+0.5,x)
 jdl = lambda l, x: -l*jl(l,x) + x * jl(l-1,x)
 hdl = lambda l, x: -l*hl(l,x) + x * hl(l-1,x)
-Nlm = lambda l, m : sqrt((2*l+1)*pi/(l*(l+1))*factorial(l-abs(m))/factorial(l+abs(m)))
+Nlm = lambda l, m : sqrt((2*l+1)*pi/(l*(l+1))*np.exp(lngamma(l-abs(m)+1)-lngamma(l+abs(m)+1)))
 
 
 def diffPlm(l, m):
@@ -27,7 +29,8 @@ def diffPlm(l, m):
     if not (l+m)%2:
         return 0
     else:
-     return -sin((l+m)*pi/2) * 2**(m+1) * gamma((l+m)/2+1)/gamma((l-m+1)/2)/sqrt(pi)
+     return -sin((l+m)*pi/2) * np.exp(np.log(2)*(m+1) + 
+                    lngamma((l+m)/2+1)-lngamma((l-m+1)/2)) /sqrt(pi)
 
 def Plm(l, m):
     """ Return the value of the deriviative of the associated Legendre polynomial
@@ -43,7 +46,7 @@ def Plm(l, m):
     if (l+m)%2:
         return 0
     else:
-        return cos((l+m)*pi/2) * 2**m * gamma((l+m+1)/2)/gamma((l-m)/2+1)/sqrt(pi)
+        return cos((l+m)*pi/2) * np.exp(np.log(2)*m + lngamma((l+m+1)/2)- lngamma((l-m)/2+1))/sqrt(pi)
 
 def ringAl(l, m, kr):
     """ Return the diagonal TM T-Matrix element of

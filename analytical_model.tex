@@ -77,7 +77,7 @@ P_\ell^{(m)}(\cos(\theta)) \right]\right\vert_{\theta=\pi/2}.
 Here we introduced the abbreviations:
 \begin{equation}
 \mathcal{N}_{\ell m} = \sqrt{\frac{(2\ell+1)\pi}{\ell(\ell+1)}\frac{(\ell-|m|)!}{(\ell+|m|)!}},\quad
-jd_\ell(kR) = \frac{\partial_{kr}  kR j_\ell(kR)}{kR}.
+zd_\ell(x) = \frac{\partial_{x}  x z_\ell(x)}{x}.
 \end{equation}
 The associated Legendre polynomials and their derivative can be written \Cite{Leong1997}:
 \begin{align}
@@ -85,8 +85,10 @@ The associated Legendre polynomials and their derivative can be written \Cite{Le
 -\sin\big((\ell+m)\pi/2\big)\dfrac{2^{m+1}\Gamma\big((l+m)/2+1\big)}{\sqrt{\pi}\Gamma\big((l-m+1)/2\big) }
 \quad : \quad (l+m)\%2=1}{\quad0\quad: \quad\text{otherwise}}\right\},
 \label{eqn:Plm0diff}
-\\\left\{
-P_\ell^{(m)}(0) = \ontop{}{}{\cos\big((l+m)\pi/2\big)\dfrac{2^m \Gamma\big((n+m+1)/2\big)}{\sqrt{\pi}\Gamma\big((n-m)/2+1\big)}\quad:\quad (l+m)\%2=0}{0\quad:\quad \text{otherwise}}\right\}.
+\\
+P_\ell^{(m)}(0) =
+\left\{
+\ontop{}{}{\cos\big((l+m)\pi/2\big)\dfrac{2^m \Gamma\big((n+m+1)/2\big)}{\sqrt{\pi}\Gamma\big((n-m)/2+1\big)}\quad:\quad (l+m)\%2=0}{0\quad:\quad \text{otherwise}}\right\}.
 \label{eqn:Plm0}
 \end{align}
 What we can learn from the above reasoning is, that a thin ring situated in the $xy$-plane can only scatter magnetic multipoles if $l+m$ is odd whereas only electric multipoles with even $l+m$ can be scattered.
@@ -94,11 +96,56 @@ We can now write down the equation for the tangential part of the total electric
 \begin{align}
 0&=\mathbf{E}^\mathrm{tot}\delta(r-R)\delta(\theta-\pi/2)\cdot \unitv{\phi} \\
 \nonumber
-0&=\left(\mathbf{M}^\mathrm{inc}_{\ell m} + \imag k \sum_{\nu=1}^\infty  \sum_{\mu=-\nu}^\nu
-I_{\mu \nu}^\textbf{(M)}\mathbf{M}_{\mu \nu}(\mathbf{r})+
-I_{\mu \nu}^\textbf{(N)}\mathbf{N}_{\mu \nu}(\mathbf{r})\right) \cdot \unitv{\phi}
-\delta(r-R)\delta(\theta-\pi/2)
+\Leftrightarrow 0&=\left(\mathbf{M}^\mathrm{inc}_{\ell m} + \imag k \sum_{\nu=1}^\infty  \sum_{\mu=-\nu}^\nu
+I_{\mu \nu}^\textbf{(M)}\mathbf{M}^\mathrm{out}_{\mu \nu}(\mathbf{r})+
+I_{\mu \nu}^\textbf{(N)}\mathbf{N}^\mathrm{out}_{\mu \nu}(\mathbf{r})\right) \cdot \unitv{\phi}
+\;\delta(r-R)\delta(\theta-\pi/2)\\
+\nonumber
+\Leftrightarrow 0&=
+-j_\ell(kR)\mathcal{N}_{\ell m}\frac{\rd}{\rd\theta}P_{\ell m}(0) 
++
+\imag k \sum_{\nu=1}^\infty  
+-I_{\nu m}^\textbf{(M)}
+h_\nu(kR)\mathcal{N}_{\nu m}\frac{\rd}{\rd\theta}P_{\nu m}(0) 
++
+I_{\nu m}^\textbf{(N)}
+hd_\nu(kR)\mathcal{N}_{\nu m}\imag m  P_{\nu m}(0) \\ \nonumber
+\Leftrightarrow
+0 &= -j_\ell(kR)\mathcal{N}_{\ell m}\frac{\rd}{\rd\theta}P_{\ell m}(0) 
++ \imag k\sum_{\nu = 1}^\infty
+K_m\Big[
+\mathcal{N}_{\nu m} \frac{\rd}{\rd \theta}P_{\nu m}(0)
+\Big]^2 j_\nu(kR) h_\nu(kR)
+\\ \nonumber
+&+ \imag k\sum_{\nu = 1}^\infty
+K_m \Big[
+\mathcal{N}_{\nu m} P_{\nu m}(0) m
+\Big]^2jd_\nu(kR) hd_\nu(kR)
+\\ \nonumber
+&\Rightarrow K_m = \frac{j_\ell(kR) \mathcal{N}_{\ell m}\dfrac{\rd}{\rd \theta}P_{\ell m}(0)}{\imag k \displaystyle \sum_{\nu=1}^\infty
+\Big[
+\mathcal{N}_{\nu m} \frac{\rd}{\rd \theta}P_{\nu m}(0)
+\Big]^2 j_\nu(kR) h_\nu(kR)
++
+\Big[
+\mathcal{N}_{\nu m} P_{\nu m}(0) m
+\Big]^2jd_\nu(kR) hd_\nu(kR)
+}
 \end{align}
+We thus know now, what kind of current density is induced in the ring in order to cancel the tangential component of an incoming magnetic multipole field. In order to
+find the $\mathbb{T}$-Matrix of the ring, we now calculate \cref{eqn:Escat} to arrive at:
+\begin{equation}
+\mathbb{T}^{MM}_{\ell m;\ell m} = -
+\frac{\Big[j_\ell(kR) \mathcal{N}_{\ell m}\dfrac{\rd}{\rd \theta}P_{\ell m}(0)\Big]^2}{\displaystyle \sum_{\nu=1}^\infty
+\Big[
+\mathcal{N}_{\nu m} \frac{\rd}{\rd \theta}P_{\nu m}(0)
+\Big]^2 j_\nu(kR) h_\nu(kR)
++
+\Big[
+\mathcal{N}_{\nu m} P_{\nu m}(0) m
+\Big]^2jd_\nu(kR) hd_\nu(kR)
+}
+\end{equation}
 
 \subsection{Perpendicular incidence, perfectly conducting rings}
 At perpendicular incidence the cylindrical symmetry of the rings allows to choose the polarization in $\unitv{x}$-direction without loss of generality. Therefore \cref{eqn:Einc} becomes:

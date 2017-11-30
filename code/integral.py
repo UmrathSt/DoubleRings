@@ -1,22 +1,31 @@
 from legendre import jl, hl, Nlm, jdl, hdl, diffPlm, Plm
 import numpy as np
 
-def b_correction(kR, lmax):
-    denom =   (Nlm(1,0)*diffPlm(1,0))**2*hl(1,kR)*jl(1,kR)
+def b_correction(kR, l1, m1, lmax):
+    denom =   (Nlm(l1, m1)*diffPlm(l1, m1))**2*hl(l1,kR)*jl(l1,kR)
     factor = 1
-    l = np.arange(2, lmax+1)
-    l_e = l[::2]
-    l_o = l[1::2]
-    factor += np.array([(Nlm(l,0)*diffPlm(l,0))**2*hl(l,kR)*jl(l,kR) for l in l_o]).sum()
-    factor -= np.array([(Nlm(l,0)*Plm(l,0)/kR)**2*hdl(l,kR)*jdl(l,kR) for l in l_e]).sum()
-
+    ls = np.arange(max(1,abs(m1)), lmax+1)
+    l_e = ls[1::2]
+    l_o = ls[::2]
+    factor += np.array([(Nlm(l, m1)*diffPlm(l, m1))**2*hl(l, kR)*jl(l,kR) for l in l_o]).sum()
+    factor += np.array([(Nlm(l, m1)*Plm(l, m1)/kR*m1)**2*hdl(l, kR)*jdl(l,kR) for l in l_e]).sum()
+    factor /= denom
     return 1/factor
 
 
 
 if __name__ == "__main__":
-    lmax = 100
-    result = np.zeros(lmax)
-    for lmax in np.arange(1, lmax+1):
-        result[lmax-1] = b_correction(0.1, lmax)
+    LMAX = 200
+    kr = 1 
+    m1 = 0 
+    l1 = 1 
+    from matplotlib import pyplot as plt
+    l = np.arange(1, LMAX+1)
+    print(l)
+    result = np.zeros(LMAX, dtype=np.complex128)
+    for lmax in l:
+        print("filling idx ", lmax-1)
+        result[lmax-1] = b_correction(kr, l1, m1, lmax)
+    plt.plot(l, np.abs(result), "ko")
     print(result)
+    plt.show()
