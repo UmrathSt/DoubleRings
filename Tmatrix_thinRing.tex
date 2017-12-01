@@ -1,11 +1,110 @@
+\documentclass[a4paper,12pt]{scrartcl}  %% article, see KOMA 
+\usepackage[english]{babel}
+\usepackage{caption}
+\captionsetup[figure]{labelfont={color=blue}}
+\usepackage{color}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[backref=true,backend=bibtex,natbib=true,hyperref=true, 
+style=numeric, sorting=none]{biblatex}
+
+\addbibresource{bibliography.bib}
+\renewcommand{\labelnamepunct}{\addcolon\space} % Doppelpunkt anstatt des Punkts nach dem Autor und vor dem Titel der Arbeit
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{ae,aecompl}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{psfrag}
+\usepackage{authblk}
+\usepackage{physics}
+\usepackage{mathtools}
+\usepackage{bm}
+
+\renewcommand*\sectfont{\normalcolor\rmfamily\bfseries}
+\renewcommand*\descfont{\rmfamily\bfseries}
+
+%%% listings: include programming code
+%\usepackage{listings}
+
+%%% units: technical units
+%\usepackage{units}
+\usepackage[automark]{scrpage2}
+\usepackage{ifpdf}
+
+\ifpdf
+  %%% graphicx: support for graphics
+  \usepackage[pdftex]{graphicx}
+  \usepackage[pdftex=true,backref,pagebackref=false,colorlinks=true,
+    bookmarks=true, bookmarksopen=false, bookmarksnumbered=false,
+    pdfpagemode=None]{hyperref}
+  \hypersetup{linkcolor = RoyalBlue, citecolor = RoyalBlue, urlcolor=WildStrawberry}
+  \usepackage{cleveref}
+  \DeclareGraphicsExtensions{.pdf}
+\else
+\usepackage[dvips]{graphicx}
+
+  \DeclareGraphicsExtensions{.eps}
+
+  \usepackage[dvips]{hyperref}
+\fi
+
+\hypersetup{
+  pdftitle={Scattering by thin rings}, %%
+  pdfauthor={Dr. Stefan Umrath}, %%
+  pdfsubject={}, %%
+  pdfcreator={LaTeX with hyperref-package.}, %% 
+  pdfproducer={}, %%
+  pdfkeywords={} %%
+}
+
+\newcommand{\mygraphics}[3]{
+  \begin{center}
+    \includegraphics[width=#1, keepaspectratio=true]{#2} \\
+    \textbf{#3}
+  \end{center}
+}
+\renewcommand{\Cref}[1]{\cref{#1}\textcolor{RoyalBlue}{)}}
+\newcommand{\capFref}[1]{Fig. \ref{#1}\textcolor{RoyalBlue}{)}}
+\newcommand{\capEref}[1]{Eq. \textcolor{RoyalBlue}{(}\ref{#1}\textcolor{RoyalBlue}{)}}
+\newcommand{\Ref}[1]{\ref{#1}\textcolor{RoyalBlue}{)}}
+\newcommand{\unitv}[1]{\hat{\bm{#1}}}
+\newcommand{\imag}{\mathrm{i}}
+\newcommand{\euler}{\mathrm{e}}
+\renewcommand{\dyad}[1]{\overset{\bm\leftrightarrow}{#1}}
+\newcommand{\rd}{\mathrm{d}}
+%\newcommand{\ontop}{\genfrac{\{}{\}}{0pt}{}}
+\newcommand\ontop[4]{\genfrac{#1}{#2}{0pt}{}{#3}{#4}}
+
+
+\title{Dualband metamaterial absorber}
+
+%%% author(s)
+\author[1]{Dr. Stefan Umrath, \href{mailto:Stefan.Umrath@dlr.de}{Stefan.Umrath@dlr.de}}
+\affil[1]{German Aerospace Center (DLR)}
+\date{Oberpfaffenhofen \today{} \vspace{3cm}}
+\bibliography{bibliography.bib}
+
+
+
+\begin{document}
+
+%\maketitle
+%\begin{center}
+%\includegraphics[width= 0.75\linewidth]{./media/DLR_Logo_engl_schwarz.jpg}
+%\end{center}
+%
+%\newpage
+%\tableofcontents 
+%\newpage
+
+
+
 \section{An analytical model of the scattering by rings}
 \label{sec:analytical_ring_scattering}
-A plane wave of frequency $\omega$ with the elctric field vector pointing along $\unitv{\xi}$ and propagating in the direction of $\mathbf{k}$ can be written: 
-\begin{equation}
-\mathbf{E}^\text{inc.} (\unitv{r}, t)= E_0 \unitv{\xi} \exp\left[\imag (-\omega t- \mathbf{k}\cdot \mathbf{r})\right].
-\label{eqn:Einc_cart}
-\end{equation}
-In order to describe how a 2d ring scatters waves described by \cref{eqn:Einc_cart} an appropriate coordinate system should be chosen. This could be both, cylindrical ($\rho$, $\phi$, $z$) or spherical coordinates ($r$, $\theta$, $\phi$). From now on we will choose spherical coordinates and drop the harmonic time dependence. A complete set of zero-divergence (i. e. sourceless) vector fields is given by the Hansen multipoles \Cite{Hansen1935} 
+
+In order to describe how a 2d ring scatters electromagnetic waves an appropriate coordinate system should be chosen. This could be both, cylindrical ($\rho$, $\phi$, $z$) or spherical coordinates ($r$, $\theta$, $\phi$). From now on we will choose spherical coordinates and drop the harmonic time dependence $\exp(-\imag \omega t)$ . A complete set of zero-divergence (i. e. sourceless) vector fields is given by the Hansen multipoles \Cite{Hansen1935} 
 \begin{equation}
 \mathbf{M}_{\ell m} = \nabla \times \unitv{r} z_\ell(kr) Y_{\ell m}(\theta, \phi),
 \label{eqn:HansenM}
@@ -16,20 +115,7 @@ In order to describe how a 2d ring scatters waves described by \cref{eqn:Einc_ca
 \end{equation}
 In \cref{eqn:HansenM} $z_\ell$ is any linear combination of spherical bessel functions $j_\ell(kr)$ and $y_\ell(kr)$ \Cite{DLMF_Bessel} of degree $\ell$. $r$ is the distance from the origin and $k$ the wave number. $Y_{\ell m}$ denote spherical harmonics of degree $\ell$ and order $m$ \Cite{DLMF_SphericalHarmonics}. Their dependence upon the azimut angle $\theta$ and polar angle $\phi$ is understood although not written out explicitly from now on.
 
-Written in terms of $\mathbf{M}_{\ell m}$ and $\mathbf{N}_{\ell m}$ \cref{eqn:Einc_cart} becomes:
-\begin{equation}
-\unitv{\xi} \exp\left[-\imag  \mathbf{k}\cdot \mathbf{r}\right] =\sum_{\ell,m} \sum_{m'=-\ell}^\ell\mathcal{D}_{m m'}^\ell (\theta_k, \phi_k,0)\big[
-m_{\ell, m} \mathbf{M}_{\ell m} +n_{\ell,m} \mathbf{N}_{\ell m}\big].
-\end{equation}
-Here $\theta_k$ and $\phi_k$ denote the angular coordinates of $\mathbf{k}$ and $\mathcal{D}_{m m'}^\ell$ are Wigner-D matrices in $zxz$ convention. The coefficients $m$ and $n$ can be evaluated to \Cite{Kristensson2014}:
-\begin{align}
-&& m_{\ell,m} = &\imag^{\ell+1} \delta_{m\pm 1}\sqrt{(2\ell+1)\pi} 
-(\unitv{x}\mp\imag \unitv{y})\cdot \unitv{\xi},\\
-&& n_{\ell,m} = \pm&\imag^{\ell+1} \delta_{m\pm 1}\sqrt{(2\ell+1)\pi} 
-(\unitv{x}\mp\imag \unitv{y})\cdot \unitv{\xi}.
-\end{align}
-
-An electromagnetic wave incident on a conducting ring (radius $R$ and width $w$) situated in the $xy$-plane induces currents in the ring which can only exist on the surface of the rings. If the ring possesses zero thickness in $z$-direction and zero width $w$ only currents flowing in $\unitv{\phi}$-direction can exist. Therefore we may expand the current density responsible for scattered waves in a fourier series in the coordinate $\phi$:
+An electromagnetic wave incident on a conducting ring (radius $R$ and width $w$) situated in the $xy$-plane induces currents in the ring which can only exist on the surface of the ring. If the ring possesses zero thickness in $z$-direction and zero width $w$ only currents flowing in $\unitv{\phi}$-direction can exist. Therefore we may expand the current density responsible for scattered waves in a fourier series in the coordinate $\phi$:
 \begin{equation}
 \mathbf{j}^\text{scat} = \sum_{p=-\infty}^\infty \mathrm{e}^{\imag p \phi} \unitv{\phi}K_p\; \delta(r-R) \delta(\theta-\pi/2) .
 \label{eqn:ring_currents}
@@ -56,29 +142,30 @@ The scattered field of \cref{eqn:E_scattered} can be therefore cast in the form:
 \begin{equation}
 \mathbf{E}^\text{scat}(\mathbf{r}) = \imag k \sum_{\ell=1}^\infty  \sum_{m=-\ell}^\ell
 I_{\ell m}^\textbf{(M)}\mathbf{M}_{\ell m}(\mathbf{r})+
-I_{\ell m}^\textbf{(N)}\mathbf{N}_{\ell m}(\mathbf{r})
+I_{\ell m}^\textbf{(E)}\mathbf{N}_{\ell m}(\mathbf{r})
 \label{eqn:Escat}
 \end{equation}
 with the expansion coefficients
 \begin{align}
 I_{\ell m}^\text{(M)} = \int \rd^3\mathbf{r}' \mathbf{M}^*_{\ell m}(\mathbf{r}')\cdot
 \mathbf{j}^\textbf{scat}(\mathbf{r}'),\\
-I_{\ell m}^\text{(N)} = \int \rd^3\mathbf{r}' \mathbf{N}^*_{\ell m}(\mathbf{r}')\cdot
+I_{\ell m}^\text{(E)} = \int \rd^3\mathbf{r}' \mathbf{N}^*_{\ell m}(\mathbf{r}')\cdot
 \mathbf{j}^\textbf{scat}(\mathbf{r}'),
 \end{align}
 where the Hansen Multipoles have to be written with regular spherical bessel function $j_\ell(kr)$. The above integrals can be evaluated in closed form once \cref{eqn:ring_currents} is inserted as the scattered current density $\mathbf{j}^\text{scat}$ yielding:
 \begin{align}
-\left.I_{\ell m}^\textbf{(M)} = K_p\delta_{p m} \mathcal{N}_{\ell m} j_\ell(kR)\left[-\frac{\displaystyle\rd}{\rd \theta}P_{\ell}^{(m)}(\cos(\theta))
+\left.I_{\ell m}^\textbf{(M)} = K^\mathrm{M}_{p m}\delta_{p m} \mathcal{N}_{\ell m} j_\ell(kR)\left[-\frac{\displaystyle\rd}{\rd \theta}P_{\ell}^{(m)}(\cos(\theta))
 \right]\right \vert_{\theta=\pi/2},\\
-\left.I_{\ell m}^\textbf{(N)} =  K_p \delta_{p m} \mathcal{N}_{\ell m}jd_\ell(kR)
+\left.I_{\ell m}^\textbf{(E)} =  K^\mathrm{E}_{p m} \delta_{p m} \mathcal{N}_{\ell m}jd_\ell(kR)
 \left[-\imag m 
 P_\ell^{(m)}(\cos(\theta)) \right]\right\vert_{\theta=\pi/2}.
 \end{align}
 Here we introduced the abbreviations:
 \begin{equation}
 \mathcal{N}_{\ell m} = \sqrt{\frac{(2\ell+1)\pi}{\ell(\ell+1)}\frac{(\ell-|m|)!}{(\ell+|m|)!}},\quad
-zd_\ell(x) = \frac{\partial_{x}  x z_\ell(x)}{x}.
+zd_\ell(x) = \frac{\partial_{x}  x z_\ell(x)}{x},
 \end{equation}
+where $z_\ell(x)$ can be either $j_\ell(x)$ or $h_\ell^{(1)}(x)$.
 The associated Legendre polynomials and their derivative can be written \Cite{Leong1997}:
 \begin{align}
 \frac{\rd}{\rd \theta}P_\ell^{(m)}(0) =\left\{\ontop{}{}{
@@ -98,7 +185,7 @@ We can now write down the equation for the tangential part of the total electric
 \nonumber
 \Leftrightarrow 0&=\left(\mathbf{M}^\mathrm{inc}_{\ell m} + \imag k \sum_{\nu=1}^\infty  \sum_{\mu=-\nu}^\nu
 I_{\mu \nu}^\textbf{(M)}\mathbf{M}^\mathrm{out}_{\mu \nu}(\mathbf{r})+
-I_{\mu \nu}^\textbf{(N)}\mathbf{N}^\mathrm{out}_{\mu \nu}(\mathbf{r})\right) \cdot \unitv{\phi}
+I_{\mu \nu}^\textbf{(E)}\mathbf{N}^\mathrm{out}_{\mu \nu}(\mathbf{r})\right) \cdot \unitv{\phi}
 \;\delta(r-R)\delta(\theta-\pi/2)\\
 \nonumber
 \Leftrightarrow 0&=
@@ -108,21 +195,21 @@ I_{\mu \nu}^\textbf{(N)}\mathbf{N}^\mathrm{out}_{\mu \nu}(\mathbf{r})\right) \cd
 -I_{\nu m}^\textbf{(M)}
 h_\nu(kR)\mathcal{N}_{\nu m}\frac{\rd}{\rd\theta}P_{\nu m}(0) 
 +
-I_{\nu m}^\textbf{(N)}
+I_{\nu m}^\textbf{(E)}
 hd_\nu(kR)\mathcal{N}_{\nu m}\imag m  P_{\nu m}(0) \\ \nonumber
 \Leftrightarrow
 0 &= -j_\ell(kR)\mathcal{N}_{\ell m}\frac{\rd}{\rd\theta}P_{\ell m}(0) 
 + \imag k\sum_{\nu = 1}^\infty
-K_m\Big[
+K^\mathrm{M}_{\ell m}\Big[
 \mathcal{N}_{\nu m} \frac{\rd}{\rd \theta}P_{\nu m}(0)
 \Big]^2 j_\nu(kR) h_\nu(kR)
 \\ \nonumber
 &+ \imag k\sum_{\nu = 1}^\infty
-K_m \Big[
+K^\mathrm{M}_{\ell m} \Big[
 \mathcal{N}_{\nu m} P_{\nu m}(0) m
 \Big]^2jd_\nu(kR) hd_\nu(kR)
 \\ \nonumber
-&\Rightarrow K_m = \frac{j_\ell(kR) \mathcal{N}_{\ell m}\dfrac{\rd}{\rd \theta}P_{\ell m}(0)}{\imag k \displaystyle \sum_{\nu=1}^\infty
+&\Rightarrow K^\mathrm{M}_{\ell m} = \frac{j_\ell(kR) \mathcal{N}_{\ell m}\dfrac{\rd}{\rd \theta}P_{\ell m}(0)}{\imag k \displaystyle \sum_{\nu=1}^\infty
 \Big[
 \mathcal{N}_{\nu m} \frac{\rd}{\rd \theta}P_{\nu m}(0)
 \Big]^2 j_\nu(kR) h_\nu(kR)
@@ -132,7 +219,7 @@ K_m \Big[
 \Big]^2jd_\nu(kR) hd_\nu(kR)
 }
 \end{align}
-We thus know now, what kind of current density is induced in the ring in order to cancel the tangential component of an incoming magnetic multipole field. In order to
+We thus know now, the current coefficients $K^\mathrm{M}_{\ell m}$ which go into the current density \cref{eqn:ring_currents} and lead to a scattered field which exactly cancels the tangential component of an incoming magnetic (M) multipole field of degree $\ell$ and order $m$. In order to
 find the $\mathbb{T}$-Matrix of the ring, we now calculate \cref{eqn:Escat} to arrive at:
 \begin{equation}
 \mathbb{T}^\mathrm{MM}_{\ell_1 m;\ell_2 m} = -
@@ -153,7 +240,7 @@ If if do the same for the electric polarization we get:
 \nonumber
 \Leftrightarrow 0&=\left(\mathbf{N}^\mathrm{inc}_{\ell m} + \imag k \sum_{\nu=1}^\infty  \sum_{\mu=-\nu}^\nu
 I_{\mu \nu}^\textbf{(M)}\mathbf{M}^\mathrm{out}_{\mu \nu}(\mathbf{r})+
-I_{\mu \nu}^\textbf{(N)}\mathbf{N}^\mathrm{out}_{\mu \nu}(\mathbf{r})\right) \cdot \unitv{\phi}
+I_{\mu \nu}^\textbf{(E)}\mathbf{N}^\mathrm{out}_{\mu \nu}(\mathbf{r})\right) \cdot \unitv{\phi}
 \;\delta(r-R)\delta(\theta-\pi/2)\\
 \nonumber
 \Leftrightarrow 0&=
@@ -163,17 +250,17 @@ jd_\ell(kR)\mathcal{N}_{\ell m}\imag m P_{\ell m}(0)
 -I_{\nu m}^\textbf{(M)}
 h_\nu(kR)\mathcal{N}_{\nu m}\frac{\rd}{\rd\theta}P_{\nu m}(0) 
 +
-I_{\nu m}^\textbf{(N)}
+I_{\nu m}^\textbf{(E)}
 hd_\nu(kR)\mathcal{N}_{\nu m}\imag m  P_{\nu m}(0) \\ \nonumber
 \Leftrightarrow
 0 &= jd_\ell(kR)\mathcal{N}_{\ell m}\imag m P_{\ell m}(0) 
 + \imag k\sum_{\nu = 1}^\infty
-K_m\Big[
+K^\mathrm{E}_{\ell m}\Big[
 \mathcal{N}_{\nu m} \frac{\rd}{\rd \theta}P_{\nu m}(0)
 \Big]^2 j_\nu(kR) h_\nu(kR)
 \\ \nonumber
 &+ \imag k\sum_{\nu = 1}^\infty
-K_m \Big[
+K^\mathrm{E}_{\ell m} \Big[
 \mathcal{N}_{\nu m} P_{\nu m}(0) m
 \Big]^2jd_\nu(kR) hd_\nu(kR)
 \\ \nonumber
@@ -259,105 +346,34 @@ j_{\ell_2}(kR)hd_{\ell_1}(kR) \mathcal{N}_{\ell_1 m}\mathcal{N}_{\ell_2 m}
 P_{\ell_1 m}(0)\dfrac{\rd}{\rd \theta} P_{\ell_2 m}(0)
 }{
 \mathrm{denom}_m(kR)
-}
+}.
 \end{align}
 
-\subsection{Perpendicular incidence, perfectly conducting rings}
-At perpendicular incidence the cylindrical symmetry of the rings allows to choose the polarization in $\unitv{x}$-direction without loss of generality. Therefore \cref{eqn:Einc} becomes:
-\begin{equation}
-\mathbf{E}^\text{inc.} (z, t)= \unitv{x} \exp\left[\imag (-\omega t- k\cdot z)\right].
-\label{eqn:Ex}
-\end{equation}
-Henceforth the time-dependence $\exp(-\imag \omega t)$ will be suppressed. To satisfy the boundary conditions
+%%% name of the bibliography file without .bib
+%%% e.g.: literatur.bib -> 
+\section{Appendix}
+\subsection{Vector Multipole Fields}
+In spherical coordinates the vectorial Helmholtz equation possesses the set of
+solutions:
 \begin{align}
-\left.\left(\mathbf{E}^\text{inc.}+\mathbf{E}^\text{scat}\right)\times \unitv{r}\right\vert_{\theta=\pi/2, r=R} = 0,
-\label{eqn:Etan}\\
-\left.\left(\mathbf{H}^\text{inc.}+\mathbf{H}^\text{scat}\right)\times \unitv{r}\right\vert_{\theta=\pi/2, r=R} = 0,
-\label{eqn:Htan}
+&& \mathbf{X}_{\ell m} &= \frac{1}{\sqrt{\ell(\ell+1)}} \left[
+\unitv{\theta} \frac{1}{\sin(\theta)} \frac{\partial}{\partial \phi} Y_{\ell m} -
+\unitv{\phi} \frac{\partial}{\partial \theta} Y_{\ell m}
+\right], \label{eqn:Xlm}\\
+&& \mathbf{W}_{\ell m} &= \frac{1}{\sqrt{\ell(\ell+1)}} \left[
+\unitv{\theta} \frac{\partial}{\partial \theta} Y_{\ell m} +
+\unitv{\phi} \frac{1}{\sin(\theta)} \frac{\partial}{\partial \phi} Y_{\ell m} 
+\right], \label{eqn:Wlm}\\
+&& \mathbf{L}_{\ell m} &= \unitv{r} Y_{\ell m},\label{eqn:Llm}
 \end{align}
-for the field components transverse to the rings we expand \cref{eqn:Ex} in Hansen multipoles \cite{Kristensson2014}[p. 44 ff.]:
-\begin{equation}
-\mathbf{E}^\text{inc.} = \sqrt{(2\ell+1)\pi}\sum_{\ell=1}^\infty \imag^{\ell+1}\ 
-\big( \mathbf{M}_{\ell m} \pm \imag \mathbf{N}_{\ell m}\big) \delta_{m \pm 1}
-\label{eqn:Einc}
-\end{equation}
-and have to take care that the $\unitv{\phi}$- and $\unitv{\theta}$-components of the total fields satisfy \cref{eqn:Etan,eqn:Htan}. Supposing for the moment, that the ring is small as compared to the wavelength, we can restrict the sums in \cref{eqn:Escat} to $\ell=1$. This assumption leads to  $I^\text{(M)}_{1,\pm 1}=0$ (see \cref{eqn:Plm0diff}), whereas $I^\text{(N)}_{1,\pm 1}$ (see \cref{eqn:Plm0}) survives for $|m|=1$.
+which are orthonormal upon integration over the unit-sphere. With \cref{eqn:Xlm,eqn:Wlm,eqn:Llm} one can construct the zero-divergence Hansen-Multipoles:
 \begin{align}
-\left[
-\renewcommand\arraystretch{1.4}\begin{matrix}
-I_{1,1}^\text{(M)} \\
-I_{1,0}^\text{(M)} \\ 
-I_{1,-1}^\text{(M)}
-\end{matrix} \right]=
-\frac{j_1(kR)}{\sqrt{2}} \left[ 
-\renewcommand\arraystretch{1.4}\begin{matrix}
-0 \\ K_0 \\ 0
-\end{matrix}
-\right]
-\\
-\left[
-\renewcommand\arraystretch{1.4}\begin{matrix}
-I_{1,1}^\text{(N)} \\
-I_{1,0}^\text{(N)} \\ 
-I_{1,-1}^\text{(N)}
-\end{matrix} \right] =  \frac{\frac{\rd}{\rd (kR)}\left[kR j_1(kR)\right]}{kR\sqrt{2}} 
-\left[
-\renewcommand\arraystretch{1.4}\begin{matrix}
--K_1\\0\\+K_{-1}
-\end{matrix}
-\right]
+&& \mathbf{M}_{\ell m} &= \mathbf{X}_{\ell m} z_\ell(kr), \\
+&& \mathbf{N}_{\ell m} &= \sqrt{\ell(\ell+1)} \frac{z_\ell(kr)}{kr} \mathbf{L}_{\ell m}+
+\frac{\frac{\partial}{\partial kr}\left[kr z_\ell(kr)\right]}{kr}\mathbf{W}_{\ell m}. \label{eqn:NlmVSH}
 \end{align}
 
-We observe, that in order to match the boundary conditions the coefficients $I_{\ell m}^\text{(M)}$ and $I_{\ell m}^\text{(N)}$ resemble Mie's coefficients for a perfectly conducting sphere of radius $R$, $b_\ell$ and $a_\ell$. 
-The fact that on the thin ring no currents in the $\unitv{\theta}$-direction can be induced leads to the vanishing magnetic dipole polarizability in the $xy$-plane i. e. zero terms $I_{\ell, \pm 1}^\text{(M)}$ and a vanishing electric dipole polarizability in the $\unitv{z}$-direction $I_{\ell, 0}^\text{(N)}$.
+\printbibliography
 
-\subsection{xy-periodic array of thin rings}
-Building upon the results of the last section we can discuss the scattering of a periodic arrangement of rings in the $xy$-plane by forcing the expansion coefficients $Q^\text{TM}$ and $Q^\text{TE}$ of the total electric field to be eigenfunctions of the translationoperators $\mathcal{P}_x$ and $\mathcal{P}_y$. This is necessary because the fields in the periodic structure must satisfy:
-\begin{equation}
-\mathbf{E}\left(\mathbf{r}+m L \unitv{x}+
-n L \unitv{y}\right)=
-\mathbf{E}\left(\mathbf{r}\right).
-\end{equation}
-For any choice of the whole numbers $m, n\in \mathbb{Z}$. Therefore we can write
-\begin{equation}
-\mathbf{E}\left(\mathbf{r}\right) = 
-\exp\left(\imag \frac{2\pi}{L}x\right) \exp\left(\imag \frac{2\pi}{L}y\right)\mathbf{\tilde{E}}\left(\mathbf{r}\right),
-\end{equation}
-where $\mathbf{\tilde{E}}(\mathbf{r})$ is the field in a single unit-cell. Each of the exponential factors can be expanded in the fashion:
-\begin{equation}
-\exp\left(\imag\mathbf{k}\cdot \mathbf{r}\right) = 4\pi \sum_{\ell=0}^\infty \sum_{m=-\ell}^\ell
-\imag^\ell j_\ell(kr) Y_{\ell m}(\unitv{r}) Y_{\ell m}^*(\unitv{k}),
-\end{equation}
-where the arguments $\unitv{r}$, $\unitv{k}$ of the spherical harmonics are a shortcut for the dependence upon the angles $\theta$, $\phi$ of the position vector $\mathbf{r}$ and $\theta_\mathrm{k}$, $\phi_\mathrm{k}$ of the wave vector $\mathbf{k}$. Substituting $\mathbf{k}=\frac{2\pi}{L}\unitv{x}$ we end up with:
-\begin{align}
-&& \nonumber
-\exp\left(\imag \frac{2\pi}{L} x\right) &= 4\pi \sum_{\ell=0}^\infty \sum_{m=-\ell}^\ell
-\imag^\ell j_\ell\left(\frac{2\pi r}{L}\right) Y_{\ell m}(\theta, \phi) Y_{\ell m}^*\left(\frac{\pi}{2}, 0\right) \\
-&& &= 4\pi N_{\ell m} \sum_{\ell=0}^\infty \sum_{m=-\ell}^\ell
-\imag^\ell j_\ell\left(\frac{2\pi r}{L}\right) Y_{\ell m}(\theta, \phi)
-P_{\ell m}(0).
-\label{eqn:xperiodicity}
-\end{align}
-This sum contains only terms of pairs $(\ell,m)$ with even $\ell+m$ (see \cref{eqn:Plm0}). If we collect both, the exponential depending on $x$ and $y$ we can combine them to:
-\begin{equation}
-\exp\left(\imag \frac{2\pi}{L} (x+y)\right) = 4\pi \sum_{\ell=0}^\infty \sum_{m=-\ell}^\ell
-\imag^\ell j_\ell\left(\frac{2\pi r}{L}\right) Y_{\ell m}(\theta, \phi) Y_{\ell m}^*\left(\frac{\pi}{2}, \pi/4\right).
-\end{equation}
 
-In total we end up with the boundary condition:
-\begin{equation}
-\left[\mathbf{E}^\text{inc}+\exp\left(\imag \frac{2\pi}{L}(x+y)\right)\mathbf{E}^\text{scat}\right] \cdot \unitv{\phi}\big|_{r=R} = 0
-\label{eqn:xyperiodicBC}
-\end{equation}
-
-\subsubsection{Dipole limit}
-If the radius of the ring is small compared to the wavelength of the incident radiation, the $\ell=1$-contribution to the scattered field is dominant.
-In this case \cref{eqn:xyperiodicBC} becomes:
-\begin{equation}
-m_{1,m} \mathbf{M}_{1 m} + n_{1 m} \mathbf{N}_{1 m} = \sum_{\ell'=0}^\infty\sum_{m'=-\ell}^{\ell'}
-C_{\ell' m'} Y_{\ell' m'} 
-\left(
-m^\text{scat}_{1 m''} \mathbf{M}_{\ell'' m''} +
-n^\text{scat}_{1 m''} \mathbf{N}_{\ell'' m''}
-\right)
-\end{equation}
+\end{document}
