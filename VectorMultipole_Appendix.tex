@@ -19,3 +19,20 @@ which are orthonormal upon integration over the unit-sphere. With \cref{eqn:Xlm,
 && \mathbf{N}_{\ell m} &= \sqrt{\ell(\ell+1)} \frac{z_\ell(kr)}{kr} \mathbf{L}_{\ell m}+
 \frac{\frac{\partial}{\partial kr}\left[kr z_\ell(kr)\right]}{kr}\mathbf{W}_{\ell m}. \label{eqn:Nlm}
 \end{align}
+
+\subsection{Proof of continuity}
+\label{sec:Gproof}
+Lets assume, that the current density $\mathbf{j}$ is concentrated on a spherical shell of radius $R$. This makes the following expansion possible:
+\begin{equation}
+\mathbf{j} = \delta(r-R)\sum_{\nu,\mu} x_{\nu \mu} \mathbf{X}_{\nu \mu} + w_{\nu \mu} \mathbf{W}_{\nu \mu}.
+\end{equation}
+Inserted into \cref{eqn:Greens_Dyadic} we can use the mutual orthogonalty of \cref{eqn:Xlm,eqn:Wlm,eqn:Llm} to arrive at:
+\begin{align}
+h_\ell(kR) \int \rd r' {r'}^2j_\nu(kR)\delta_{l, \nu}\delta_{m,\mu} \delta(r'-R) 
+= 
+j_\ell(kR) \int \rd r' {r'}^2h_\nu(kR)\delta_{l, \nu}\delta_{m,\mu} \delta(r'-R),\\
+hd_\ell(kR) \int \rd r' {r'}^2jd_\nu(kR)\delta_{l, \nu}\delta_{m,\mu} \delta(r'-R) 
+= 
+jd_\ell(kR) \int \rd r' {r'}^2hd_\nu(kR)\delta_{l, \nu}\delta_{m,\mu} \delta(r'-R),
+\end{align}
+which is obviously true due to the radial delta functions.
