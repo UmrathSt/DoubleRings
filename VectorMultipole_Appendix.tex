@@ -1,0 +1,21 @@
+\subsection{Vector Multipole Fields}
+In spherical coordinates the vectorial Helmholtz equation possesses the set of
+solutions:
+\begin{align}
+&& \mathbf{X}_{\ell m} &= \frac{1}{\sqrt{\ell(\ell+1)}} \left[
+\unitv{\theta} \frac{1}{\sin(\theta)} \frac{\partial}{\partial \phi} Y_{\ell m} -
+\unitv{\phi} \frac{\partial}{\partial \theta} Y_{\ell m}
+\right], \label{eqn:Xlm}\\
+&& \mathbf{W}_{\ell m} &= \frac{1}{\sqrt{\ell(\ell+1)}} \left[
+\unitv{\theta} \frac{\partial}{\partial \theta} Y_{\ell m} +
+\unitv{\phi} \frac{1}{\sin(\theta)} \frac{\partial}{\partial \phi} Y_{\ell m} 
+\right], \label{eqn:Wlm}\\
+&& \mathbf{L}_{\ell m} &= \unitv{r} Y_{\ell m},\label{eqn:Llm}
+\end{align}
+which are orthonormal upon integration over the unit-sphere. With \cref{eqn:Xlm,eqn:Wlm,eqn:Llm} one can construct the zero-divergence Hansen-Multipoles:
+\begin{align}
+&& \mathbf{M}_{\ell m} &= \mathbf{X}_{\ell m} z_\ell(kr),
+\label{eqn:Mlm} \\
+&& \mathbf{N}_{\ell m} &= \sqrt{\ell(\ell+1)} \frac{z_\ell(kr)}{kr} \mathbf{L}_{\ell m}+
+\frac{\frac{\partial}{\partial kr}\left[kr z_\ell(kr)\right]}{kr}\mathbf{W}_{\ell m}. \label{eqn:Nlm}
+\end{align}
