@@ -1,21 +1,9 @@
-\section{Transmission Line Theory of concentric rings}
-Two concentric rings in front of a conduncting wall can be discussed
-by means of transmission line theory which assignes coupling coefficients
-which connect the voltages and currents in both rings to each other:
+\section{Transmission Line Theory for a single ring}
+Consider a square unit-cell of edge length $L$ and a copper ring of outer Radius $R$ and width $w$ in it.
+The ring can be modelled by transmission line theory to behave as a series RLC-circuit. 
+The single ring has an inductance of:
 \begin{equation}
-\left[
-\begin{array}{c}
-U_1(\omega) \\ U_2(\omega)
-\end{array}
-\right] = \imag \omega\left[
-\begin{array}{cc}
-L_{11} & L_{12} \\
-L_{21} & L_{22}
-\end{array}
-\right]
-\left[
-\begin{array}{c}
-I_1(\omega) \\ I_2(\omega)
-\end{array}
-\right] 
+L = \mu_0 (R-w) \ln\left(
+\frac{16(R-w)}{w}-2
+\right)
 \end{equation}
