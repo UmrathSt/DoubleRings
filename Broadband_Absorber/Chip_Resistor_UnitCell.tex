@@ -1,0 +1,83 @@
+\documentclass{article}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,calc,decorations.markings}
+\usetikzlibrary{math}
+\usepackage{xintexpr}
+\usepackage{siunitx}
+\usetikzlibrary{external}
+
+
+\begin{document}
+\pgfarrowsdeclarecombine{|<}{>|}{|}{|}{latex}{latex}
+\def\Dimline[#1][#2][#3]{
+    \begin{scope}[>=latex] % redef arrow for dimension lines
+        \draw let \p1=#1, \p2=#2, \n0={veclen(\x2-\x1,\y2-\y1)} in [|<->|,
+        decoration={markings, % switch on markings
+                mark=at position .5 with {\node[#3] at (0,0) {\DimScale{\n0}};},
+        },
+        postaction=decorate] #1 -- #2 ;
+    \end{scope}
+}% 
+
+\def\DimScale#1{\pgfmathparse{round(#1/28.33333333*10)/10} \pgfmathprintnumberto[precision=4]{\pgfmathresult}{\roundednumber}  {\roundednumber $\,$}mm}
+\newcommand*{\pgfmathsetnewmacro}[2]{%
+    \newcommand*{#1}{}% Error if already defined
+    \pgfmathsetmacro{#1}{#2}%
+}%
+
+
+\def\UCDim{14}
+\def\Length{4}
+\def\sLength{3}
+\def\fgap{0.6}
+\def\sgap{0.6}
+\pgfmathsetnewmacro{\ssLength}{2}
+\pgfmathsetnewmacro{\fLength}{2*\Length+\fgap}
+\def\reswidth{0.6}
+
+%% The following macro is used to scale a dimension from points to the
+%% display scale.  The following code divides the number of points by
+%% 28.4 to roughly get the width in centimeters (rounding to the
+%% nearest millimeter):
+
+
+
+
+\begin{tikzpicture}
+
+
+\newcommand{\rect}{(\fLength/2-\sLength, \fgap/2) -- (\fLength/2, \fgap/2) -- 
+				   (\fLength/2, \fgap/2+\Length)  -- (\fgap/2, \fgap/2+\Length) --
+				   (\fgap/2, \fLength/2-\sLength)
+				   };
+	\fill[orange, opacity=0.3] \rect -- cycle;
+	\Dimline[($(\fLength/2,\fgap/2)$)][($(\fLength/2,\fgap/2+\Length)$)][right];
+	\Dimline[($(\fLength/2-\sLength, \fgap/2)$)][($(\fLength/2, \fgap/2)$)][above];
+	\Dimline[($(-\fgap/2, \fgap/2+\Length)$)][($(\fgap/2, \fgap/2+\Length)$)][above];
+	\foreach \i in {90, 180, 270}
+	{
+	\begin{scope}[rotate around={\i:(0,0)}]
+	\fill[orange, opacity=0.3]
+        \rect -- cycle;	
+	\end{scope}
+	}
+	\draw[black] (-\UCDim/2, -\UCDim/2) -- (+\UCDim/2, -\UCDim/2) --
+				 (+\UCDim/2, +\UCDim/2) -- (-\UCDim/2, +\UCDim/2) --
+			     cycle;
+	\Dimline[($(-6.99, -7)$)][($(7, -7)$)][below];			     
+			     
+%    \node at (0,0) (nA) {A};
+%    \node at (3,0) (nB) {B};
+%    \Dimline[($(nA)+(0,1)$)][($(nB)+(0,1)$)][above];
+%
+%    \node at (0,-3) (nC) {C};
+%    \Dimline[($(nA)+(-1,0)$)][($(nC)+(-1,0)$)][left];
+%    \Dimline[($(nC)+(0.3,-0.3)$)][($(nB)+(0.3,-0.3)$)][right];
+%
+%    \node at (3,-3) (nD) {D};
+%    \Dimline[($(nC)+(0,-1)$)][($(nD)+(0,-1)$)][below];
+%    \Dimline[($(nB)+(1,0)$)][($(nD)+(1,0)$)][right];
+\end{tikzpicture}
+
+\end{document}
