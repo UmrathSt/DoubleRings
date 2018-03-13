@@ -7,6 +7,7 @@
 \usepackage{siunitx}
 \usetikzlibrary{external}
 
+\tikzexternalize[prefix=tikzfigures/]
 
 \begin{document}
 \pgfarrowsdeclarecombine{|<}{>|}{|}{|}{latex}{latex}
@@ -43,10 +44,8 @@
 
 
 
-
+\tikzsetnextfilename{UnitCell}
 \begin{tikzpicture}
-
-
 \newcommand{\rect}{(\fLength/2-\sLength, \fgap/2) -- (\fLength/2, \fgap/2) -- 
 				   (\fLength/2, \fgap/2+\Length)  -- (\fgap/2, \fgap/2+\Length) --
 				   (\fgap/2, \fLength/2-\sLength)
