@@ -19,10 +19,10 @@
 #declare dphi = 45;
 #declare reswidth = 0.6;
 #declare reslength = 1;
-#declare resheight = 0.2;
+#declare resheight = 0.35;
 #declare rho= 2;
 camera {
-    location <0,-60, 50>
+    location <0,-60, 25>
     look_at  <0, 0, 0>
     rotate <0,0,25>
 
@@ -37,7 +37,7 @@ box { <-BPsize, -BPsize, -0.018> <BPsize, BPsize, 0>
 #for (dy, -14, 14, 14)
 #for (dx, -14, 14, 14)
 box { <-7+dx, -7+dy, 0> <7+dx, 7+dy, 3.2> 
-       texture {pigment {color Yellow transmit 0.2}}
+       texture {pigment {color Yellow transmit 0.0}}
    }
 
 box { <dx-L3/2, dy-reswidth/2, 3.2> 

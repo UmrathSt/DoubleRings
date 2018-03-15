@@ -8,11 +8,11 @@
 #declare Xo = -0;
 #declare Yo = 0;
 #declare Zo = 8;
-#declare Larrow = 30;
+#declare Larrow = 15*1.4;
 #declare CopperLz = 0.018;
 
 camera {
-    location <0,-120, 50>
+    location <0,-86, 36>
     look_at  <0, 0, 0>
     rotate <0,0,25>
 
@@ -33,19 +33,19 @@ camera {
 
 //jerusalem(10, 12, 1, 1, 1, <0, 0, 0>, <0, 0, 0>)
 //jerusalem(10, 12, 1, 1, 1, <0, 0, 0>, <0, 0, 90>)
-#declare BPsize = 51;
+#declare BPsize = 36;
 box { <-BPsize, -BPsize, -0.018> <BPsize, BPsize, 0> 
        texture {Copper_Metal}
    }
 
 
-#for (dy, -40, 40, 20)
-#for (dx, -40, 40, 20)
+#for (dy, -20, 20, 20)
+#for (dx, -20, 20, 20)
 ring(9.8, 8.3, CopperLz, <dx, dy, 2.00>, 90)
 ring(5.1, 4.6, CopperLz, <dx, dy, 2.00>, 90)
 
 box { <-10+dx, -10+dy, 0> <10+dx, 10+dy, 2> 
-       texture {pigment {color Yellow transmit 0.2}}
+       texture {pigment {color Yellow transmit 0.0}}
    }
 
   
@@ -58,14 +58,13 @@ plane {
      texture { pigment{ color White} }  //The texture comes from the file "metals.inc"
      finish { phong 1 reflection 1 }
    }
-object{ Vector( <Xo,Yo,Zo>,<Xo,Yo,Larrow>, 1) pigment{ color Green }  }
 #declare X = text{
      ttf "timrom.ttf" "X" 0.05, 0 
      pigment { color Black}
      finish { reflection 0 specular 1 }
            };
 object{X rotate <90, 0,180>
-         scale 10 
+         scale 5*1.4 
          translate<Xo-Larrow,Yo,Zo>
      } 
 #declare Y = text{
@@ -74,7 +73,7 @@ object{X rotate <90, 0,180>
      finish { reflection 0 specular 1 }
            };
 object{Y rotate <90, 0,180>
-         scale 10 
+         scale 5*1.4 
          translate<Xo+5,Yo+Larrow,Zo>
      }
 #declare Z = text{
@@ -83,12 +82,13 @@ object{Y rotate <90, 0,180>
      finish { reflection 0 specular 1 }
            };
 object{Z rotate <90, 0,180>
-         scale 10 
-         translate<Xo,Yo,Zo+Larrow-5>
+         scale 5*1.4 
+         translate<Xo,Yo,Zo+Larrow>
      }
 
-object{ Vector( <Xo,Yo,Zo>,<Xo,Yo+Larrow,Zo>, 1) pigment{ color Blue}  }
-object{ Vector( <Xo,Yo,Zo>,<Xo-Larrow,Yo,Zo>, 1) pigment{ color Red }  }
+object{ Vector( <Xo,Yo,Zo>,<Xo,Yo,Zo+Larrow>, 0.5*1.4) pigment{ color Green }  }
+object{ Vector( <Xo,Yo,Zo>,<Xo,Yo+Larrow,Zo>, 0.5*1.4) pigment{ color Blue}  }
+object{ Vector( <Xo,Yo,Zo>,<Xo-Larrow,Yo,Zo>, 0.5*1.4) pigment{ color Red }  }
 
 light_source { <0, -50, 100> color White}
 
