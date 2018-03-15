@@ -41,8 +41,8 @@ box { <-BPsize, -BPsize, -0.018> <BPsize, BPsize, 0>
 
 #for (dy, -40, 40, 20)
 #for (dx, -40, 40, 20)
-ring(9.8, 8.3, CopperLz, <dx, dy, 2.009>, 90)
-ring(5.1, 4.6, CopperLz, <dx, dy, 2.009>, 90)
+ring(9.8, 8.3, CopperLz, <dx, dy, 2.00>, 90)
+ring(5.1, 4.6, CopperLz, <dx, dy, 2.00>, 90)
 
 box { <-10+dx, -10+dy, 0> <10+dx, 10+dy, 2> 
        texture {pigment {color Yellow transmit 0.2}}
