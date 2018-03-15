@@ -14,10 +14,12 @@ If we have a structure with three different media like depicted in \cref{fig:sta
 \begin{equation}
 \Gamma_1 = \frac{\rho_1+\rho_2 \exp\left[-2\imag k_2 L_2\right]}
 {1+\rho_1\rho_2 \exp\left[-2\imag k_2 L_2\right]},
+\label{eqn:2layerGamma}
 \end{equation}
 where the the coefficients $\rho$ are indexed by the number of the interface and 
 \begin{equation}
 \rho_j = \frac{Z_j - Z_{j-1} }{Z_j + Z_{j-1} }
+\label{eqn:rho}
 \end{equation}
 stands for the scattering factor at interface $j$ and depends on the impedances left and right to the interface, 
 $Z_{j-1}$ and $Z_j$. The length of the layer under study is $L_2$ and the wavenumber in terms of permittivity 
@@ -34,3 +36,33 @@ and permeability is $k_2=\sqrt{\varepsilon_2\mu_2} \omega/c$, whereas $Z_2=\sqrt
 \caption{The scattering properties of a metamaterial described by an impedance $Z_2$ which is embedded (from the left) in a material of $Z_1$ and from the right in $Z_3$.}
 \label{fig:stacked_structure}
 \end{figure}
+
+\cref{eqn:2layerGamma} can be generalized for structures with more than one layer and in general becomes:
+\begin{equation}
+\Gamma_{j-1} = \frac{\rho_{j-1}+\Gamma_j \exp\left[-2\imag k_j L_j\right]}
+{1+\rho_{j-1}\Gamma_j \exp\left[-2\imag k_j L_j\right]}.
+\label{eqn:NlayerGamma}
+\end{equation}
+
+In the case of metamaterial absorbers there are often three layers. From vacuum with impedance $Z_0$ a wave is incident on a very thin sheet of some copper structure with impedance $Z_m$ followed by a substrate layer of $Z_s$ with thickness $l_z$ which is backed by a conducting surface with impedance $Z_g$, which in case of perfect conductivity is exactly zero.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\tikz \filldraw[fill=rgray3,draw=black] (0,0) rectangle (3,3) ++(-1.5,0.25) node[black] {$Z_0$};
+\tikz \filldraw[fill=rgray1,draw=black] (3,0) rectangle (4,3) ++(-0.5,0.25) node[black] {$Z_m$};
+\tikz \filldraw[fill=rgray1,draw=black] (3,0) rectangle (4,3) ++(-0.5,0.25) node[black] {$Z_s$};
+\tikz \filldraw[fill=rgray3,draw=black] (4,0) rectangle (7,3) ++(-1.5,0.25) node[black] {$Z_g\to 0$};
+\end{tikzpicture}
+\caption{The scattering properties of a typical metamaterial absorber is described by an impedance $Z_m$ which is on top of a grounded substrate slab.}
+\label{fig:Nstacked_structure}
+\end{figure}
+
+In this case the total scattering coefficient on the interface between $Z_0$ and $Z_m$ can be evaluated once the scattering coefficients at the interfaces $Z_m$/$Z_s$ and $Z_s/Z_g$ are known.
+
+From \cref{eqn:rho} we get -- in case of $Z_g=0$ for the scattering at $Z_s/Z_g$ that $\Gamma_3=\rho_3=-1$. Therefore the scattering coefficient $\Gamma_2$ of the interface $Z_m/Z_s$ becomes:
+\begin{equation}
+\Gamma_2 = \frac{\rho_2- \exp[-2\imag k_2 L_2]}
+			    {1-\rho_2\exp[-2\imag k_2 L_2]}
+	    =
+\end{equation}
