@@ -90,6 +90,6 @@ object{ Vector( <Xo,Yo,Zo>,<Xo,Yo,Zo+Larrow>, 0.5*1.4) pigment{ color Green }  }
 object{ Vector( <Xo,Yo,Zo>,<Xo,Yo+Larrow,Zo>, 0.5*1.4) pigment{ color Blue}  }
 object{ Vector( <Xo,Yo,Zo>,<Xo-Larrow,Yo,Zo>, 0.5*1.4) pigment{ color Red }  }
 
-light_source { <0, -50, 100> color White}
+light_source { <0, -30, 80> color White}
 
 
