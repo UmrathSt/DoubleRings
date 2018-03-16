@@ -103,16 +103,33 @@ style=numeric, sorting=none]{biblatex}
 \tableofcontents 
 \newpage
 \section{Motivation}
-Die Verwendung von elektromagnetischen Wellen hat mit der voranschreitenden 
-Digitalisierung und Vernetzung stark zugenommen. Damit hat einerseits die 
-Optimierung der Abstrahl-/Emfangseigenschaften von Sendern bzw. Emfängern 
-an Wichtigkeit gewonnen und andererseits die Detektion von passiven, d. h. 
-weder sendenden, noch empfangenden. Als Beispiele seinen die Mobilfunkkommunikation, 
-autonom navigierende Fahrzeuge, oder die Luftraumüberwachung genannt, welche
-sich u. a. mit der Detektion von Drohnen und feindlichen Flugzeugen beschäftigt. 
-In all diesen Bereichen gibt es Anwendungen für Materialien, welche von 
-Menschenhand mit einer speziellen Wirkung auf elektromagnetische Wellen
-ausgestattet wurden, sog. Metamaterialien.
+%Die Verwendung von elektromagnetischen Wellen hat mit der voranschreitenden 
+%Digitalisierung und Vernetzung stark zugenommen. Damit hat einerseits die 
+%Optimierung der Abstrahl-/Emfangseigenschaften von Sendern bzw. Emfängern 
+%an Wichtigkeit gewonnen und andererseits die Detektion von passiven, d. h. 
+%weder sendenden, noch empfangenden. Als Beispiele seinen die Mobilfunkkommunikation, 
+%autonom navigierende Fahrzeuge, oder die Luftraumüberwachung genannt, welche
+%sich u. a. mit der Detektion von Drohnen und feindlichen Flugzeugen beschäftigt. 
+%In all diesen Bereichen gibt es Anwendungen für Materialien, welche von 
+%Menschenhand mit einer speziellen Wirkung auf elektromagnetische Wellen
+%ausgestattet wurden, sog. Metamaterialien.
+
+Metamaterials are man-made artificial materials with novel tailored electromagnetical properties.
+Their design has become possible due to the computational power of todays computing systems and 
+methods for manufacturing submilimeter conducting structures. Todays research focusses on the 
+design of flat, cheap and lightweight microwave absorbers, radomes with enhanced transmission
+properties and devices which can more effectively absorb light to harvest energy.
+
+In case of microwave or radar absorbing materials (RAM) the callenge is to design structures
+which exhibit either absorption of incoming radiation at sharply defined frequncies or obtain broadband
+absorption characteristics. 
+Due to mutual interaction of resonant metallic inclusions obtaining absorption at two or more 
+frequencies is not an easy task. \capFref{fig:Wifi} depicts a unitcell which conists of two concentric conducting rings placed on a dielectric FR4 subsrtate. Due to its high degree of symmetry its reflection
+response is not only independent of the polarization of incoming radition but the radii of the rings 
+can also be choosen with the larger ring determining the lower and the smaller ring determining the higher absorption frequency.
+When it comes to broadband microwave absorbers, mechanisms which connect multiple neighboring 
+absorption peaks to obtain absorption over an interval of frequencies. \capFref{fig:XBand} shows 
+unitcells with the aforementioned reflection attenuation.
 
 \section{Metamaterialien für Reflexionsdämpfung}
 Überall dort, wo Reflexion von elektromagnetischen Wellen unterdrückt werden sollen
@@ -125,12 +142,16 @@ Um die Machbarkeit für beide Szenarien zu demonsiereren, wurden ein schmalbandi
 
 \begin{figure}
 \centering
+\begin{minipage}[b]{0.5\textwidth}
+\includegraphics[scale=0.3]{../media/double_rings.png}
+\caption{Unitcell for a metamaterial absorber working at the WiFi frequencies 2.4 and 5.2 GHz.}
+\label{fig:Wifi}
+\hspace{55pt}
+\end{minipage}
 \begin{minipage}[b]{0.4\textwidth}
 \includegraphics[scale=0.3]{../media/XBandAbsorber.png}
-\end{minipage}
-\hspace{50pt}
-\begin{minipage}[b]{0.4\textwidth}
-\includegraphics[scale=0.3]{../media/double_rings.png}
+\caption{Unitcell for a metamaterial absorber desigend for the X-Band.}
+\label{fig:XBand}
 \end{minipage}
 \end{figure}
 
