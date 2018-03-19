@@ -22,9 +22,9 @@
 #declare resheight = 0.35;
 #declare rho= 2;
 camera {
-    location <0,-60, 25>
+    location <0,-45, 50>
     look_at  <0, 0, 0>
-    rotate <0,0,25>
+    rotate <0,0,15>
 
 }
 

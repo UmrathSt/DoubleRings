@@ -12,9 +12,9 @@
 #declare CopperLz = 0.018;
 
 camera {
-    location <0,-86, 36>
+    location <0,-63,70 >
     look_at  <0, 0, 0>
-    rotate <0,0,25>
+    rotate <0,0,15>
 
 }
 
@@ -33,7 +33,7 @@ camera {
 
 //jerusalem(10, 12, 1, 1, 1, <0, 0, 0>, <0, 0, 0>)
 //jerusalem(10, 12, 1, 1, 1, <0, 0, 0>, <0, 0, 90>)
-#declare BPsize = 36;
+#declare BPsize = 34;
 box { <-BPsize, -BPsize, -0.018> <BPsize, BPsize, 0> 
        texture {Copper_Metal}
    }
@@ -42,7 +42,7 @@ box { <-BPsize, -BPsize, -0.018> <BPsize, BPsize, 0>
 #for (dy, -20, 20, 20)
 #for (dx, -20, 20, 20)
 ring(9.8, 8.3, CopperLz, <dx, dy, 2.00>, 90)
-ring(5.1, 4.6, CopperLz, <dx, dy, 2.00>, 90)
+ring(5.1, 4.2, CopperLz, <dx, dy, 2.00>, 90)
 
 box { <-10+dx, -10+dy, 0> <10+dx, 10+dy, 2> 
        texture {pigment {color Yellow transmit 0.0}}
