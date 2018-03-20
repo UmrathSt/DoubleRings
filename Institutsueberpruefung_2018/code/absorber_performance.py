@@ -22,7 +22,9 @@ plt.xlim([args.xmin, args.xmax])
 plt.ylim([0,1])
 plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
-plt.xlabel(r"$\mathbf{Frequency}\; \mathbf{[GHz]}$", fontsize = 14)
-plt.ylabel(r"$\mathbf{Absorbed\; Power}\; \mathbf{[\%]}$", fontsize = 14)
+plt.xlabel(r"Frequency [GHz]", fontsize=14, 
+        fontweight="bold")
+plt.ylabel(r"Absorbed Power [%]", fontsize=14, 
+        fontweight="bold")
 fig.tight_layout()
 fig.savefig(args.resultname, format="pdf")
