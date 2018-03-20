@@ -16,8 +16,8 @@
 // loop start Z:
 #while ( Z < EndZ + Step)
 
-  #declare X = -5;  // start value X
-  #declare EndX = 5;//   end value X
+  #declare X = -10;  // start value X
+  #declare EndX = 20;//   end value X
   //loop start X:
   #while ( X < EndX + Step)
 
@@ -28,16 +28,11 @@
 
 #declare Z = Z + Step; //next Z
 #end // ------------ loop end Z
-union {
-	cylinder { <0,2,20>,<0,2, L>,0.15 }
-	cone { <0,2,L-0.75>,0,<0,2,L>,0.5 }
-	pigment { color Black }
-}
 object{
     cylinder { <0,L/2,0>,<0,L/2,L/sqrt(2)>,0.1
             color Black 
             rotate <0,alph,0>
-             }
+            }
      }
 object{
     cylinder { <0,L/2,0>,<0,L/2,L/sqrt(2)>,.1
@@ -48,20 +43,21 @@ object{
         rotate <0,0,0>
              }
       }
-object{ Segment_of_Torus( 1.00, 0.25, -145)
+object{ Segment_of_Torus( L/sqrt(2)*0.9, 0.15, alph)
     texture { pigment{color Black}
               finish { phong 1 }  
-    } // end of texture
-}
-                                                          rotate<-90,0,0> translate<0,1,0>
-                                                                } // end of Segment_of_Torus(...) ----
+            } // end of texture
+
+            rotate<0,-90,0>
+            translate <0,L/2,0>
+} // end of Segment_of_Torus(...) ----
 
 
 background{White}
 camera {
     location <30, 30, 15>
     look_at <0, 0, 0>
-    focal_point 0 blur_samples 50 aperture .2
+//    focal_point 0 blur_samples 50 aperture .2
 }
                                          
 light_source {
@@ -107,15 +103,15 @@ finish{
        };
 
 
-object{X rotate <0, 20,0>
+object{X rotate <0, 40,0>
          scale 2 
          translate<arrowl,distfact*L,0>
      }
-object{Y rotate <0, 20,0>
+object{Y rotate <0, 40,0>
          scale 2 
          translate<0,distfact*L+arrowl,0>
      }
-object{Z rotate <180, 20,0>
+object{Z rotate <180, 40,0>
          scale 2 
          translate<0,distfact*L+2,-arrowl>
      }
