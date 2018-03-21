@@ -1,20 +1,23 @@
 #include "colors.inc"
 #include "shapes.inc"
+#include "shapes3.inc"
 #include "textures.inc"
 #include "glass.inc"
 #include "ball.inc"
-
+#include "analytical_g.inc"
 #include "ball.inc"
-
+#declare arrowl = 12.5;
 #declare L = 10;
-#declare Z = L*1.4;  // start value Z
+#declare alph = 25;
+#declare distfact = .5;
+#declare Z = L*1.2;  // start value Z
 #declare EndZ = 40;  //   end value Z
 #declare Step = 0.1;// step value
 // loop start Z:
 #while ( Z < EndZ + Step)
 
-  #declare X = -5;  // start value X
-  #declare EndX = 5;//   end value X
+  #declare X = -10;  // start value X
+  #declare EndX = 20;//   end value X
   //loop start X:
   #while ( X < EndX + Step)
 
@@ -25,17 +28,36 @@
 
 #declare Z = Z + Step; //next Z
 #end // ------------ loop end Z
-union {
-	cylinder { <0,2,20>,<0,2, L>,0.15 }
-	cone { <0,2,L-0.75>,0,<0,2,L>,0.5 }
-	pigment { color Black }
-}
+object{
+    cylinder { <0,L/2,0>,<0,L/2,L/sqrt(2)>,0.1
+            color Black 
+            rotate <0,alph,0>
+            }
+     }
+object{
+    cylinder { <0,L/2,0>,<0,L/2,L/sqrt(2)>,.1
+    //        pigment { checker
+    //                color White
+    //                color Red}
+        pigment {color Red    }
+        rotate <0,0,0>
+             }
+      }
+object{ Segment_of_Torus( L/sqrt(2)*0.9, 0.15, alph)
+    texture { pigment{color Black}
+              finish { phong 1 }  
+            } // end of texture
+
+            rotate<0,-90,0>
+            translate <0,L/2,0>
+} // end of Segment_of_Torus(...) ----
 
 
 background{White}
 camera {
-    location <20, 20, 25>
+    location <30, 30, 15>
     look_at <0, 0, 0>
+//    focal_point 0 blur_samples 50 aperture .2
 }
                                          
 light_source {
@@ -60,14 +82,55 @@ finish{
         phong 2
         phong_size 100
     }
-    rotate <0,45,0>
+    rotate <0,alph,0>
     interior{ ior 1.32}
 }
+#declare X = text{
+ ttf "timrom.ttf" "X" .05, 0
+ pigment { color Black}
+ finish { reflection 0 specular 1 }
+       };
+#declare Y = text{
+ ttf "timrom.ttf" "Y" .05, 0
+ pigment { color Black}
+ finish { reflection 0 specular 1 }
+       };
+
+#declare Z = text{
+ ttf "timrom.ttf" "Z" .05, 0
+ pigment { color Black}
+ finish { reflection 0 specular 1 }
+       };
+
+
+object{X rotate <0, 40,0>
+         scale 2 
+         translate<arrowl,distfact*L,0>
+     }
+object{Y rotate <0, 40,0>
+         scale 2 
+         translate<0,distfact*L+arrowl,0>
+     }
+object{Z rotate <180, 40,0>
+         scale 2 
+         translate<0,distfact*L+2,-arrowl>
+     }
+object{ Vector( <0,distfact*L,0>,
+                <arrowl,distfact*L,0>, 0.25) pigment{ 
+        color Green }  }
+
+object{ Vector( <0,distfact*L,0>,
+                        <0,distfact*L+arrowl,0>, 0.25) pigment{ 
+        color Blue }  }
+
+object{ Vector( <0,distfact*L,0>,
+                <0,distfact*L,-arrowl>, 0.25) pigment{ 
+        color Red }  }
 
 
 
 plane {
-    <0, 1, 0>,-L/2 
+    <0, 1, 0>,L*1000 
     pigment {
     White 
     }
