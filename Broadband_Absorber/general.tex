@@ -90,3 +90,18 @@ and the impedance $Z_{fss}$ of the metallic patch layer / frequency selective su
     \caption{Transmission line model of a FSS patch on top of a grounded dielectric substrate with impedance $Z_d$.}
   \end{center}
 \end{figure}
+
+The resulting impedance $Z_m$ of the metamaterial becomes:
+\begin{align}
+\nonumber
+&&\frac{1}{Z_\mathrm{m}} &= \frac{1}{Z_\mathrm{d}} + \frac{1}{Z_\mathrm{fss}}\\
+&&\Rightarrow Z_\mathrm{m} &= \frac{Z_\mathrm{d} Z_\mathrm{fss}}{Z_d + Z_\mathrm{fss}}.
+\end{equation}
+
+While $Z_\mathrm{d}$ is given analytically, $Z_\mathrm{fss}$ must be calculated from simulations. Therefore the reflection coefficient
+$\Gamma$ can be utilized which reads:
+\begin{align}
+\nonumber
+&&\Gamma_\mathrm{fss} &= \frac{Z_\mathrm{fss}-Z_0}{Z_0 + Z_\mathrm{fss}}\\
+&&\Rightarrow Z_\mathrm{fss} &= Z_0 \frac{1 - \Gamma_\mathrm{fss}}{1 + \Gamma_\mathrm{fss}}.
+\end{align}
