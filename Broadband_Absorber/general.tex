@@ -66,3 +66,27 @@ From \cref{eqn:rho} we get -- in case of $Z_g=0$ for the scattering at $Z_s/Z_g$
 			    {1-\rho_2\exp[-2\imag k_2 L_2]}
 	    =
 \end{equation}
+
+\subsection{Metamaterial absorber layout}
+A typical metamaterial absorber consists of a 2d patch with metallic structures on top of a dielectric substrate.
+It can be modelled as a parallel connection of the impedance of a grounded dielectric substrate:
+\begin{equation}
+Z_d = \frac{jZ_0}{\sqrt{\epsilon_\mathrm{r}}} \tan\left(\omega/c_0 \sqrt{\epsilon_\mathrm{r}}d\right),
+\end{equation}
+and the impedance $Z_{fss}$ of the metallic patch layer / frequency selective surface.
+
+\begin{figure}[h!]
+  \begin{center}
+    \begin{circuitikz}[european resistors]
+      \draw (0,0) to[short,o-] (2,0) 
+      to[R=$R$] (2,2) % The resistor
+      to[L=$L$] (2,3) % The resistor
+      to[C=$C$] (2,4) % The resistor
+	  to[short,-o] (0,4)
+      (2,0) to[short] (4,0)
+      to[R=$Z_d$] (4,4)
+      to[short] (2,4);
+    \end{circuitikz}
+    \caption{Transmission line model of a FSS patch on top of a grounded dielectric substrate with impedance $Z_d$.}
+  \end{center}
+\end{figure}
