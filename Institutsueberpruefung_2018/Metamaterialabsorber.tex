@@ -103,72 +103,34 @@ style=numeric, sorting=none]{biblatex}
 \tableofcontents 
 \newpage
 \section{Motivation}
-%Die Verwendung von elektromagnetischen Wellen hat mit der voranschreitenden 
-%Digitalisierung und Vernetzung stark zugenommen. Damit hat einerseits die 
-%Optimierung der Abstrahl-/Emfangseigenschaften von Sendern bzw. Emfängern 
-%an Wichtigkeit gewonnen und andererseits die Detektion von passiven, d. h. 
-%weder sendenden, noch empfangenden. Als Beispiele seinen die Mobilfunkkommunikation, 
-%autonom navigierende Fahrzeuge, oder die Luftraumüberwachung genannt, welche
-%sich u. a. mit der Detektion von Drohnen und feindlichen Flugzeugen beschäftigt. 
-%In all diesen Bereichen gibt es Anwendungen für Materialien, welche von 
-%Menschenhand mit einer speziellen Wirkung auf elektromagnetische Wellen
-%ausgestattet wurden, sog. Metamaterialien.
+Die Verwendung von elektromagnetischen Wellen hat mit der voranschreitenden 
+Digitalisierung und Vernetzung stark zugenommen. Damit hat einerseits die 
+Optimierung der Abstrahl-/Emfangseigenschaften von Sendern bzw. Emfängern 
+an Wichtigkeit gewonnen und andererseits die Detektion von passiven, d. h. 
+weder sendenden, noch empfangenden. Als Beispiele seinen die Mobilfunkkommunikation, 
+autonom navigierende Fahrzeuge, oder die Luftraumüberwachung genannt, welche
+sich u. a. mit der Detektion von Drohnen und feindlichen Flugzeugen beschäftigt. 
+In all diesen Bereichen gibt es Anwendungen für Materialien, welche von 
+Menschenhand mit einer speziellen Wirkung auf elektromagnetische Wellen
+ausgestattet wurden, sog. Metamaterialien.
 
-Metamaterials are man-made artificial materials with electromagnetical properties which
-tailored to enable them to manipulate light or radar waves in a desired way.
-Their design has become possible due to the computational power of todays computing systems on the one hand
-and approriate methods for manufacturing submilimeter conducting structures. Todays research in the field of
-metamaterials includes the design of flat, cheap and lightweight microwave absorbers, cloaks, radomes 
-with enhanced transmission properties and devices which can harvest the energy of the sun more 
-effectively than their conventional counterparts.
-
-In case of microwave or radar absorbing materials (RAM) the callenge is to design structures
-which exhibit either absorption of incoming radiation at sharply defined frequncies or obtain broadband
-absorption characteristics. 
-Due to mutual interaction of resonant metallic inclusions in a unitcell obtaining absorption at two or more 
-frequencies is not an easy task. \capFref{fig:Wifi} depicts a 3x3 array of a unitcell which consists of two concentric conducting rings placed on a dielectric FR4 substrate which is backed by a solid conducting slab. Due to the high degree of symmetry the reflection response of this structure is not only independent of the polarization of incoming radition but the freedom to choose the radii of the rings also allows for adjusting the absorption frequencies at will.
-When it comes to broadband microwave absorbers, mechanisms must be found, which interconnect multiple neighboring absorption peaks to obtain absorption over an interval of frequencies. \capFref{fig:XBand} shows 
-a unitcell with broadband reflection attenuation. The key idea of turning the unitcell to a broadband absorber is the introduction of loss by means of surface mount resistors (shown in black).
-
-The aforementioned absorbers have been designed for application as wifi absorbers at 2.4 and 5.2 GHz and X-Band absorber, respectively. Their performance has been checked experimentally and the simulated and measured data depicted in \cref{fig:double_ring, fig:xband_absorber} are in excellent agreement.
+\section{Metamaterialien für Reflexionsdämpfung}
+Überall dort, wo Reflexion von elektromagnetischen Wellen unterdrückt werden sollen
+und spezielle Anforderungen an das Absorbermaterial gestellt werden, können 
+Metamaterialabsorber eingesetzt werden. 
+Entsprechend des Einsatzgebiets können Metamaterialabsorber ihren konventionellen
+Absorbern auf Basis von magnetischen Materialien oder Schaumabsorbern in Punkto Gewicht, Dicke, Herstellungspreis überlegen sein. Je nach Anwendungszweck können Absorber mit
+Wirksamkeit über einen breiten Frequenzbereich oder schmalbandig erwünscht sein. 
+Um die Machbarkeit für beide Szenarien zu demonsiereren, wurden ein schmalbandiger Absorber für zwei weit verbreitete WLan-Frequnezen, sowie ein Breitbandabsorber für das militärisch relevante X-Band entwickelt, simuliert, gefertigt und vermessen.
 
 \begin{figure}
 \centering
-\begin{minipage}[b]{0.5\textwidth}
-\includegraphics[scale=0.6]{code/WifiAbsorber.pdf}
-\caption{The narrowband Wifi absorber}
-\label{fig:WifiMeas}
-\hspace{55pt}
-\end{minipage}
-\begin{minipage}[b]{0.4\textwidth}
-\includegraphics[scale=0.6]{code/XBandAbsorber.pdf}
-\caption{The absorption of the broadband absorber designed for the X-band.}
-\label{fig:XBandMeas}
-\end{minipage}
-\end{figure}
-
-%
-%\section{Metamaterialien für Reflexionsdämpfung}
-%Überall dort, wo Reflexion von elektromagnetischen Wellen unterdrückt werden sollen
-%und spezielle Anforderungen an das Absorbermaterial gestellt werden, können 
-%Metamaterialabsorber eingesetzt werden. 
-%Entsprechend des Einsatzgebiets können Metamaterialabsorber ihren konventionellen
-%Absorbern auf Basis von magnetischen Materialien oder Schaumabsorbern in Punkto Gewicht, Dicke, Herstellungspreis überlegen sein. Je nach Anwendungszweck können Absorber mit
-%Wirksamkeit über einen breiten Frequenzbereich oder schmalbandig erwünscht sein. 
-%Um die Machbarkeit für beide Szenarien zu demonsiereren, wurden ein schmalbandiger Absorber für zwei weit verbreitete WLan-Frequnezen, sowie ein Breitbandabsorber für das militärisch relevante X-Band entwickelt, simuliert, gefertigt und vermessen.
-
-\begin{figure}
-\centering
-\begin{minipage}[b]{0.5\textwidth}
-\includegraphics[scale=0.3]{../media/double_rings.png}
-\caption{Unitcell for a metamaterial absorber working at the WiFi frequencies 2.4 and 5.2 GHz.}
-\label{fig:Wifi}
-\hspace{55pt}
-\end{minipage}
 \begin{minipage}[b]{0.4\textwidth}
 \includegraphics[scale=0.3]{../media/XBandAbsorber.png}
-\caption{Unitcell for a metamaterial absorber desigend for the X-Band.}
-\label{fig:XBand}
+\end{minipage}
+\hspace{50pt}
+\begin{minipage}[b]{0.4\textwidth}
+\includegraphics[scale=0.3]{../media/double_rings.png}
 \end{minipage}
 \end{figure}
 
