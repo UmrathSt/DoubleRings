@@ -82,6 +82,14 @@ style=numeric, sorting=none]{biblatex}
 %\newcommand{\ontop}{\genfrac{\{}{\}}{0pt}{}}
 \newcommand\ontop[4]{\genfrac{#1}{#2}{0pt}{}{#3}{#4}}
 
+\newcommand{\wing}[3]{
+\pgfmathsetmacro{\L1}{{#1}}
+\pgfmathsetmacro{\L2}{{#2}}
+\pgfmathsetmacro{\L}{\L1-\L2}
+\draw[fill=blue!35] (-\L1/2,-\L1/2) -- (-\L1/2, \L1/2) -- (\L, \L1/2) -- (\L1/2,\L) -- (\L1/2,-\L1/2) -- cycle;
+}
+
+
 
 \title{Development of a broadband metamaterial absorber}
 

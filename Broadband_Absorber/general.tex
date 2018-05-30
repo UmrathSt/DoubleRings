@@ -8,6 +8,76 @@ Due to their working principle deflectors and absorbers can be discriminated. Th
 
 The primitive building block of these periodic structures is called unit cell. Typically a metamaterial absorber consistis of copper structures upon one or more layers of some kind of dielectric substrate. Since the dielectric substrates are isotropic in the xy-plane, their scattering properties can be treated seperately from the meta-sheet in order to optimize their thicknesses.
 
+\subsection{Absorber layout for the X-Band}
+In this section an absorber layout for frequencies from 8 to 12 GHz is proposed. it consists of
+a periodic array of metallic inclusions which include two kinds of surface mount resistors.
+
+%\begin{figure}
+%\centering
+%\begin{tikzpicture}[scale=0.5]
+%  \coordinate[label=above left:A](A) at (2,3);
+%  \begin{scope}[rotate around ={45,A}
+%  \pgfmathsetmacro{\s}{4.6}
+%  \draw[fill=blue!35] (-2,-2) -- (-2, 2) -- (1, 2) -- (2,1) -- (2,-2) -- cycle;
+%  \draw[fill=blue!35] (-2+\s,-2) -- (2+\s, -2) -- (2+\s, 2) -- (-1+\s,2) -- (-2+\s,1) -- cycle;
+%  \draw[fill=blue!35] (-2,-2+\s) -- (-2,2+\s) -- (2, 2+\s) -- (2,-1+\s) -- (1,-2+\s) -- cycle;
+%  \draw[fill=blue!35] (-2+\s,-1+\s) -- (-2+\s,2+\s) -- (2+\s,2+\s) -- (2+\s,-2+\s) -- (-1+\s,-2+\s) -- cycle;
+% \end{scope}
+%\end{tikzpicture}
+%\end{figure}
+
+\begin{tikzpicture}
+
+    \begin{scope}[scale=0.5,shift={(0,5.96)},rotate around={-45:(-2,2)}] % Oben
+    \coordinate(A) at (-2,-2);
+    \coordinate(B) at (1,-2);
+    \coordinate(C) at (2,-1);
+    \coordinate(D) at (2,2);
+    \coordinate(E) at (-2,2);
+    \draw[fill=blue!30]
+        (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
+    \end{scope}
+    
+    \begin{scope}[scale=0.5,shift={(-5.96,0)},rotate around={45:(-2,2)}] % Links
+    \coordinate(A) at (-2,-2);
+    \coordinate(B) at (1,-2);
+    \coordinate(C) at (2,-1);
+    \coordinate(D) at (2,2);
+    \coordinate(E) at (-2,2);
+    \draw[fill=blue!35]
+        (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
+    \end{scope}
+    
+    \begin{scope}[scale=0.5,shift={(0,-5.96)},rotate around={135:(-2,2)}] % Unten
+    \coordinate(A) at (-2,-2);
+    \coordinate(B) at (1,-2);
+    \coordinate(C) at (2,-1);
+    \coordinate(D) at (2,2);
+    \coordinate(E) at (-2,2);
+    \draw[fill=blue!35]
+        (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
+    \end{scope}
+    \begin{scope}[scale=0.5,shift={(5.96,0)},rotate around={225:(-2,2)}] % Rechts
+    \coordinate(A) at (-2,-2);
+    \coordinate(B) at (1,-2);
+    \coordinate(C) at (2,-1);
+    \coordinate(D) at (2,2);
+    \coordinate(E) at (-2,2);
+    \draw[fill=blue!35]
+        (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
+    \end{scope}
+    \begin{scope}[scale=0.5,shift={(0,0.5)}]
+    \draw[fill=blue!35]
+        (-2.5,2) -- (-1.5,2) -- (-1.5,1) -- (-2.5,1) -- cycle;
+    \end{scope}
+    \begin{scope}[scale=0.5,shift={(-0.65,0.5)}]
+    \draw[fill=black]
+        (-2.5,2) -- (-1.5,2) -- (-1.5,1.5) -- (-2.5,1.5) -- cycle;
+    \end{scope}
+
+\end{tikzpicture}
+
+
 \subsection{Some definitions}
 
 If we have a structure with three different media like depicted in \cref{fig:stacked_structure}, we can describe the scattering of the structure like:
@@ -96,7 +166,7 @@ The resulting impedance $Z_m$ of the metamaterial becomes:
 \nonumber
 &&\frac{1}{Z_\mathrm{m}} &= \frac{1}{Z_\mathrm{d}} + \frac{1}{Z_\mathrm{fss}}\\
 &&\Rightarrow Z_\mathrm{m} &= \frac{Z_\mathrm{d} Z_\mathrm{fss}}{Z_d + Z_\mathrm{fss}}.
-\end{equation}
+\end{align}
 
 While $Z_\mathrm{d}$ is given analytically, $Z_\mathrm{fss}$ must be calculated from simulations. Therefore the reflection coefficient
 $\Gamma$ can be utilized which reads:
