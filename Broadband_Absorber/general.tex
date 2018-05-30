@@ -141,9 +141,9 @@ From \cref{eqn:rho} we get -- in case of $Z_g=0$ for the scattering at $Z_s/Z_g$
 A typical metamaterial absorber consists of a 2d patch with metallic structures on top of a dielectric substrate.
 It can be modelled as a parallel connection of the impedance of a grounded dielectric substrate:
 \begin{equation}
-Z_d = \frac{jZ_0}{\sqrt{\epsilon_\mathrm{r}}} \tan\left(\omega/c_0 \sqrt{\epsilon_\mathrm{r}}d\right),
+Z_\mathrm{d} = \frac{jZ_0}{\sqrt{\epsilon_\mathrm{r}}} \tan\left(\omega \sqrt{\epsilon_\mathrm{r}}d/c_0 \right),
 \end{equation}
-and the impedance $Z_{fss}$ of the metallic patch layer / frequency selective surface.
+and the impedance $Z_\mathrm{fss}$ of the metallic patch layer / frequency selective surface.
 
 \begin{figure}[h!]
   \begin{center}
@@ -154,14 +154,14 @@ and the impedance $Z_{fss}$ of the metallic patch layer / frequency selective su
       to[C=$C$] (2,4) % The resistor
 	  to[short,-o] (0,4)
       (2,0) to[short] (4,0)
-      to[R=$Z_d$] (4,4)
+      to[R=$Z_\mathrm{d}$] (4,4)
       to[short] (2,4);
     \end{circuitikz}
-    \caption{Transmission line model of a FSS patch on top of a grounded dielectric substrate with impedance $Z_d$.}
+    \caption{Transmission line model of a FSS patch on top of a grounded dielectric substrate with impedance $Z_\mathrm{d}$.}
   \end{center}
 \end{figure}
 
-The resulting impedance $Z_m$ of the metamaterial becomes:
+The resulting impedance $Z_\mathrm{m}$ of the metamaterial becomes:
 \begin{align}
 \nonumber
 &&\frac{1}{Z_\mathrm{m}} &= \frac{1}{Z_\mathrm{d}} + \frac{1}{Z_\mathrm{fss}}\\
@@ -175,3 +175,17 @@ $\Gamma$ can be utilized which reads:
 &&\Gamma_\mathrm{fss} &= \frac{Z_\mathrm{fss}-Z_0}{Z_0 + Z_\mathrm{fss}}\\
 &&\Rightarrow Z_\mathrm{fss} &= Z_0 \frac{1 - \Gamma_\mathrm{fss}}{1 + \Gamma_\mathrm{fss}}.
 \end{align}
+
+\subsubsection{Metallic Square-Patches}
+Let's consider a 2d-periodic array of perforated metallic square patches of edge length $a=9.5$ mm, hole radius $R=3.3$ mm with a period of $L=10$ mm on a FR4-substrate with $\epsilon_\mathrm{r}=4.4(1+\imag 0.02)$ of thickness $l_z=0.4$ mm.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\path[fill=yellow] (0,0) -- (3,0) -- (3,3) -- (0,3) -- cycle;
+\path[fill=orange] (0.2,0.2) -- (2.8,0.2) -- (2.8,2.8) -- (0.2,2.8) -- cycle;
+\fill[fill=yellow] (1.5,1.5) circle (1);
+\end{tikzpicture}
+\caption{Top view of the metamaterial with a perforated copper square patch (orange) on top of a FR4 substrate (yellow)}
+\label{fig:SquarePatch}
+\end{figure}
