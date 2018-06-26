@@ -25,16 +25,16 @@ a periodic array of metallic inclusions which include two kinds of surface mount
 % \end{scope}
 %\end{tikzpicture}
 %\end{figure}
-
+\begin{figure}
+\centering
 \begin{tikzpicture}
-
     \begin{scope}[scale=0.5,shift={(0,5.96)},rotate around={-45:(-2,2)}] % Oben
     \coordinate(A) at (-2,-2);
     \coordinate(B) at (1,-2);
     \coordinate(C) at (2,-1);
     \coordinate(D) at (2,2);
     \coordinate(E) at (-2,2);
-    \draw[fill=blue!30]
+    \draw[fill=yellow!90]
         (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
     \end{scope}
     
@@ -44,7 +44,7 @@ a periodic array of metallic inclusions which include two kinds of surface mount
     \coordinate(C) at (2,-1);
     \coordinate(D) at (2,2);
     \coordinate(E) at (-2,2);
-    \draw[fill=blue!35]
+    \draw[fill=yellow!90]
         (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
     \end{scope}
     
@@ -54,7 +54,7 @@ a periodic array of metallic inclusions which include two kinds of surface mount
     \coordinate(C) at (2,-1);
     \coordinate(D) at (2,2);
     \coordinate(E) at (-2,2);
-    \draw[fill=blue!35]
+    \draw[fill=yellow!90]
         (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
     \end{scope}
     \begin{scope}[scale=0.5,shift={(5.96,0)},rotate around={225:(-2,2)}] % Rechts
@@ -63,19 +63,56 @@ a periodic array of metallic inclusions which include two kinds of surface mount
     \coordinate(C) at (2,-1);
     \coordinate(D) at (2,2);
     \coordinate(E) at (-2,2);
-    \draw[fill=blue!35]
+    \draw[fill=yellow!90]
         (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
     \end{scope}
     \begin{scope}[scale=0.5,shift={(0,0.5)}]
-    \draw[fill=blue!35]
+    \draw[fill=yellow!90]
         (-2.5,2) -- (-1.5,2) -- (-1.5,1) -- (-2.5,1) -- cycle;
     \end{scope}
-    \begin{scope}[scale=0.5,shift={(-0.65,0.5)}]
+    % first resistor inside left
+    \begin{scope}[scale=0.5,shift={(-0.75,0.25)}]
     \draw[fill=black]
         (-2.5,2) -- (-1.5,2) -- (-1.5,1.5) -- (-2.5,1.5) -- cycle;
     \end{scope}
-
+    % inside right
+    \begin{scope}[scale=0.5,shift={(-3.25,0.25)}]
+    \draw[fill=black]
+        (2.5,2) -- (1.5,2) -- (1.5,1.5) -- (2.5,1.5) -- cycle;
+    \end{scope}
+    % inside top
+    \begin{scope}[scale=0.5,shift={(-2,2)}]
+    \draw[fill=black]
+        (-0.25,0.25) -- (0.25,0.25) -- (0.25,1.25) -- (-0.25,1.25) -- cycle;
+    \end{scope}
+    % inside bottom
+    \begin{scope}[scale=0.5,shift={(-2,2)}]
+    \draw[fill=black]
+        (-0.25,-0.25) -- (0.25,-0.25) -- (0.25,-1.25) -- (-0.25,-1.25) -- cycle;
+    \end{scope}
+    % outside right top
+    \begin{scope}[scale=0.5,shift={(-2,2)}, rotate around={45:(0,0)},shift={(2,0.75)}]
+    \draw[fill=black]
+        (-0.25,-0.25) -- (0.25,-0.25) -- (0.25,-1.25) -- (-0.25,-1.25) -- cycle;
+    \end{scope}
+    % outside left bottom
+    \begin{scope}[scale=0.5,shift={(-2,2)}, rotate around={45:(0,0)},shift={(-2,0.75)}]
+    \draw[fill=black]
+        (-0.25,-0.25) -- (0.25,-0.25) -- (0.25,-1.25) -- (-0.25,-1.25) -- cycle;
+    \end{scope}
+    % outside left top
+    \begin{scope}[scale=0.5,shift={(-2,2)}, rotate around={-45:(0,0)},shift={(2,0.75)}]
+    \draw[fill=black]
+        (-0.25,-0.25) -- (0.25,-0.25) -- (0.25,-1.25) -- (-0.25,-1.25) -- cycle;
+    \end{scope}
+    % outside right bottom
+    \begin{scope}[scale=0.5,shift={(-2,2)}, rotate around={-45:(0,0)},shift={(-2,0.75)}]
+    \draw[fill=black]
+        (-0.25,-0.25) -- (0.25,-0.25) -- (0.25,-1.25) -- (-0.25,-1.25) -- cycle;
+    \end{scope}
 \end{tikzpicture}
+\caption{The unit-cell of the X-band absorber.}
+\end{figure}
 
 
 \subsection{Some definitions}
