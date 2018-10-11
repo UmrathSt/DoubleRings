@@ -129,8 +129,8 @@ where the the coefficients $\rho$ are indexed by the number of the interface and
 \label{eqn:rho}
 \end{equation}
 stands for the scattering factor at interface $j$ and depends on the impedances left and right to the interface, 
-$Z_{j-1}$ and $Z_j$. The length of the layer under study is $L_2$ and the wavenumber in terms of permittivity 
-and permeability is $k_2=\sqrt{\varepsilon_2\mu_2} \omega/c$, whereas $Z_2=\sqrt{\mu_2/\varepsilon_2}$ and permittivites and permeabilities are to be understood as relative quantitites.
+$Z_{j-1}$ and $Z_j$. The thickness of the layer under study is $L_j$ and the wavenumber in terms of permittivity 
+and permeability is $k_2=\sqrt{\varepsilon_j\mu_j} \omega/c$, whereas $Z_j=\sqrt{\mu_j/\varepsilon_j}$ and permittivites and permeabilities are to be understood as relative quantitites. For the geometry of \cref{fig:stacked_structure} $j=2$.
 
 
 \begin{figure}
@@ -144,7 +144,7 @@ and permeability is $k_2=\sqrt{\varepsilon_2\mu_2} \omega/c$, whereas $Z_2=\sqrt
 \label{fig:stacked_structure}
 \end{figure}
 
-\cref{eqn:2layerGamma} can be generalized for structures with more than one layer and in general becomes:
+\capEref{eqn:2layerGamma} can be generalized for structures with more than one layer and in general becomes:
 \begin{equation}
 \Gamma_{j-1} = \frac{\rho_{j-1}+\Gamma_j \exp\left[-2\imag k_j L_j\right]}
 {1+\rho_{j-1}\Gamma_j \exp\left[-2\imag k_j L_j\right]}.
@@ -171,8 +171,12 @@ From \cref{eqn:rho} we get -- in case of $Z_g=0$ for the scattering at $Z_s/Z_g$
 \begin{equation}
 \Gamma_2 = \frac{\rho_2- \exp[-2\imag k_2 L_2]}
 			    {1-\rho_2\exp[-2\imag k_2 L_2]}
-	    =
+	    =Z_\mathrm{m}\imag \tan\left(k_2 L_2\right)
+	    =Z_\mathrm{m}\imag \tan\left(\omega/c_0 n_2 L_2\right).
+\label{eqn:Zsubstrate}
 \end{equation}
+In eqn. (\ref{eqn:Zsubstrate}) $k_2$ is the wavenumber in the substrate and therefore can be written as $\omega/c_0$ times the refractive index of the substrate, $n_2$.
+
 
 \subsection{Metamaterial absorber layout}
 A typical metamaterial absorber consists of a 2d patch with metallic structures on top of a dielectric substrate.
@@ -203,26 +207,32 @@ The resulting impedance $Z_\mathrm{m}$ of the metamaterial becomes:
 \nonumber
 &&\frac{1}{Z_\mathrm{m}} &= \frac{1}{Z_\mathrm{d}} + \frac{1}{Z_\mathrm{fss}}\\
 &&\Rightarrow Z_\mathrm{m} &= \frac{Z_\mathrm{d} Z_\mathrm{fss}}{Z_d + Z_\mathrm{fss}}.
+\label{eqn:Zm}
 \end{align}
 
 While $Z_\mathrm{d}$ is given analytically, $Z_\mathrm{fss}$ must be calculated from simulations. Therefore the reflection coefficient
-$\Gamma$ can be utilized which reads:
+$\Gamma_0$ of the left-most interface can be utilized. $\Gamma_0$ obtained from full wave simulations can be set equal to the equivalent reflection of the impedance mismatch between $Z_0$ and $Z_\mathrm{m}$. It follows:
 \begin{align}
-\nonumber
-&&\Gamma_\mathrm{fss} &= \frac{Z_\mathrm{fss}-Z_0}{Z_0 + Z_\mathrm{fss}}\\
-&&\Rightarrow Z_\mathrm{fss} &= Z_0 \frac{1 - \Gamma_\mathrm{fss}}{1 + \Gamma_\mathrm{fss}}.
+&& \Gamma_0 = \frac{Z_\mathrm{m}-Z_0}{Z_\mathrm{m}+Z_0}. 
+\label{eqn:Gamma0}
+\end{align}
+Combining \cref{eqn:Gamma0,eqn:Zm} we arrive at:
+\begin{align}
+Z_\mathrm{fss} = \frac{Z_0 Z_\mathrm{d}}{\dfrac{1-\Gamma_0}{1+\Gamma_0}Z_\mathrm{d}-Z_0}.
 \end{align}
 
-\subsubsection{Metallic Square-Patches}
-Let's consider a 2d-periodic array of perforated metallic square patches of edge length $a=9.5$ mm, hole radius $R=3.3$ mm with a period of $L=10$ mm on a FR4-substrate with $\epsilon_\mathrm{r}=4.4(1+\imag 0.02)$ of thickness $l_z=0.4$ mm.
 
-\begin{figure}
-\centering
-\begin{tikzpicture}
-\path[fill=yellow] (0,0) -- (3,0) -- (3,3) -- (0,3) -- cycle;
-\path[fill=orange] (0.2,0.2) -- (2.8,0.2) -- (2.8,2.8) -- (0.2,2.8) -- cycle;
-\fill[fill=yellow] (1.5,1.5) circle (1);
-\end{tikzpicture}
-\caption{Top view of the metamaterial with a perforated copper square patch (orange) on top of a FR4 substrate (yellow)}
-\label{fig:SquarePatch}
-\end{figure}
+
+\subsubsection{Metallic Square-Patches}
+Let's consider a 2d-periodic array of metallic square patches of edge length $L$ with a period of $D$ on top of a dielectric substrate with permittivity $\epsilon_\mathrm{r}(1+\imag \tan\delta)$ and thickness $l_z$. Once the substrate material is fixed, even this simple geometry possesses three parameters.
+
+%\begin{figure}
+%\centering
+%\begin{tikzpicture}
+%\path[fill=yellow] (0,0) -- (3,0) -- (3,3) -- (0,3) -- cycle;
+%\path[fill=orange] (0.2,0.2) -- (2.8,0.2) -- (2.8,2.8) -- (0.2,2.8) -- cycle;
+%\fill[fill=yellow] (1.5,1.5) circle (1);
+%\end{tikzpicture}
+%\caption{Top view of the metamaterial with a perforated copper square patch (orange) on top of a FR4 substrate (yellow)}
+%\label{fig:SquarePatch}
+%\end{figure}

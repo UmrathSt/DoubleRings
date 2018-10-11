@@ -16,7 +16,7 @@ def get_Zsubs(eps,d,f):
         f
     """
     w = 2*np.pi*f
-    return 1j*Z0/np.sqrt(eps)*np.tan(w*np.sqrt(eps)/C0)
+    return -1j*Z0/np.sqrt(eps)*np.tan(w*np.sqrt(eps)/C0)
 
 def get_Zfss(Z0, Zd, Gamma0):
     """ Return the impedance of a frequency selective surface
@@ -43,13 +43,23 @@ if __name__ == "__main__":
     lz = args.lz
     eps = eps+kappa*1j/(2*np.pi*f*EPS0)
     Zd = get_Zsubs(eps, args.lz, f)
-    Zfss = get_Zfss(Z0, Zd, Gamma0)
+    Zm = Z0*(1+Gamma0)/(1-Gamma0)
+    Zfss = Zm*Zd/(Zd-Zm)
+    print(Zm)
     plt.plot(f/1e9, np.real(Zfss),"r-",linewidth=2,
             label="$\mathcal{R}(Z_\mathrm{fss})$")
     plt.plot(f/1e9, np.imag(Zfss),"b-",linewidth=2,
             label="$\mathcal{I}(Z_\mathrm{fss})$")
+    plt.plot(f/1e9, np.real(Zm),"m-",linewidth=2,
+            label="$\mathcal{R}(Z_\mathrm{m})$")
+    plt.plot(f/1e9, np.imag(Zm),"c-",linewidth=2,
+            label="$\mathcal{I}(Z_\mathrm{m})$")
+    plt.plot(f/1e9, np.real(Zd),"k-",linewidth=2,
+            label="$\mathcal{R}(Z_\mathrm{d})$")
+    plt.plot(f/1e9, np.imag(Zd),"k--",linewidth=2,
+            label="$\mathcal{I}(Z_\mathrm{d})$")
     plt.xlabel("f [GHz]")
-    plt.ylabel("$\mathcal{R}(Z_\mathrm{fss}),\mathcal{I}(Z_\mathrm{fss})$")
+    plt.ylabel("$\mathcal{R}(Z_\mathrm{fss}),\mathcal{I}(Z_\mathrm{fss}),\mathcal{R}(Z_\mathrm{m}),\mathcal{I}(Z_\mathrm{m}$")
     plt.xlim(f[[0,-1]]/1e9)
     plt.legend(loc="best").draw_frame(False)
     plt.show()
