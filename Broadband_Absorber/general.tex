@@ -187,7 +187,7 @@ Z_\mathrm{d} = -\frac{jZ_0}{\sqrt{\epsilon_\mathrm{r}}} \tan\left(\omega \sqrt{\
 and the impedance $Z_\mathrm{fss}$ of the metallic patch layer / frequency selective surface.
 
 \begin{figure}[h!]
-  \begin{center}
+\centering
     \begin{circuitikz}[european resistors]
       \draw (0,0) to[short,o-] (2,0) 
       to[R=$R$] (2,2) % The resistor
@@ -199,7 +199,7 @@ and the impedance $Z_\mathrm{fss}$ of the metallic patch layer / frequency selec
       to[short] (2,4);
     \end{circuitikz}
     \caption{Transmission line model of a FSS patch on top of a grounded dielectric substrate with impedance $Z_\mathrm{d}$.}
-  \end{center}
+\label{figure:EQ_model}
 \end{figure}
 
 The resulting impedance $Z_\mathrm{m}$ of the metamaterial becomes:
@@ -224,7 +224,16 @@ Z_\mathrm{fss} = \frac{Z_0 Z_\mathrm{d}}{\dfrac{1-\Gamma_0}{1+\Gamma_0}Z_\mathrm
 
 
 \subsubsection{Metallic Square-Patches}
-Let's consider a 2d-periodic array of metallic square patches of edge length $L$ with a period of $D$ on top of a dielectric substrate with permittivity $\epsilon_\mathrm{r}(1+\imag \tan\delta)$ and thickness $l_z$. Once the substrate material is fixed, even this simple geometry possesses three parameters, being $l_z$, $D$ and $L$.
+Let's consider a 2d-periodic array of metallic square patches of edge length $L$ with a period of $D$ on top of a dielectric substrate with permittivity $\epsilon_\mathrm{r}(1+\imag \tan\delta)$ and thickness $l_z$. Once the substrate material is fixed, even this simple geometry possesses three parameters, being $l_z$, $D$ and $L$. 
+
+If one chooses FR4 as a substrate with $\epsilon_\mathrm{r}= 4.6(1+0.02\imag)$ and $D=7.2$ mm, $L=7$ mm, $l_z=0.1$ mm and calculate the effective impedance of the absorber by $\Gamma_\mathrm{m} = Z_0 (1+\Gamma)/(1-\Gamma)$ then we end up with an absorption frequency in the X-band which can be described by a simple RLC-circuit in parallel to a grounded dielectric slab (see \cref{fig:Impedance}). What's clearly visible is, that the absorption peak at the second harmonic can not be described by a single parallel RLC-subcircuit, but would require a second subcircuit.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{Bilder/EC_vs_openEMS.pdf}
+\caption{Impedance of a metamaterial absorber as a function of frequency. Magenta and cyan lines show the real and imaginary parts of the impedance calculated from full-wave FDTD simulations. The geometry parameters are chosen to be $D=7.2$ mm, $L=7$ mm and $l_z=0.1$ for the full-wave simualation. A least-square fit of a simple equivalent circuit model (see. \cref{figure:EQ_model}) with $R=0.24\,\Omega$, $L= 27.8$ pH and $C=1.81$ pF leads to the impedance shown in red and blue.}
+\label{fig:Impedance}
+\end{figure}
 
 %\begin{figure}
 %\centering
