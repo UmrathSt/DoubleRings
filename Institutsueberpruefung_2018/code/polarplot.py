@@ -1,10 +1,10 @@
 from matplotlib import pyplot as plt
 import numpy as np
 
-d = np.loadtxt("rcs_PVC_cube_L_5cm_alpha_22.5.dat", delimiter=",")
+d = np.loadtxt("bistrcs_dielectriccube_22.5Grad_eps_2.74.dat", delimiter=",")
 m = np.loadtxt("RCS_PVC_Bistatisch.dat")
-alpha = d[:,0]
-rcs = d[:,1]
+alpha = np.linspace(0,360,len(d[1:])) 
+rcs = d[1:]
 xdim = 6
 fig = plt.figure(figsize=(xdim,xdim/1.6))
 ax = plt.subplot(111, polar=True)
