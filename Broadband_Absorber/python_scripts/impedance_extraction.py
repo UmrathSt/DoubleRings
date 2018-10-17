@@ -5,9 +5,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--eps", dest="eps", type=float)
 parser.add_argument("--kappa", dest="kappa", type=float)
 parser.add_argument("--lz", dest="lz", type=float)
-parser.add_argument("--fmin", dest="fmin", type=int, default=0)
-parser.add_argument("--fmax", dest="fmax", type=int, default=1e18)
+parser.add_argument("--fmin", dest="fmin", type=float, default=0)
+parser.add_argument("--fmax", dest="fmax", type=float, default=1e18)
 parser.add_argument("--filename", dest="filename", type=str)
+parser.add_argument("--onlyZm", dest="onlyZm", type=bool, default=False)
 
 
 def get_Zsubs(eps,d,f):
@@ -46,18 +47,20 @@ if __name__ == "__main__":
     Zm = Z0*(1+Gamma0)/(1-Gamma0)
     Zfss = Zm*Zd/(Zd-Zm)
     print(Zm)
-    plt.plot(f/1e9, np.real(Zfss),"r-",linewidth=2,
-            label="$\mathcal{R}(Z_\mathrm{fss})$")
-    plt.plot(f/1e9, np.imag(Zfss),"b-",linewidth=2,
-            label="$\mathcal{I}(Z_\mathrm{fss})$")
+    if not args.onlyZm:
+
+        plt.plot(f/1e9, np.real(Zfss),"r-",linewidth=2,
+              label="$\mathcal{R}(Z_\mathrm{fss})$")
+        plt.plot(f/1e9, np.imag(Zfss),"b-",linewidth=2,
+              label="$\mathcal{I}(Z_\mathrm{fss})$")
+        plt.plot(f/1e9, np.real(Zd),"k-",linewidth=2,
+            label="$\mathcal{R}(Z_\mathrm{d})$")
+        plt.plot(f/1e9, np.imag(Zd),"k--",linewidth=2,
+            label="$\mathcal{I}(Z_\mathrm{d})$")
     plt.plot(f/1e9, np.real(Zm),"m-",linewidth=2,
             label="$\mathcal{R}(Z_\mathrm{m})$")
     plt.plot(f/1e9, np.imag(Zm),"c-",linewidth=2,
             label="$\mathcal{I}(Z_\mathrm{m})$")
-    plt.plot(f/1e9, np.real(Zd),"k-",linewidth=2,
-            label="$\mathcal{R}(Z_\mathrm{d})$")
-    plt.plot(f/1e9, np.imag(Zd),"k--",linewidth=2,
-            label="$\mathcal{I}(Z_\mathrm{d})$")
     plt.xlabel("f [GHz]")
     plt.ylabel("$\mathcal{R}(Z_\mathrm{fss}),\mathcal{I}(Z_\mathrm{fss}),\mathcal{R}(Z_\mathrm{m}),\mathcal{I}(Z_\mathrm{m}$")
     plt.xlim(f[[0,-1]]/1e9)
